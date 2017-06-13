@@ -1,0 +1,182 @@
+.form-table th.tawksetting {
+  width: 350px;
+}
+
+.tawknotice{
+	font-size:14px;
+}
+
+.tawkheader{
+	overflow: hidden;
+  border-style: solid;
+  border-color: #ccc;
+  border-width:1px 1px 0 1px;
+  background-color: #ffffff;
+  width:95%;
+  margin-top:20px;
+  padding: 6px 12px 0;
+  font-size:2em;
+}
+
+div.tawkmel{
+  float:left;
+  width:10%;
+  min-width: 75px;
+  min-height: 80px;
+  text-align: center;
+}
+
+div.tawkheadtext{
+  float:left;
+  line-height: 86px;
+}
+
+div.tawkfootaction{
+  float:left;
+  width:10%;
+  min-width: 75px;
+}
+
+div.tawkfoottext{
+  float:right;
+  text-align: right;
+}
+
+a.tawklink{
+  color:#7FB06F;
+  text-decoration: none;
+}
+
+a.tawklink:hover{
+  text-decoration: underline;
+}
+
+
+div.tawkaction{
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    width:95%;
+    padding: 6px 12px;
+}
+
+div.tawkaction p{
+    margin:0;
+    padding:0;
+} 
+
+.tawksettingsbody{
+    overflow: hidden;
+    border-style: solid;
+    border-color: #ccc;
+    border-width:0 1px 0 1px;
+    background-color: #ffffff;
+    width:95%;
+    padding: 0 24px 0 0;
+}
+
+div.tawktabs {
+	float:left;
+  overflow: hidden;
+  background-color: #ffffff;
+  width:10%;
+  min-width: 75px;
+}
+
+
+div.tawktabs button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 0;
+    transition: 0.3s; 
+    width:100%;
+}
+
+div.tawktabs button:hover {
+    background-color: #ddd;
+    color:#0085BA;
+}
+
+div.tawktabs button.active {
+    background-color: #f1f1f1;
+}
+
+.tawktabcontent {
+	float:left;
+    display: none;
+    padding: 6px 12px;
+    background-color: #ffffff;
+    
+    border-style: solid;
+    border-color: #ccc;
+    border-width:0 0 0 1px;
+
+    border-top: none;
+    width:85%;
+    min-width: 240px;
+}
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {display:none;}
+
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+#exlucded_urls_container,
+#included_urls_container{
+  padding:15px;
+}
