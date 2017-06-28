@@ -3,7 +3,7 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.3.1
+Version: 0.3.2
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
@@ -43,6 +43,7 @@ if(!class_exists('TawkTo_Settings')){
 			#add_action('admin_head', array(&$this,'tawk_custom_admin_style') );
 
 			add_action('admin_enqueue_scripts', array($this,'tawk_settings_assets') );
+			add_action( 'admin_notices', array($this,'tawk_admin_notice') );
 		}
 
 		public function tawk_settings_assets($hook)
@@ -77,8 +78,21 @@ if(!class_exists('TawkTo_Settings')){
 			update_option(self::TAWK_PAGE_ID_VARIABLE, $_POST['pageId']);
 			update_option(self::TAWK_WIDGET_ID_VARIABLE, $_POST['widgetId']);
 
+			
 			echo json_encode(array('success' => TRUE));
 			die();
+		}
+
+		function tawk_admin_notice() {
+
+		   	if( isset($_GET["settings-updated"]) ) 
+		   	{
+			    ?>
+			    <div class="notice notice-warning is-dismissible">
+			        <p><?php _e( 'You might need to clear cache if your using a cache plugin to see your udpates', 'tawk-to-live-chat' ); ?></p>
+			    </div>
+			    <?php
+			}
 		}
 
 		public function action_removewidget() {

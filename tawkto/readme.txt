@@ -116,10 +116,12 @@ Note: You will need a free tawk.to account : <a href="https://tawk.to/?utm_sourc
 * fixed issues with visibility filters
 
 = 0.3.1 = 
-* added registered user identification
-* fixed issues with url exclusion visibility filter
-* fixed issues with url inclusion visibility filter
-* added property and widget setting protection
+* notifications update
+* logged in user recognition
+
+= 0.3.1 = 
+* notifications update for cache clearing
+ 
 
 == Frequently Asked Questions ==
 
