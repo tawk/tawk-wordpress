@@ -1,13 +1,9 @@
-=== Tawk.to Live Chat ===
-Contributors: tawkto
-Tags: tawk, tawk.to, tawkto, free chat, livechat, chat widget, plugin, enhancement, widget, banckle, Casengo, chat, chat for web, chat online, chat software, click desk, clickdesk, freshdesk, free chat, free live chat, IM Chat, jivochat, jivosite, live chat, live chat inc, live support, live web chat, livechat, olark, online chat, online support, snapengage, wordpress chat, wordpress live chat, Zendesk, Zopim, Happyfox chat, Smartsupp, Smartsup, Smartsapp, Boldchat, Live person, pure chat, chatra
-Requires at least: 2.7
-Tested up to: 4.8
-Stable tag: 0.3.1
+# Tawk.to Live Chat
+Website: [http://tawk.to](http://tawk.to)
 
 (OFFICIAL tawk.to plugin) Instantly chat with  visitors on your website with the free tawk.to chat widget.
 
-== Description ==
+## Description
 
 tawk.to is a 100% FREE live chat app that lets you monitor and chat with visitors on your Wordpress site. No catch. No spam. No wares. It's truly free and always will be.
 
@@ -23,32 +19,33 @@ Compatible with all modern browsers, tawk.to is free live chat software created 
 
 Tawk.to offers free iOS, Android, Windows and Mac OSX apps to stay connected, or you can log in via any modern browser.
 
-**Why use tawk.to?**
+## Why use tawk.to?
 
 tawk.to is a free live chat app which integrates seamlessly with Wordpress! More than 250000 companies use tawk.to to provide real time support and service to their customers. Never lose another lead or sale again, with tawk.to you can monitor and chat with your website visitors when they need it most.
 
-**How much does this cost?**
+## How much does this cost?
 
 This tawk.to app is completely free.
 
-**Support**
+## Support
 
 tawk.to offers 24x7-365 live support, visit https://www.tawk.to and initiate a chat or send us an email at support@tawk.to.
 
-Don't have a tawk.to account ? <a href="https://www.tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup">Create one for free here!</a>
+Don't have a tawk.to account ? [Create one for free here!](https://www.tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
 
-== Installation ==
+## Installation
 
 Adding tawk.to live chat widget to your Wordpress site is really easy, follow these steps :
 
-* Install the Free plugin from the WordPress directory and activate it.
+* Clone this repository into your plugins directory or download the zip file and unzip on your plugins directory
+* or Install the Free plugin from the WordPress directory and activate it.
 * Go to `Settings`, then to the `Tawk.to` sub menu, and login to your tawk.to account to select a widget.
-* Customize the chat widget from within the <a href="https://dashboard.tawk.to" target="_blank">tawk.to dashboard</a> to your preference.
+* Customize the chat widget from within the [tawk.to dashboard](https://dashboard.tawk.to) to your preference.
 * Start chatting with your visitors! :)
 
-Note: You will need a free tawk.to account : <a href="https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup">Create one for free here!</a>.
+Note: You will need a free tawk.to account : [Create one for free here!](https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
 
-== Changelog ==
+## Changelog
 
 = 0.1.0 =
 * Add the tawk.to live chat widget to your site!
@@ -124,12 +121,12 @@ Note: You will need a free tawk.to account : <a href="https://tawk.to/?utm_sourc
   If user is logged in, the widget will fill the pre-chat form automatically
  
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions 
 
 [FAQ](http://tawk.uservoice.com/knowledgebase)
 
-== Screenshots ==
-
-1. Chat window - minimized
-2. Chat widget - maximized
-3. Wordpress plugin
+Contributors: tawkto
+Tags: tawk, tawk.to, tawkto, free chat, livechat, chat widget, plugin, enhancement, widget, banckle, Casengo, chat, chat for web, chat online, chat software, click desk, clickdesk, freshdesk, free chat, free live chat, IM Chat, jivochat, jivosite, live chat, live chat inc, live support, live web chat, livechat, olark, online chat, online support, snapengage, wordpress chat, wordpress live chat, Zendesk, Zopim, Happyfox chat, Smartsupp, Smartsup, Smartsapp, Boldchat, Live person, pure chat, chatra
+Requires at least: 2.7
+Tested up to: 4.8
+Stable tag: 0.3.1
