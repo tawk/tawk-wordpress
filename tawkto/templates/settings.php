@@ -43,7 +43,14 @@ if ( ! defined( 'ABSPATH' ) ) {
       }else{
         $override = false;
       }
-  if( ( ($page_id === false) && ($widget_id === false) ) || ($override == TRUE) ){
+    $display_widgetsettings = false;
+    if(($page_id == NULL) || ($widget_id == NULL)){
+        $display_widgetsettings = true;
+    }
+    if($override == TRUE){
+        $display_widgetsettings = true; 
+    }
+  if ($display_widgetsettings == TRUE){
   ?>
 		<iframe
 			id="tawkIframe"
@@ -94,7 +101,8 @@ if ( ! defined( 'ABSPATH' ) ) {
                 });
             }
 	  	</script>
-  <?php }else{
+      <?php
+   }else{
       echo "<h2>Property and widget is already set.</h2>";
       $tawk_admin_url = admin_url('options-general.php?page=tawkto_plugin&override=1');
       echo 'if you wish to reselect property or widget <a href="'.$tawk_admin_url.'">click here</a>';
