@@ -120,6 +120,8 @@ Note: You will need a free tawk.to account : [Create one for free here!](https:/
 * logged in user recognition
   If user is logged in, the widget will fill the pre-chat form automatically
  
+ = 0.3.2 = 
+* fixed issues on widget settings on fresh install
 
 ## Frequently Asked Questions 
 

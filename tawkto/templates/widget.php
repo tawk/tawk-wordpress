@@ -1,4 +1,4 @@
-<!--Start of Tawk.to Script (0.3.1)-->
+<!--Start of Tawk.to Script (0.3.2)-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{};
 <?php echo $user_js; ?>
@@ -12,4 +12,4 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<!--End of Tawk.to Script (0.3.1)-->
+<!--End of Tawk.to Script (0.3.2)-->
