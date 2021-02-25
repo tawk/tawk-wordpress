@@ -3,7 +3,7 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.4.5
+Version: 0.5.0
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */

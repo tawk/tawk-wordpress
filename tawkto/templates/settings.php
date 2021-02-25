@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   <div class="tawktabs">
     <button class="tawktablinks" onclick="opentab(event, 'account')" id="defaultOpen">Account Settings</button>
     <button class="tawktablinks" onclick="opentab(event, 'visibility')">Visibility Options</button>
-    <button class="tawktablinks" onclick="opentab(event, 'visitor')">Visitor Options</button>
+    <button class="tawktablinks" onclick="opentab(event, 'visitor')">Privacy Options</button>
       <?php
       if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
       {
@@ -285,7 +285,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
   <div id="visitor" class="tawktabcontent">
-    <h2><?php _e('Visitor Options','tawk-to-live-chat'); ?></h2>
+    <h2><?php _e('Privacy Options','tawk-to-live-chat'); ?></h2>
     <table class="form-table">
       <tr valign="top">
         <th class="tawksetting" scope="row">
