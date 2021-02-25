@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Tawk.to Live Chat
-Plugin URI: https://tawk.to
+Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.3.2
+Version: 0.4.4
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
@@ -55,7 +55,7 @@ if(!class_exists('TawkTo_Settings')){
         	wp_enqueue_style( 'tawk_admin_style' );
 
         	wp_enqueue_script( 'tawk_admin_script', plugins_url( 'assets/tawk.admin.js' , __FILE__ ) );
-        
+
 		}
 
 		public function admin_init(){
@@ -78,20 +78,20 @@ if(!class_exists('TawkTo_Settings')){
 			update_option(self::TAWK_PAGE_ID_VARIABLE, $_POST['pageId']);
 			update_option(self::TAWK_WIDGET_ID_VARIABLE, $_POST['widgetId']);
 
-			
+
 			echo json_encode(array('success' => TRUE));
 			die();
 		}
 
 		function tawk_admin_notice() {
 
-		   	if( isset($_GET["settings-updated"]) ) 
-		   	{
-			    ?>
-			    <div class="notice notice-warning is-dismissible">
-			        <p><?php _e( 'You might need to clear cache if your using a cache plugin to see your udpates', 'tawk-to-live-chat' ); ?></p>
-			    </div>
-			    <?php
+			if( isset($_GET["settings-updated"]) )
+			{
+				?>
+				<div class="notice notice-warning is-dismissible">
+					<p><?php _e( 'You might need to clear cache if your using a cache plugin to see your updates', 'tawk-to-live-chat' ); ?></p>
+				</div>
+				<?php
 			}
 		}
 
@@ -138,7 +138,7 @@ if(!class_exists('TawkTo_Settings')){
 			echo '<style>
 				    .form-table th.tawksetting {
 				      width: 350px;
-				    } 
+				    }
 				    .tawknotice{
 				    	font-size:14px;
 				    }
@@ -180,15 +180,6 @@ if(!class_exists('TawkTo')){
 
 		}
 
-		public function check_if_user_logged_in()
-		{
-	        if ( is_user_logged_in() ){
-	        	$current_user = wp_get_current_user();
-	        	$current_user_name = $current_user->user_firstname . ' '.$current_user->user_lastname;
-	        	$current_user_email = $current_user->user_email;
-	        }
-	    }
-
 		public static function activate(){
 
 			$visibility = array (
@@ -219,114 +210,126 @@ if(!class_exists('TawkTo')){
 		}
 
 		public function shortcode_print_embed_code(){
-			add_action('wp_footer',  array($this, 'embed_code'));
+			add_action('wp_footer',  array($this, 'embed_code'),100);
 		}
 
-		public function embed_code()
-		{
+		public function getCurrentCustomerDetails () {
+			if(is_user_logged_in() ){
+				$current_user = wp_get_current_user();
+				$user_info = array(
+					'name' => $current_user->display_name,
+					'email' => $current_user->user_email
+				);
+				return json_encode($user_info);
+			}
+			return NULL;
+		}
+
+		public function embed_code() {
 			$page_id = get_option('tawkto-embed-widget-page-id');
 			$widget_id = get_option('tawkto-embed-widget-widget-id');
-			$user_js = '';
 
-			global $current_user;
-	        	$current_user = wp_get_current_user();
-	        	$current_user_name = $current_user->user_firstname . ' '.$current_user->user_lastname;
-	        	$current_user_email = $current_user->user_email;
-	        	$user_js = '
-					Tawk_API.visitor = {
-					    name  : "'.$current_user_name.'",
-					    email : "'. $current_user_email.'"
-					};
-				';
-				
-			
-			if(!empty($page_id) && !empty($widget_id))
-			{
+			$customer_details = $this->getCurrentCustomerDetails();
+
+			if (!empty($page_id) && !empty($widget_id)) {
 				include(sprintf("%s/templates/widget.php", dirname(__FILE__)));
 			}
 		}
 
-		public function print_embed_code()
-		{
-			$vsibility = get_option( 'tawkto-visibility-options' );
-			
-			$display = FALSE;
+		private function get_current_url() {
+			$current_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+			$current_url = urldecode($current_url);
 
-			if(($vsibility['show_onfrontpage'] == 1) && (is_home() || is_front_page()) ){ $display = TRUE; }
-			if(($vsibility['show_oncategory'] == 1) && is_category() ){ $display = TRUE; }
-			if(($vsibility['show_ontagpage'] == 1) && is_tag() ){ $display = TRUE; }
-			if($vsibility['always_display'] == 1){ $display = TRUE; }
-			if(($vsibility['show_onarticlepages'] == 1) && is_single() ){ $display = TRUE; }
+			$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
 
-			if(($vsibility['exclude_url'] == 1)){
-				$excluded_url_list = $vsibility['excluded_url_list'];
+			return strtolower($protocol . $current_url);
+		}
 
-				$current_url = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-				$current_url = urldecode($current_url);
+		private function match_url($url, $url_pattern) {
+			// do partial match if wildcard character matched at the end pattern
+			if (substr($url_pattern, -1) === '*') {
+				$url_pattern = substr($url_pattern, 0, -1);
 
-				$ssl      = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' );
-			    $sp       = strtolower( $_SERVER['SERVER_PROTOCOL'] );
-			    $protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
+				return (strpos($url, $url_pattern) === 0);
+			}
 
-			    $current_url = $protocol.'://'.$current_url;
-			    $current_url = strtolower($current_url);
+			// do extact match if wildcard character not matched at the end pattern
+			return (strcmp($url, $url_pattern) === 0);
+		}
 
-				$excluded_url_list = preg_split("/,/", $excluded_url_list);
-				foreach($excluded_url_list as $exclude_url)
-				{
-					$exclude_url = strtolower(urldecode(trim($exclude_url)));
-					if(!empty($exclude_url))
-					{
-						if (strpos($current_url, $exclude_url) !== false) 
-						{
-							if(strcmp($current_url, $exclude_url) === 0)
-							{
-								$display = false;
-							}
-						}
-					}
+		public function print_embed_code() {
+			$vsibility = get_option('tawkto-visibility-options');
+			$display = false;
+
+			if ($vsibility['always_display'] == 1) {
+				$display = true;
+			}
+
+			if (($vsibility['show_onfrontpage'] == 1) && (is_home() || is_front_page())) {
+				$display = true;
+			}
+
+			if (($vsibility['show_oncategory'] == 1) && is_category()) {
+				$display = true;
+			}
+
+			if (($vsibility['show_ontagpage'] == 1) && is_tag()) {
+				$display = true;
+			}
+
+			if (($vsibility['show_onarticlepages'] == 1) && is_single()) {
+				$display = true;
+			}
+
+			if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+				if (($vsibility['display_on_shop'] == 1) && is_shop()) {
+					$display = true;
+				}
+
+				if (($vsibility['display_on_productcategory'] == 1) && is_product_category()) {
+					$display = true;
+				}
+
+				if (($vsibility['display_on_productpage'] == 1) && is_product()) {
+					$display = true;
+				}
+
+				if (($vsibility['display_on_producttag'] == 1) && is_product_tag()) {
+					$display = true;
 				}
 			}
 
-			if(isset($vsibility['include_url']) && $vsibility['include_url'] == 1){
+			if (isset($vsibility['include_url']) && $vsibility['include_url'] == 1) {
+				$current_url = $this->get_current_url();
+
 				$included_url_list = $vsibility['included_url_list'];
-				$current_url = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-				$current_url = urldecode($current_url);
-
-				$ssl      = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' );
-			    $sp       = strtolower( $_SERVER['SERVER_PROTOCOL'] );
-			    $protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
-
-			    $current_url = $protocol.'://'.$current_url;
-			    $current_url = strtolower($current_url);
-
 				$included_url_list = preg_split("/,/", $included_url_list);
-				foreach($included_url_list as $include_url)
-				{
+
+				foreach ($included_url_list as $include_url) {
 					$include_url = strtolower(urldecode(trim($include_url)));
-					if(!empty($include_url))
-					{
-						if (strpos($current_url, $include_url) !== false) 
-						{
-							if(strcmp($current_url, $include_url) === 0)
-							{
-								$display = TRUE;
-							}
-						}
+
+					if (!empty($include_url) && $this->match_url($current_url, $include_url)) {
+						$display = true;
 					}
 				}
 			}
 
-			if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
-   			{
-				if(($vsibility['display_on_shop'] == 1) && is_shop() ){ $display = TRUE; }
-				if(($vsibility['display_on_productcategory'] == 1) && is_product_category() ){ $display = TRUE; }
-				if(($vsibility['display_on_productpage'] == 1) && is_product() ){ $display = TRUE; }
-				if(($vsibility['display_on_producttag'] == 1) && is_product_tag() ){ $display = TRUE; }
+			if (isset($vsibility['exclude_url']) && ($vsibility['exclude_url'] == 1)) {
+				$current_url = $this->get_current_url();
+
+				$excluded_url_list = $vsibility['excluded_url_list'];
+				$excluded_url_list = preg_split("/,/", $excluded_url_list);
+
+				foreach ($excluded_url_list as $exclude_url) {
+					$exclude_url = strtolower(urldecode(trim($exclude_url)));
+
+					if (!empty($exclude_url) && $this->match_url($current_url, $exclude_url)) {
+						$display = false;
+					}
+				}
 			}
 
-			if($display == TRUE)
-			{
+			if ($display) {
 				$this->embed_code();
 			}
 		}
