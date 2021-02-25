@@ -3,7 +3,7 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.4.4
+Version: 0.4.5
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
@@ -31,7 +31,8 @@ if(!class_exists('TawkTo_Settings')){
 				'display_on_shop' => 0,
 				'display_on_productcategory' => 0,
 				'display_on_productpage' => 0,
-				'display_on_producttag' => 0
+				'display_on_producttag' => 0,
+				'enable_visitor_recognition' => 1
 			);
 			update_option( 'tawkto-visibility-options', $visibility);
 			}
@@ -120,6 +121,7 @@ if(!class_exists('TawkTo_Settings')){
 			$input['display_on_productcategory'] = ($input['display_on_productcategory'] != '1')? 0 : 1;
 			$input['display_on_productpage'] = ($input['display_on_productpage'] != '1')? 0 : 1;
 			$input['display_on_producttag'] = ($input['display_on_producttag'] != '1')? 0 : 1;
+			$input['enable_visitor_recognition'] = ($input['enable_visitor_recognition'] != '1')? 0 : 1;
 
 			return $input;
 		}
@@ -195,7 +197,8 @@ if(!class_exists('TawkTo')){
 				'display_on_shop' => 0,
 				'display_on_productcategory' => 0,
 				'display_on_productpage' => 0,
-				'display_on_producttag' => 0
+				'display_on_producttag' => 0,
+				'enable_visitor_recognition' => 1
 			);
 
 			add_option(TawkTo_Settings::TAWK_PAGE_ID_VARIABLE, '', '', 'yes');
@@ -225,11 +228,15 @@ if(!class_exists('TawkTo')){
 			return NULL;
 		}
 
-		public function embed_code() {
+		public function embed_code($options) {
 			$page_id = get_option('tawkto-embed-widget-page-id');
 			$widget_id = get_option('tawkto-embed-widget-widget-id');
 
-			$customer_details = $this->getCurrentCustomerDetails();
+			$enable_visitor_recognition = $options['enable_visitor_recognition'];
+
+			if ($enable_visitor_recognition) {
+				$customer_details = $this->getCurrentCustomerDetails();
+			}
 
 			if (!empty($page_id) && !empty($widget_id)) {
 				include(sprintf("%s/templates/widget.php", dirname(__FILE__)));
@@ -330,7 +337,10 @@ if(!class_exists('TawkTo')){
 			}
 
 			if ($display) {
-				$this->embed_code();
+				$options = array(
+					'enable_visitor_recognition' => $vsibility['enable_visitor_recognition'] == 1
+				);
+				$this->embed_code($options);
 			}
 		}
 

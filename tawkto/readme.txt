@@ -166,6 +166,9 @@ Note: You will need a free tawk.to account : [Create one for free here!](https:/
 = 0.4.4
 * supported version bump 5.6.2
 
+= 0.4.5
+* Added option to enable/disable visitor recognition
+
 ## Frequently Asked Questions
 
 = How much does this cost? =
