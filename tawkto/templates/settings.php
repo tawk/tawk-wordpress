@@ -26,6 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   <div class="tawktabs">
     <button class="tawktablinks" onclick="opentab(event, 'account')" id="defaultOpen">Account Settings</button>
     <button class="tawktablinks" onclick="opentab(event, 'visibility')">Visibility Options</button>
+    <button class="tawktablinks" onclick="opentab(event, 'privacy')">Privacy Options</button>
       <?php
       if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
       {
@@ -283,7 +284,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	   ?>
 	</div>
 
-</div>
+  <div id="privacy" class="tawktabcontent">
+    <h2><?php _e('Privacy Options','tawk-to-live-chat'); ?></h2>
+    <table class="form-table">
+      <tr valign="top">
+        <th class="tawksetting" scope="row">
+          <?php _e('Enable Visitor Recognition', 'tawk-to-live-chat'); ?>
+        </th>
+        <td>
+          <label class="switch">
+          <input type="checkbox" class="slider round" id="enable_visitor_recognition" name="tawkto-visibility-options[enable_visitor_recognition]" value="1" <?php echo checked( 1, $visibility['enable_visitor_recognition'], false ); ?> />
+          <div class="slider round"></div>
+          </label>
+        </td>
+      </tr>
+    </table>
+  </div>
 <div class="tawkaction">
   <div class="tawkfootaction">
   <?php submit_button(); ?>

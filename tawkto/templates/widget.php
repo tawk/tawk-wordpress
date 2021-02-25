@@ -1,8 +1,8 @@
-<!--Start of Tawk.to Script (0.4.4)-->
+<!--Start of Tawk.to Script (0.5.0)-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{};
 <?php
-if(!is_null($customer_details)) {
+if(!is_null($customer_details) && $enable_visitor_recognition) {
 	echo 'Tawk_API.visitor = '. $customer_details.';';
 }
 ?>
@@ -16,4 +16,4 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<!--End of Tawk.to Script (0.4.4)-->
+<!--End of Tawk.to Script (0.5.0)-->
