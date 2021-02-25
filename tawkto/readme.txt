@@ -168,6 +168,7 @@ Note: You will need a free tawk.to account : [Create one for free here!](https:/
 
 = 0.5.0
 * Added option to enable/disable visitor recognition
+* Escaped widget embed URL to prevent possible XSS issues
 
 ## Frequently Asked Questions
 
