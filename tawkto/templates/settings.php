@@ -6,7 +6,7 @@
  * @copyright (C) 2014- Tawk.to
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 **/
-if ( ! defined( 'ABSPATH' ) ) { 
+if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 ?>
@@ -23,19 +23,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php submit_button(); ?>
 </div>
 <div class="tawksettingsbody">
-	<div class="tawktabs">
-	  <button class="tawktablinks" onclick="opentab(event, 'account')" id="defaultOpen">Account Settings</button>
-	  <button class="tawktablinks" onclick="opentab(event, 'visibility')">Visibility Options</button>
-	  	<?php 
-	  	if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
-   		{
-   		?>
-	  		<button class="tawktablinks" onclick="opentab(event, 'woocommerce')">Woocomerce Options</button>
-	  	<?php } ?>
-	</div>
+  <div class="tawktabs">
+    <button class="tawktablinks" onclick="opentab(event, 'account')" id="defaultOpen">Account Settings</button>
+    <button class="tawktablinks" onclick="opentab(event, 'visibility')">Visibility Options</button>
+      <?php
+      if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
+      {
+      ?>
+        <button class="tawktablinks" onclick="opentab(event, 'woocommerce')">Woocomerce Options</button>
+      <?php } ?>
+  </div>
 
-	<div id="account" class="tawktabcontent" >
-  <?php 
+  <div id="account" class="tawktabcontent" >
+  <?php
       $page_id = get_option(self::TAWK_PAGE_ID_VARIABLE);
       $widget_id = get_option(self::TAWK_WIDGET_ID_VARIABLE);
       if(isset($_GET["override"]) && $_GET["override"] == 1){
@@ -48,22 +48,22 @@ if ( ! defined( 'ABSPATH' ) ) {
         $display_widgetsettings = true;
     }
     if($override == TRUE){
-        $display_widgetsettings = true; 
+        $display_widgetsettings = true;
     }
   if ($display_widgetsettings == TRUE){
   ?>
-		<iframe
-			id="tawkIframe"
-			src=""
-			style="min-height: 295px; width : 100%; border: none; margin-top: 20px">
-	  	</iframe>
-	  	<script>
-	  	  var currentHost = window.location.protocol + "//" + window.location.host;
-	  		var url = "<?php echo $iframe_url ?>&parentDomain=" + currentHost;
-	  		jQuery('#tawkIframe').attr('src', url);
-	  		var iframe = jQuery('#tawk_widget_customization')[0];
+    <iframe
+      id="tawkIframe"
+      src=""
+      style="min-height: 295px; width : 100%; border: none; margin-top: 20px">
+      </iframe>
+      <script>
+        var currentHost = window.location.protocol + "//" + window.location.host;
+        var url = "<?php echo $iframe_url ?>&parentDomain=" + currentHost;
+        jQuery('#tawkIframe').attr('src', url);
+        var iframe = jQuery('#tawk_widget_customization')[0];
 
-	  		window.addEventListener('message', function(e) {
+        window.addEventListener('message', function(e) {
                 if(e.origin === '<?php echo $base_url ?>') {
 
                     if(e.data.action === 'setWidget') {
@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     pageId : e.data.pageId,
                     widgetId : e.data.widgetId
                 }, function(r) {
-                    if(r.success) { 
+                    if(r.success) {
                         e.source.postMessage({action: 'setDone'}, '<?php echo $base_url ?>');
                     } else {
                         e.source.postMessage({action: 'setFail'}, '<?php echo $base_url ?>');
@@ -100,15 +100,15 @@ if ( ! defined( 'ABSPATH' ) ) {
                     }
                 });
             }
-	  	</script>
+      </script>
       <?php
-   }else{
+    }else{
       echo "<h2>Property and widget is already set.</h2>";
       $tawk_admin_url = admin_url('options-general.php?page=tawkto_plugin&override=1');
       echo 'if you wish to reselect property or widget <a href="'.$tawk_admin_url.'">click here</a>';
     }
   ?>
-	</div>
+  </div>
 <form method="post" action="options.php">
    <?php
    settings_fields( 'tawk_options' );
@@ -140,7 +140,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php _e('Please Note: that you can use the visibility options below, or you can show the tawk.to widget','tawk-to-live-chat'); ?>
     <BR>
     <?php _e('on any page independent of these visibility options by simply using the <b>[tawkto]</b> shortcode in','tawk-to-live-chat'); ?>
-    <BR> 
+    <BR>
     <?php _e('the post or page.','tawk-to-live-chat'); ?>
     </p>
     <table class="form-table">
@@ -198,9 +198,9 @@ if ( ! defined( 'ABSPATH' ) ) {
         </label>
       	<div id="exlucded_urls_container" style="display:none;">
       	<textarea id="excluded_url_list" name="tawkto-visibility-options[excluded_url_list]" cols="50" rows="10"><?php echo $visibility['excluded_url_list']; ?></textarea><BR>
-      	<?php _e('Enter the url where you <b>DO NOT</b> want the widget to display.','tawk-to-live-chat'); ?>
-      	<BR>
-				<?php _e('Separate entries with comma','tawk-to-live-chat'); ?>(,).<BR>
+        <?php _e('Enter the url where you <b>DO NOT</b> want the widget to display.','tawk-to-live-chat'); ?><BR>
+        <?php _e('Separate entries with comma','tawk-to-live-chat'); ?>(,).<BR>
+        <?php _e('Add (*) at the end of the entry to match wildcard url.','tawk-to-live-chat'); ?><BR>
       	</div>
       </td>
       </tr>
@@ -215,6 +215,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       	<textarea id="included_url_list" name="tawkto-visibility-options[included_url_list]" cols="50" rows="10"><?php echo $visibility['included_url_list']; ?></textarea><BR>
       	<?php _e('Enter the url where you <b>WANT</b> the widget to display.','tawk-to-live-chat'); ?><BR>
 				<?php _e('Separate entries with comma ','tawk-to-live-chat'); ?>(,).<BR>
+        <?php _e('Add (*) at the end of the entry to match wildcard url.','tawk-to-live-chat'); ?><BR>
       	</div>
       </td>
       </tr>
@@ -223,8 +224,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div id="woocommerce" class="tawktabcontent">
-	   <?php 
-	   if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
+	   <?php
+	   if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
 	   {
 
 	   if(!isset($visibility['display_on_shop']))
