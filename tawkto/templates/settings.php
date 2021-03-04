@@ -130,9 +130,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'display_on_shop' => 0,
 				'display_on_productcategory' => 0,
 				'display_on_productpage' => 0,
-				'display_on_producttag' => 0
+				'display_on_producttag' => 0,
+				'enable_visitor_recognition' => 1
 			);
    }
+
+	if (!isset($visibility['enable_visitor_recognition'])) {
+	   $visibility['enable_visitor_recognition'] = 1; // default value
+	}
    ?>
 	<div id="visibility" class="tawktabcontent">
 	   <div id="tawkvisibilitysettings">
