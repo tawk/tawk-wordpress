@@ -3,7 +3,7 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.5.0
+Version: 0.5.1
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
@@ -338,8 +338,13 @@ if(!class_exists('TawkTo')){
 
 			if ($display) {
 				$options = array(
-					'enable_visitor_recognition' => $vsibility['enable_visitor_recognition'] == 1
+					'enable_visitor_recognition' => true // default value
 				);
+
+				if (isset($vsibility['enable_visitor_recognition'])) {
+					$options['enable_visitor_recognition'] = $vsibility['enable_visitor_recognition'] == 1;
+				}
+
 				$this->embed_code($options);
 			}
 		}
