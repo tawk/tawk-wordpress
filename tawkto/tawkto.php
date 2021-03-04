@@ -338,8 +338,13 @@ if(!class_exists('TawkTo')){
 
 			if ($display) {
 				$options = array(
-					'enable_visitor_recognition' => $vsibility['enable_visitor_recognition'] == 1
+					'enable_visitor_recognition' => true // default value
 				);
+
+				if (isset($vsibility['enable_visitor_recognition'])) {
+					$options['enable_visitor_recognition'] = $vsibility['enable_visitor_recognition'] == 1;
+				}
+
 				$this->embed_code($options);
 			}
 		}
