@@ -3,7 +3,7 @@ Contributors: tawkto
 Tags: tawk,tawk.to,tawkto,chat,free chat,livechat,chat widget,plugin,chat for web,chat online,chat software,free live chat,IM Chat,,live chat,live support,live web chat,online chat,online support,snapengage,wordpress chat,wordpress live chat
 Requires at least: 2.7
 Tested up to: 5.7
-Stable tag: 0.5.1
+Stable tag: 0.5.2
 
 (OFFICIAL tawk.to plugin) Instantly chat with  visitors on your website with the free tawk.to chat widget.
 Website: [http://tawk.to](http://tawk.to)
@@ -55,125 +55,129 @@ Note: You will need a free tawk.to account : [Create one for free here!](https:/
 
 == Changelog ==
 
-= 0.1.0 =
-* Add the tawk.to live chat widget to your site!
+= 0.5.2 =
+* Fixed checking of $customer_details variable.
+* Fixed undefined index issues on validating visibility options.
 
-= 0.1.1 =
-* No more manual embed code copying, choose desired widget and it will be inserted in your site
+= 0.5.1 =
+* Supported version bump 5.7.
+* Fixed undefined index issue of the enable/disable visitor recognition feature.
+* Fixed default value for enable/disable visitor recognition feature after updating plugin.
 
-= 0.1.2 =
-* Supported version bump
+= 0.5.0 =
+* Added option to enable/disable visitor recognition
+* Escaped widget embed URL to prevent possible XSS issues
 
-= 0.1.3 =
-* Supported version bump
+= 0.4.4 =
+* supported version bump 5.6.2
 
-= 0.1.4 =
-* Supported version bump
+= 0.4.3 =
+* supported version bumbp 5.5.1
 
-= 0.1.5 =
-* Implemented visibility options, you can now choose to Always show the script, show it only on the front page, only on category pages or only on pages tagged with a shortcode.
+= 0.4.2 =
+* supported version bump 5.4
 
-= 0.1.6 =
-* Modified visibility options to fix a bug, and implemented a better shortcode.
+= 0.4.1 =
+* Fixed plugin version mismatch in readme and plugin file
 
-= 0.1.7 =
-* Fixed naming convention causing a conflict with another plugin
+= 0.4.0 =
+* Added support for wildcard url match for include URL and exclude URL
 
-= 0.1.8 =
-* Fixed bug causing conflict with another plugin, and tested on 4.5
+= 0.3.8 =
+* supported version bump 5.2.2
 
-= 0.1.9 =
-* Added the ability to exclude a specific url slug
+= 0.3.7 =
+* supported version bump 5.2.1
 
-= 0.2.0 =
-* Added multisite support *
+= 0.3.6 =
+* supported version bump 5.1
 
-= 0.2.1 =
-* Supported version bump
+= 0.3.5 =
+* supported version bump
 
-= 0.2.2 =
-* Supported version bump to 4.7
-
-= 0.2.3 =
-* Updating widget code due to known conflict
-
-= 0.2.4 =
-* updated session handling
-* Added the ability to include a specific url slug
-* modified plugin settings page interface
-
-= 0.2.5 =
-* Fixed include url warning message thrown
-
-= 0.2.6 =
-* wrapped all hard-coded text in plugin settings with gettext functions
-
-= 0.2.7 =
-* added woocommerce support
-
-= 0.2.8 =
-* added updated plugin admin interface
-
-= 0.2.9 =
-* fixed issue with assets folder
-
-= 0.3.0 =
-* fixed issues with visibility filters
-
-= 0.3.0 =
-* fixed issues with visibility filters
-
-= 0.3.1 =
-* plugin notifications update
-* logged in user recognition
-  If user is logged in, the widget will fill the pre-chat form automatically
-
-= 0.3.2 =
-* fixed issues on widget settings on fresh install
+= 0.3.4 =
+* supported version bump
 
 = 0.3.3 =
 * fixed user recognition vulnerability
 * updated admin page texts
 * moved wp_footer hook to last item
 
-= 0.3.4 =
-* supported version bump
+= 0.3.2 =
+* fixed issues on widget settings on fresh install
 
-= 0.3.5 =
-* supported version bump
+= 0.3.1 =
+* plugin notifications update
+* logged in user recognition
+  If user is logged in, the widget will fill the pre-chat form automatically
 
-= 0.3.6 =
-* supported version bump 5.1
+= 0.3.0 =
+* fixed issues with visibility filters
 
-= 0.3.7 =
-* supported version bump 5.2.1
+= 0.3.0 =
+* fixed issues with visibility filters
 
-= 0.3.8 =
-* supported version bump 5.2.2
+= 0.2.9 =
+* fixed issue with assets folder
 
-= 0.4.0 =
-* Added support for wildcard url match for include URL and exclude URL
+= 0.2.8 =
+* added updated plugin admin interface
 
-= 0.4.1 =
-* Fixed plugin version mismatch in readme and plugin file
+= 0.2.7 =
+* added woocommerce support
 
-= 0.4.2 =
-* supported version bump 5.4
+= 0.2.6 =
+* wrapped all hard-coded text in plugin settings with gettext functions
 
-= 0.4.3 =
-* supported version bumbp 5.5.1
+= 0.2.5 =
+* Fixed include url warning message thrown
 
-= 0.4.4 =
-* supported version bump 5.6.2
+= 0.2.4 =
+* updated session handling
+* Added the ability to include a specific url slug
+* modified plugin settings page interface
 
-= 0.5.0 =
-* Added option to enable/disable visitor recognition
-* Escaped widget embed URL to prevent possible XSS issues
+= 0.2.3 =
+* Updating widget code due to known conflict
 
-= 0.5.1 =
-* Supported version bump 5.7.
-* Fixed undefined index issue of the enable/disable visitor recognition feature.
-* Fixed default value for enable/disable visitor recognition feature after updating plugin.
+= 0.2.2 =
+* Supported version bump to 4.7
+
+= 0.2.1 =
+* Supported version bump
+
+= 0.2.0 =
+* Added multisite support *
+
+= 0.1.9 =
+* Added the ability to exclude a specific url slug
+
+= 0.1.8 =
+* Fixed bug causing conflict with another plugin, and tested on 4.5
+
+= 0.1.7 =
+* Fixed naming convention causing a conflict with another plugin
+
+= 0.1.6 =
+* Modified visibility options to fix a bug, and implemented a better shortcode.
+
+= 0.1.0 =
+* Add the tawk.to live chat widget to your site!
+
+= 0.1.5 =
+* Implemented visibility options, you can now choose to Always show the script, show it only on the front page, only on category pages or only on pages tagged with a shortcode.
+
+= 0.1.4 =
+* Supported version bump
+
+= 0.1.3 =
+* Supported version bump
+
+= 0.1.2 =
+* Supported version bump
+
+= 0.1.1 =
+* No more manual embed code copying, choose desired widget and it will be inserted in your site
 
 ## Frequently Asked Questions
 
