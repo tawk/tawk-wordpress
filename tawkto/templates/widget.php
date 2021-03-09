@@ -2,7 +2,7 @@
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{};
 <?php
-if(!is_null($customer_details) && $enable_visitor_recognition) {
+if(isset($customer_details) && $enable_visitor_recognition) {
 	echo 'Tawk_API.visitor = '. $customer_details.';';
 }
 ?>
