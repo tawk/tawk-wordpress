@@ -3,7 +3,7 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.5.2
+Version: 0.5.3
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
@@ -257,11 +257,16 @@ if(!class_exists('TawkTo')){
 			return NULL;
 		}
 
-		public function embed_code($options) {
+		public function embed_code() {
 			$page_id = get_option('tawkto-embed-widget-page-id');
 			$widget_id = get_option('tawkto-embed-widget-widget-id');
+			$visibility = get_option('tawkto-visibility-options');
 
-			$enable_visitor_recognition = $options['enable_visitor_recognition'];
+			$enable_visitor_recognition = true; // default value
+
+			if (isset($visibility) && isset($visibility['enable_visitor_recognition'])) {
+				$enable_visitor_recognition = $visibility['enable_visitor_recognition'] == 1;
+			}
 
 			if ($enable_visitor_recognition) {
 				$customer_details = $this->getCurrentCustomerDetails();
@@ -366,15 +371,7 @@ if(!class_exists('TawkTo')){
 			}
 
 			if ($display) {
-				$options = array(
-					'enable_visitor_recognition' => true // default value
-				);
-
-				if (isset($vsibility['enable_visitor_recognition'])) {
-					$options['enable_visitor_recognition'] = $vsibility['enable_visitor_recognition'] == 1;
-				}
-
-				$this->embed_code($options);
+				$this->embed_code();
 			}
 		}
 
