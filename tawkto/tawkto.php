@@ -166,7 +166,7 @@ if(!class_exists('TawkTo_Settings')){
 					.'?currentWidgetId='.$widget_id
 					.'&currentPageId='.$page_id
 					.'&transparentBackground=1'
-					.'&platform=wordpress';
+					.'&pltf=wordpress';
 
 
 			include(sprintf("%s/templates/settings.php", dirname(__FILE__)));
