@@ -57,6 +57,7 @@ Note: You will need a free tawk.to account : [Create one for free here!](https:/
 
 = 0.5.4 =
 * Added function for widget selection iframe to auto resize.
+* Provided platform identifier to widget selection iframe.
 
 = 0.5.3 =
 * Fixed issues for checking enabled_visitor_recognition on embed script pre render.
