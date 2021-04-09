@@ -3,7 +3,7 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.5.3
+Version: 0.5.4
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
@@ -165,7 +165,8 @@ if(!class_exists('TawkTo_Settings')){
 			$iframe_url = $base_url.'/generic/widgets'
 					.'?currentWidgetId='.$widget_id
 					.'&currentPageId='.$page_id
-					.'&transparentBackground=1';
+					.'&transparentBackground=1'
+					.'&pltf=wordpress';
 
 
 			include(sprintf("%s/templates/settings.php", dirname(__FILE__)));
