@@ -10,6 +10,9 @@ Docker container for Wordpress.
 - install docker-compose [http://docs.docker.com/compose/install/](http://docs.docker.com/compose/install/)
 
 ## Usage
+Build the image:
+- ```./build.sh```
+
 Start the container:
 - ```docker-compose up```
 
