@@ -3,10 +3,15 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.5.5
+Version: 0.6.0
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
+
+require_once(dirname(__FILE__) . '/vendor/autoload.php');
+
+use Tawk\Match\Url;
+
 if(!class_exists('TawkTo_Settings')){
 
 	class TawkTo_Settings{
@@ -350,7 +355,7 @@ if(!class_exists('TawkTo')){
 				foreach ($included_url_list as $include_url) {
 					$include_url = strtolower(urldecode(trim($include_url)));
 
-					if (!empty($include_url) && $this->match_url($current_url, $include_url)) {
+					if (!empty($include_url) && Url::match_url($current_url, $include_url)) {
 						$display = true;
 					}
 				}
@@ -365,7 +370,7 @@ if(!class_exists('TawkTo')){
 				foreach ($excluded_url_list as $exclude_url) {
 					$exclude_url = strtolower(urldecode(trim($exclude_url)));
 
-					if (!empty($exclude_url) && $this->match_url($current_url, $exclude_url)) {
+					if (!empty($exclude_url) && Url::match_url($current_url, $exclude_url)) {
 						$display = false;
 					}
 				}
