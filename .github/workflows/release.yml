@@ -1,11 +1,8 @@
 name: release
 
 on:
-  pull_request:
-    branches:
-      - master
-    types:
-      - closed
+  release:
+    types: [published]
 
 jobs:
   release:
@@ -14,6 +11,14 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: cached dependencies
+        uses: actions/cache@v2
+        id: cached-dependencies
+        with:
+          path: ./tawkto/vendor
+          # the key will change if composer.lock changes
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
 
       - name: install dependencies
         uses: php-actions/composer@v6
@@ -28,23 +33,12 @@ jobs:
       - name: build artifact
         run: rm tawkto/composer.json tawkto/composer.lock && zip -9 -rq tawkto-${{ steps.version.outputs.version }}.zip tawkto
 
-      - name: release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          draft: true
-          prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
-          tag_name: ${{ steps.version.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
       - name: upload artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./tawkto-${{ steps.version.outputs.version }}.zip
           asset_name: tawkto-${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip

@@ -1,0 +1,2 @@
+# exclude docker files from archive
+/.github export-ignore
