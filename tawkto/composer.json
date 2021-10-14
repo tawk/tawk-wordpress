@@ -2,9 +2,6 @@
     "name": "tawk/wp-plugin",
     "type": "project",
     "version" : "0.6.0",
-    "require-dev": {
-        "phpunit/phpunit": "^7.5"
-    },
     "require": {
         "tawk/url-utils": "^1.0.0"
     },

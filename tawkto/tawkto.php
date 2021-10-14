@@ -292,18 +292,6 @@ if(!class_exists('TawkTo')){
 			return strtolower($protocol . $current_url);
 		}
 
-		private function match_url($url, $url_pattern) {
-			// do partial match if wildcard character matched at the end pattern
-			if (substr($url_pattern, -1) === '*') {
-				$url_pattern = substr($url_pattern, 0, -1);
-
-				return (strpos($url, $url_pattern) === 0);
-			}
-
-			// do extact match if wildcard character not matched at the end pattern
-			return (strcmp($url, $url_pattern) === 0);
-		}
-
 		public function print_embed_code() {
 			$vsibility = get_option('tawkto-visibility-options');
 			$display = false;
@@ -352,12 +340,8 @@ if(!class_exists('TawkTo')){
 				$included_url_list = $vsibility['included_url_list'];
 				$included_url_list = preg_split("/,/", $included_url_list);
 
-				foreach ($included_url_list as $include_url) {
-					$include_url = strtolower(urldecode(trim($include_url)));
-
-					if (!empty($include_url) && Url::match_url($current_url, $include_url)) {
-						$display = true;
-					}
+				if (Url::match($current_url, $included_url_list)) {
+					$display = true;
 				}
 			}
 
@@ -367,13 +351,9 @@ if(!class_exists('TawkTo')){
 				$excluded_url_list = $vsibility['excluded_url_list'];
 				$excluded_url_list = preg_split("/,/", $excluded_url_list);
 
-				foreach ($excluded_url_list as $exclude_url) {
-					$exclude_url = strtolower(urldecode(trim($exclude_url)));
-
-					if (!empty($exclude_url) && Url::match_url($current_url, $exclude_url)) {
-						$display = false;
-					}
-				}
+				if (Url::match($current_url, $excluded_url_list)) {
+					$display = false;
+				};
 			}
 
 			if ($display) {
