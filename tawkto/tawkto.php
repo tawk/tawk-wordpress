@@ -131,22 +131,22 @@ if(!class_exists('TawkTo_Settings')){
 			if (wp_is_json_request() === false) {
 				$response['success'] = false;
 				$response['message'] = 'Invalid request';
-				echo json_encode($response);
-				die();
+				wp_send_json($response);
+				wp_die();
 			};
 
 			if ($this->validate_request_auth($postData, self::TAWK_ACTION_REMOVE_WIDGET) === false) {
 				$response['success'] = false;
 				$response['message'] = 'Unauthorized';
-				echo json_encode($response);
-				die();
+				wp_send_json($response);
+				wp_die();
 			};
 
 			update_option(self::TAWK_PAGE_ID_VARIABLE, '');
 			update_option(self::TAWK_WIDGET_ID_VARIABLE, '');
 
-			echo json_encode($response);
-			die();
+			wp_send_json($response);
+			wp_die();
 		}
 
 		private function validate_request_auth($postData = array(), $action) {
