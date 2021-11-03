@@ -68,33 +68,43 @@ if(!class_exists('TawkTo_Settings')){
 		public function action_setwidget() {
 			header('Content-Type: application/json');
 
+			$postData = json_decode(file_get_contents('php://input'), true);
+
 			$response = array(
 				'success' => true
 			);
 
-			if ($this->validate_request_auth($_POST, self::TAWK_ACTION_SET_WIDGET) === false) {
+			if (wp_is_json_request() === false) {
 				$response['success'] = false;
-				$response['message'] = 'Unauthorized';
-				echo json_encode($response);
-				die();
+				$response['message'] = 'Invalid request';
+				wp_send_json($response);
+				wp_die();
 			};
 
-			if (!isset($_POST['pageId']) || !isset($_POST['widgetId'])) {
-				echo json_encode(array('success' => FALSE));
-				die();
+			if ($this->validate_request_auth($postData, self::TAWK_ACTION_SET_WIDGET) === false) {
+				$response['success'] = false;
+				$response['message'] = 'Unauthorized';
+				wp_send_json($response);
+				wp_die();
+			};
+
+			if (!isset($postData['pageId']) || !isset($postData['widgetId'])) {
+				$response['success'] = false;
+				wp_send_json($response);
+				wp_die();
 			}
 
-			if (!self::ids_are_correct($_POST['pageId'], $_POST['widgetId'])) {
-				echo json_encode(array('success' => FALSE));
-				die();
+			if (!self::ids_are_correct($postData['pageId'], $postData['widgetId'])) {
+				$response['success'] = false;
+				wp_send_json($response);
+				wp_die();
 			}
 
-			update_option(self::TAWK_PAGE_ID_VARIABLE, $_POST['pageId']);
-			update_option(self::TAWK_WIDGET_ID_VARIABLE, $_POST['widgetId']);
+			update_option(self::TAWK_PAGE_ID_VARIABLE, $postData['pageId']);
+			update_option(self::TAWK_WIDGET_ID_VARIABLE, $postData['widgetId']);
 
-
-			echo json_encode($response);
-			die();
+			wp_send_json($response);
+			wp_die();
 		}
 
 		function tawk_admin_notice() {
@@ -112,11 +122,20 @@ if(!class_exists('TawkTo_Settings')){
 		public function action_removewidget() {
 			header('Content-Type: application/json');
 
+			$postData = json_decode(file_get_contents('php://input'), true);
+
 			$response = array(
 				'success' => true
 			);
 
-			if ($this->validate_request_auth($_POST, self::TAWK_ACTION_REMOVE_WIDGET) === false) {
+			if (wp_is_json_request() === false) {
+				$response['success'] = false;
+				$response['message'] = 'Invalid request';
+				echo json_encode($response);
+				die();
+			};
+
+			if ($this->validate_request_auth($postData, self::TAWK_ACTION_REMOVE_WIDGET) === false) {
 				$response['success'] = false;
 				$response['message'] = 'Unauthorized';
 				echo json_encode($response);

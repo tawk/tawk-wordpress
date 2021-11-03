@@ -1,6 +1,6 @@
 // variables
-var currentHost = window.location.protocol + "//" + window.location.host;
-var iframeUrl = tawk_selection_data.url.iframe + '&parentDomain=' + currentHost; // "<?php echo $iframe_url ?>&parentDomain=" + currentHost;
+var currentHost = window.location.protocol + '//' + window.location.host;
+var iframeUrl = tawk_selection_data.url.iframe + '&parentDomain=' + currentHost;
 var baseUrl = tawk_selection_data.url.base;
 
 jQuery('#tawkIframe').attr('src', iframeUrl);
@@ -22,13 +22,25 @@ window.addEventListener('message', function (e) {
 	}
 });
 
+function setHeaders() {
+	jQuery.ajaxSetup({
+		headers : {
+			'Accept' : 'application/json',
+			'Content-Type' : 'application/json'
+		}
+	});
+}
+
 function setWidget (e) {
-	jQuery.post(ajaxurl, {
-		action : 'tawkto_setwidget',
+	setHeaders();
+
+	const data = {
 		pageId : e.data.pageId,
 		widgetId : e.data.widgetId,
 		nonce : tawk_selection_data.nonce.setWidget
-	}, function (r) {
+	};
+
+	jQuery.post(ajaxurl + '?action=tawkto_setwidget', JSON.stringify(data), function (r) {
 		if (!r.success) {
 			return e.source.postMessage({action: 'setFail'}, baseUrl);
 		}
@@ -37,12 +49,14 @@ function setWidget (e) {
 }
 
 function removeWidget (e) {
-	jQuery.post(ajaxurl, {
-		action : 'tawkto_removewidget',
+	setHeaders();
+
+	const data = {
 		nonce : tawk_selection_data.nonce.removeWidget
-	}, function (r) {
+	}
+	jQuery.post(ajaxurl + '?action=tawkto_removewidget', JSON.stringify(data), function (r) {
 		if (!r.success) {
-			return  e.source.postMessage({action: 'removeFail'}, baseUrl);
+			return e.source.postMessage({action: 'removeFail'}, baseUrl);
 		}
 		e.source.postMessage({action: 'removeDone'}, baseUrl);
 	});
