@@ -22,43 +22,51 @@ window.addEventListener('message', function (e) {
 	}
 });
 
-function setHeaders() {
-	jQuery.ajaxSetup({
-		headers : {
-			'Accept' : 'application/json',
-			'Content-Type' : 'application/json'
-		}
-	});
-}
-
 function setWidget (e) {
-	setHeaders();
-
 	const data = {
 		pageId : e.data.pageId,
 		widgetId : e.data.widgetId,
 		nonce : tawk_selection_data.nonce.setWidget
 	};
 
-	jQuery.post(ajaxurl + '?action=tawkto_setwidget', JSON.stringify(data), function (r) {
-		if (!r.success) {
-			return e.source.postMessage({action: 'setFail'}, baseUrl);
+	jQuery.ajax({
+		type : 'POST',
+		url : ajaxurl + '?action=tawkto_setwidget',
+		contentType : 'application/json',
+		dataType : 'json',
+		data : JSON.stringify(data),
+		success : function (r) {
+			if (!r.success) {
+				return e.source.postMessage({action: 'setFail'}, baseUrl);
+			}
+			e.source.postMessage({action: 'setDone'}, baseUrl);
+		},
+		error : function () {
+			e.source.postMessage({action: 'setFail'}, baseUrl);
 		}
-		e.source.postMessage({action: 'setDone'}, baseUrl);
 	});
 }
 
 function removeWidget (e) {
-	setHeaders();
-
 	const data = {
 		nonce : tawk_selection_data.nonce.removeWidget
 	}
-	jQuery.post(ajaxurl + '?action=tawkto_removewidget', JSON.stringify(data), function (r) {
-		if (!r.success) {
-			return e.source.postMessage({action: 'removeFail'}, baseUrl);
+
+	jQuery.ajax({
+		type : 'POST',
+		url : ajaxurl + '?action=tawkto_removewidget',
+		contentType : 'application/json',
+		dataType : 'json',
+		data : JSON.stringify(data),
+		success : function (r) {
+			if (!r.success) {
+				return e.source.postMessage({action: 'removeFail'}, baseUrl);
+			}
+			e.source.postMessage({action: 'removeDone'}, baseUrl);
+		},
+		error : function () {
+			e.source.postMessage({action: 'removeFail'}, baseUrl);
 		}
-		e.source.postMessage({action: 'removeDone'}, baseUrl);
 	});
 }
 

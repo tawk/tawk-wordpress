@@ -10,7 +10,6 @@ jQuery(function() {
         jQuery('#include_url').prop('disabled', true);
     } else {
         jQuery('.twk_selected_display').show();
-
     }
 
     jQuery("#always_display").change(function() {
@@ -30,7 +29,6 @@ jQuery(function() {
             jQuery('#include_url').prop('disabled', false);
         }
     });
-
 
     jQuery("#exclude_url").change(function() {
         if (this.checked) {
@@ -55,7 +53,6 @@ jQuery(function() {
     if (jQuery("#exclude_url").prop("checked")) {
         jQuery("#exlucded_urls_container").fadeIn();
     }
-
 });
 
 
