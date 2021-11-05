@@ -2,6 +2,7 @@
 Contributors: tawkto
 Tags: tawk,tawk.to,tawkto,chat,free chat,livechat,chat widget,plugin,chat for web,chat online,chat software,free live chat,IM Chat,,live chat,live support,live web chat,online chat,online support,snapengage,wordpress chat,wordpress live chat
 Requires at least: 2.7
+Requires PHP: 5.6
 Tested up to: 5.8
 Stable tag: 0.6.0
 
@@ -56,8 +57,8 @@ Note: You will need a free tawk.to account : [Create one for free here!](https:/
 == Changelog ==
 
 = 0.6.0 =
-* Added checking of user access for widget selection feature. Only users with `administrator` role can setup/modify the widget.
-* Security update for handling possible CSRF attack.
+* **Security Update** Add CSRF tokens and specific action access checks.
+* **Security Update** Use `application/json` content type for ajax requests.
 
 = 0.5.5 =
 * Supported version bump 5.8.
