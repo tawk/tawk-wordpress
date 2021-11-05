@@ -52,73 +52,24 @@ if ( ! defined( 'ABSPATH' ) ) {
         $display_widgetsettings = true;
     }
   if ($display_widgetsettings == TRUE){
+
+    wp_enqueue_script('tawk-selection', plugin_dir_url(__DIR__).'assets/js/tawk.selection.js');
+    wp_localize_script('tawk-selection', 'tawk_selection_data', array(
+      'url' => array(
+        'base' => $base_url,
+        'iframe' => $iframe_url,
+      ),
+      'nonce' => array(
+        'setWidget' => $set_widget_nonce,
+        'removeWidget' => $remove_widget_nonce
+      )
+    ));
   ?>
     <iframe
       id="tawkIframe"
       src=""
       style="min-height: 295px; width : 100%; border: none; margin-top: 20px">
       </iframe>
-      <script>
-        var currentHost = window.location.protocol + "//" + window.location.host;
-        var url = "<?php echo $iframe_url ?>&parentDomain=" + currentHost;
-        jQuery('#tawkIframe').attr('src', url);
-        var iframe = jQuery('#tawk_widget_customization')[0];
-
-        window.addEventListener('message', function(e) {
-                if(e.origin === '<?php echo $base_url ?>') {
-
-                    if(e.data.action === 'setWidget') {
-                        setWidget(e);
-                    }
-
-                    if(e.data.action === 'removeWidget') {
-                        removeWidget(e);
-                    }
-
-                    if(e.data.action === 'reloadHeight') {
-                        reloadIframeHeight(e.data.height);
-                    }
-                }
-            });
-
-            function setWidget(e) {
-                jQuery.post(ajaxurl, {
-                    action : 'tawkto_setwidget',
-                    pageId : e.data.pageId,
-                    widgetId : e.data.widgetId
-                }, function(r) {
-                    if(r.success) {
-                        e.source.postMessage({action: 'setDone'}, '<?php echo $base_url ?>');
-                    } else {
-                        e.source.postMessage({action: 'setFail'}, '<?php echo $base_url ?>');
-                    }
-
-                });
-            }
-
-            function removeWidget(e) {
-                jQuery.post(ajaxurl, {action: 'tawkto_removewidget'}, function(r) {
-                    if(r.success) {
-                        e.source.postMessage({action: 'removeDone'}, '<?php echo $base_url ?>');
-                    } else {
-                        e.source.postMessage({action: 'removeFail'}, '<?php echo $base_url ?>');
-                    }
-                });
-            }
-
-            function reloadIframeHeight(height) {
-                if (!height) {
-                    return;
-                }
-
-                var iframe = jQuery('#tawkIframe');
-                if (height === iframe.height()) {
-                    return;
-                }
-
-                iframe.height(height);
-            }
-      </script>
       <?php
     }else{
       echo "<h2>Property and widget is already set.</h2>";
@@ -127,6 +78,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
   ?>
   </div>
+</div>
 <form method="post" action="options.php">
    <?php
    settings_fields( 'tawk_options' );
