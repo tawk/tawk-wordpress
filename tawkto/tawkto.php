@@ -3,7 +3,7 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.5.5
+Version: 0.6.0
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
@@ -68,18 +68,18 @@ if(!class_exists('TawkTo_Settings')){
 		public function action_setwidget() {
 			header('Content-Type: application/json');
 
-			$postData = json_decode(file_get_contents('php://input'), true);
-
-			$response = array(
-				'success' => true
-			);
-
 			if (wp_is_json_request() === false) {
 				$response['success'] = false;
 				$response['message'] = 'Invalid request';
 				wp_send_json($response);
 				wp_die();
 			};
+
+			$postData = json_decode(file_get_contents('php://input'), true);
+
+			$response = array(
+				'success' => true
+			);
 
 			if ($this->validate_request_auth($postData, self::TAWK_ACTION_SET_WIDGET) === false) {
 				$response['success'] = false;
@@ -122,18 +122,18 @@ if(!class_exists('TawkTo_Settings')){
 		public function action_removewidget() {
 			header('Content-Type: application/json');
 
-			$postData = json_decode(file_get_contents('php://input'), true);
-
-			$response = array(
-				'success' => true
-			);
-
 			if (wp_is_json_request() === false) {
 				$response['success'] = false;
 				$response['message'] = 'Invalid request';
 				wp_send_json($response);
 				wp_die();
 			};
+
+			$postData = json_decode(file_get_contents('php://input'), true);
+
+			$response = array(
+				'success' => true
+			);
 
 			if ($this->validate_request_auth($postData, self::TAWK_ACTION_REMOVE_WIDGET) === false) {
 				$response['success'] = false;
