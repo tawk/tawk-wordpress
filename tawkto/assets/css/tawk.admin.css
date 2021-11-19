@@ -1,182 +1,220 @@
-.form-table th.tawksetting {
-  width: 350px;
-}
-
-.tawknotice{
-	font-size:14px;
-}
-
-.tawkheader{
+/**
+ * #.# Header section
+ *
+ * Styles in the header section of the settings panel
+ */
+#tawk-header {
+	background-color: #ffffff;
 	overflow: hidden;
-  border-style: solid;
-  border-color: #ccc;
-  border-width:1px 1px 0 1px;
-  background-color: #ffffff;
-  width:95%;
-  margin-top:20px;
-  padding: 6px 12px 0;
-  font-size:2em;
+	width: 95%;
+	margin-top: 20px;
+	padding: 6px 12px 0;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 1px 1px 0 1px;
+	font-size: 2em;
 }
 
-div.tawkmel{
-  float:left;
-  width:10%;
-  min-width: 75px;
-  min-height: 80px;
-  text-align: center;
+div.tawk-mel {
+	float: left;
+	min-width: 75px;
+	min-height: 80px;
+	width: 10%;
+	text-align: center;
 }
 
-div.tawkheadtext{
-  float:left;
-  line-height: 86px;
+div.tawk-header-text {
+	float: left;
+	line-height: 86px;
 }
 
-div.tawkfootaction{
-  float:left;
-  width:10%;
-  min-width: 75px;
+/**
+ * #.# Form Action
+ *
+ * Styles for the form action button
+ */
+.tawk-action {
+	background-color: #ffffff;
+	overflow: hidden;
+	width: 95%;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
 }
 
-div.tawkfoottext{
-  float:right;
-  text-align: right;
+.tawk-action p {
+	margin:0;
+	padding:0;
 }
 
-a.tawklink{
-  color:#7FB06F;
-  text-decoration: none;
+div.tawk-footer-action {
+	width: 10%;
+	min-width: 75px;
+	float: left;
 }
 
-a.tawklink:hover{
-  text-decoration: underline;
+div.tawk-footer-text {
+	float: right;
+	text-align: right;
 }
 
-
-div.tawkaction{
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #ffffff;
-    width:95%;
-    padding: 6px 12px;
+/**
+ * #.# Settings Body
+ *
+ * Styles for the settings panel body container
+ */
+#tawk-settings-body {
+	background-color: #ffffff;
+	overflow: hidden;
+	width: 95%;
+	padding: 0 24px 0 0;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 0 1px 0 1px;
 }
 
-div.tawkaction p{
-    margin:0;
-    padding:0;
-} 
-
-.tawksettingsbody{
-    overflow: hidden;
-    border-style: solid;
-    border-color: #ccc;
-    border-width:0 1px 0 1px;
-    background-color: #ffffff;
-    width:95%;
-    padding: 0 24px 0 0;
+/**
+ * #.# Tabs
+ *
+ * Styles for the tabs section in the settings panel
+ */
+#tawk-tabs {
+	background-color: #ffffff;
+	overflow: hidden;
+	float: left;
+	min-width: 75px;
+	width: 10%;
 }
 
-div.tawktabs {
-	float:left;
-  overflow: hidden;
-  background-color: #ffffff;
-  width:10%;
-  min-width: 75px;
+#tawk-tabs button {
+	background-color: inherit;
+	float: left;
+	width: 100%;
+	border: none;
+	padding: 14px 0;
+	outline: none;
+	cursor: pointer;
+	transition: 0.3s;
 }
 
-
-div.tawktabs button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 0;
-    transition: 0.3s; 
-    width:100%;
+#tawk-tabs button:hover {
+	background-color: #ddd;
+	color:#0085BA;
 }
 
-div.tawktabs button:hover {
-    background-color: #ddd;
-    color:#0085BA;
+#tawk-tabs button.active {
+	background-color: #f1f1f1;
 }
 
-div.tawktabs button.active {
-    background-color: #f1f1f1;
+/**
+ * #.# Tab Content
+ *
+ * Styles for the tab content of the settings panel
+ */
+.tawk-tab-content {
+	background-color: #ffffff;
+	display: none;
+	float: left;
+	min-width: 240px;
+	width: 85%;
+	padding: 6px 12px;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 0 0 0 1px;
+	border-top: none;
 }
 
-.tawktabcontent {
-	float:left;
-    display: none;
-    padding: 6px 12px;
-    background-color: #ffffff;
-    
-    border-style: solid;
-    border-color: #ccc;
-    border-width:0 0 0 1px;
-
-    border-top: none;
-    width:85%;
-    min-width: 240px;
+#tawk-iframe {
+	min-height: 295px;
+	width: 100%;
+	margin-top: 20px;
+	border: none;
 }
 
+.tawk-notice{
+	font-size: 14px;
+}
 
+.form-table th.tawk-setting {
+	width: 350px;
+}
+
+#exlucded-urls-container,
+#included-urls-container{
+	padding:15px;
+}
+
+/**
+ * #.# Switch and Slider
+ *
+ * Styles for the switch/toggle/slider in the settings panel
+ */
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+	display: inline-block;
+	height: 34px;
+	width: 60px;
+	position: relative;
 }
 
-.switch input {display:none;}
-
+.switch input {
+	display: none;
+}
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+	background-color: #ccc;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	-webkit-transition: .4s;
+	transition: .4s;
+	cursor: pointer;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+	background-color: white;
+	height: 26px;
+	width: 26px;
+	position: absolute;
+	left: 4px;
+	bottom: 4px;
+	-webkit-transition: .4s;
+	transition: .4s;
+	content: "";
 }
 
 .slider.round {
-  border-radius: 34px;
+	border-radius: 34px;
 }
 
 .slider.round:before {
-  border-radius: 50%;
+	border-radius: 50%;
 }
 
-#exlucded_urls_container,
-#included_urls_container{
-  padding:15px;
+input:checked + .slider {
+	background-color: #2196F3;
+}
+
+input:focus + .slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
+}
+
+/**
+ * #.# Links
+ *
+ * Styles for links
+ */
+a.tawk-link {
+	color:#7FB06F;
+	text-decoration: none;
+}
+
+a.tawk-link:hover{
+	text-decoration: underline;
 }

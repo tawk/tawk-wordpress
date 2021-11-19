@@ -2,9 +2,9 @@
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{};
 <?php
-if(isset($customer_details) && $enable_visitor_recognition) {
-	echo 'Tawk_API.visitor = '. $customer_details.';';
-}
+	if ( isset( $customer_details ) && $enable_visitor_recognition ) {
+		echo 'Tawk_API.visitor = '. $customer_details.';';
+	}
 ?>
 var Tawk_LoadStart=new Date();
 (function(){
