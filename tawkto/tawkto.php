@@ -76,7 +76,7 @@ if ( !class_exists( 'TawkTo_Settings' ) ) {
 				'success' => true,
 			);
 
-			if ( false === $this->validate_request_auth( $postData, self::TAWK_ACTION_SET_WIDGET ) ) {
+			if ( false === $this->validate_request_auth( self::TAWK_ACTION_SET_WIDGET, $postData ) ) {
 				$response['success'] = false;
 				$response['message'] = 'Unauthorized';
 				wp_send_json( $response );
@@ -128,7 +128,7 @@ if ( !class_exists( 'TawkTo_Settings' ) ) {
 				'success' => true,
 			);
 
-			if ( false === $this->validate_request_auth( $postData, self::TAWK_ACTION_REMOVE_WIDGET) ) {
+			if ( false === $this->validate_request_auth( self::TAWK_ACTION_REMOVE_WIDGET, $postData ) ) {
 				$response['success'] = false;
 				$response['message'] = 'Unauthorized';
 				wp_send_json( $response );
@@ -142,7 +142,7 @@ if ( !class_exists( 'TawkTo_Settings' ) ) {
 			wp_die();
 		}
 
-		private function validate_request_auth( $postData = array(), $action ) {
+		private function validate_request_auth( $action, $postData = array() ) {
 			if ( false === current_user_can('administrator') ) {
 				return false;
 			}
