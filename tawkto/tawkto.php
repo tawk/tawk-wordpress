@@ -18,19 +18,19 @@ if ( !class_exists( 'TawkTo_Settings' ) ) {
 		public function __construct() {
 			if( !get_option( 'tawkto-visibility-options', false ) ) {
 				$visibility = array(
-					'always_display' 			 => 1,
-					'show_onfrontpage' 			 => 0,
-					'show_oncategory' 			 => 0,
-					'show_ontagpage' 			 => 0,
-					'show_onarticlepages' 		 => 0,
-					'exclude_url' 				 => 0,
-					'excluded_url_list' 		 => '',
-					'include_url' 				 => 0,
-					'included_url_list' 		 => '',
-					'display_on_shop' 			 => 0,
+					'always_display'			 => 1,
+					'show_onfrontpage'			 => 0,
+					'show_oncategory'			 => 0,
+					'show_ontagpage'			 => 0,
+					'show_onarticlepages'		 => 0,
+					'exclude_url'				 => 0,
+					'excluded_url_list'			 => '',
+					'include_url'				 => 0,
+					'included_url_list'			 => '',
+					'display_on_shop'			 => 0,
 					'display_on_productcategory' => 0,
-					'display_on_productpage' 	 => 0,
-					'display_on_producttag' 	 => 0,
+					'display_on_productpage'	 => 0,
+					'display_on_producttag'		 => 0,
 					'enable_visitor_recognition' => 1,
 				);
 				update_option( 'tawkto-visibility-options', $visibility );
@@ -103,7 +103,7 @@ if ( !class_exists( 'TawkTo_Settings' ) ) {
 		}
 
 		function tawk_admin_notice() {
-			if( isset( $_GET["settings-updated"] ) ) {
+			if( isset( $_GET['settings-updated'] ) ) {
 				?>
 				<div class="notice notice-warning is-dismissible">
 					<p><?php _e( 'You might need to clear cache if your using a cache plugin to see your updates', 'tawk-to-live-chat' ); ?></p>
@@ -216,7 +216,7 @@ if ( !class_exists( 'TawkTo_Settings' ) ) {
 			$remove_widget_nonce = wp_create_nonce( self::TAWK_ACTION_REMOVE_WIDGET );
 
 
-			include( sprintf( "%s/templates/settings.php", dirname( __FILE__ ) ) );
+			include( sprintf( '%s/templates/settings.php', dirname( __FILE__ ) ) );
 		}
 
 		public static function ids_are_correct( $page_id, $widget_id ) {
@@ -260,19 +260,19 @@ if ( !class_exists( 'TawkTo' ) ) {
 
 		public static function activate() {
 			$visibility = array (
-				'always_display' 			 => 1,
-				'show_onfrontpage' 			 => 0,
-				'show_oncategory' 			 => 0,
-				'show_ontagpage' 			 => 0,
-				'show_onarticlepages' 		 => 0,
-				'exclude_url' 				 => 0,
-				'excluded_url_list' 		 => '',
-				'include_url' 				 => 0,
-				'included_url_list' 		 => '',
-				'display_on_shop' 			 => 0,
+				'always_display'			 => 1,
+				'show_onfrontpage'			 => 0,
+				'show_oncategory'			 => 0,
+				'show_ontagpage'			 => 0,
+				'show_onarticlepages'		 => 0,
+				'exclude_url'				 => 0,
+				'excluded_url_list'			 => '',
+				'include_url'				 => 0,
+				'included_url_list'			 => '',
+				'display_on_shop'			 => 0,
 				'display_on_productcategory' => 0,
-				'display_on_productpage' 	 => 0,
-				'display_on_producttag' 	 => 0,
+				'display_on_productpage'	 => 0,
+				'display_on_producttag'		 => 0,
 				'enable_visitor_recognition' => 1,
 			);
 
@@ -319,7 +319,7 @@ if ( !class_exists( 'TawkTo' ) ) {
 			}
 
 			if ( !empty( $page_id ) && !empty( $widget_id ) ) {
-				include( sprintf( "%s/templates/widget.php", dirname( __FILE__ ) ) );
+				include( sprintf( '%s/templates/widget.php', dirname( __FILE__ ) ) );
 			}
 		}
 
@@ -390,7 +390,7 @@ if ( !class_exists( 'TawkTo' ) ) {
 				$current_url = $this->get_current_url();
 
 				$included_url_list = $vsibility['included_url_list'];
-				$included_url_list = preg_split( "/,/", $included_url_list );
+				$included_url_list = preg_split( '/,/', $included_url_list );
 
 				foreach ( $included_url_list as $include_url ) {
 					$include_url = strtolower( urldecode( trim( $include_url ) ) );
@@ -405,7 +405,7 @@ if ( !class_exists( 'TawkTo' ) ) {
 				$current_url = $this->get_current_url();
 
 				$excluded_url_list = $vsibility['excluded_url_list'];
-				$excluded_url_list = preg_split( "/,/", $excluded_url_list );
+				$excluded_url_list = preg_split( '/,/', $excluded_url_list );
 
 				foreach ($excluded_url_list as $exclude_url) {
 					$exclude_url = strtolower( urldecode( trim( $exclude_url ) ) );
@@ -463,7 +463,7 @@ if ( class_exists( 'TawkTo' ) ) {
 		}
 
 		$plugin = plugin_basename( __FILE__ );
-		add_filter( "plugin_action_links_$plugin", 'tawkto_plugin_settings_link' );
+		add_filter( 'plugin_action_links_'.$plugin, 'tawkto_plugin_settings_link' );
 	}
 
 	add_action( 'wp_footer',  array( $tawkto, 'print_embed_code' ) );

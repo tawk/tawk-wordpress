@@ -113,19 +113,19 @@ $has_woocommerce = in_array(
 			$visibility = get_option( 'tawkto-visibility-options', false );
 			if ( false === $visibility ) {
 				$visibility = array (
-					'always_display' 			 => 1,
-					'show_onfrontpage' 			 => 0,
-					'show_oncategory' 			 => 0,
-					'show_ontagpage' 			 => 0,
-					'show_onarticlepages' 		 => 0,
-					'exclude_url' 				 => 0,
-					'excluded_url_list' 		 => '',
-					'include_url' 				 => 0,
-					'included_url_list' 		 => '',
-					'display_on_shop' 			 => 0,
+					'always_display'			 => 1,
+					'show_onfrontpage'			 => 0,
+					'show_oncategory'			 => 0,
+					'show_ontagpage'			 => 0,
+					'show_onarticlepages'		 => 0,
+					'exclude_url'				 => 0,
+					'excluded_url_list'			 => '',
+					'include_url'				 => 0,
+					'included_url_list'			 => '',
+					'display_on_shop'			 => 0,
 					'display_on_productcategory' => 0,
-					'display_on_productpage' 	 => 0,
-					'display_on_producttag' 	 => 0,
+					'display_on_productpage'	 => 0,
+					'display_on_producttag'		 => 0,
 					'enable_visitor_recognition' => 1,
 				);
 			}
@@ -286,7 +286,7 @@ $has_woocommerce = in_array(
 		<div id="woocommerce" class="tawk-tab-content">
 			<?php
 				if ( $has_woocommerce ) {
-					if ( !isset($visibility['display_on_shop']) ) {
+					if ( !isset( $visibility['display_on_shop'] ) ) {
 						$visibility['display_on_shop'] = 0;
 						$visibility['display_on_productcategory'] = 0;
 						$visibility['display_on_productpage'] = 0;
@@ -397,7 +397,7 @@ $has_woocommerce = in_array(
 <div class="tawk-action">
 	<div class="tawk-footer-action">
 		<?php submit_button( null, 'primary', 'submit-footer', true, array(
-			'form' => 'tawk-settings-form'
+			'form' => 'tawk-settings-form',
 		) ); ?>
 	</div>
 	<div class="tawk-footer-text">
