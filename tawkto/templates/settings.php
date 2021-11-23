@@ -83,12 +83,12 @@ $has_woocommerce = in_array(
 			if ( true === $display_widget_settings ) {
 				wp_enqueue_script( 'tawk-selection', plugin_dir_url( __DIR__ ).'assets/js/tawk.selection.js' );
 				wp_localize_script( 'tawk-selection', 'tawk_selection_data', array(
-					'url' => array(
-						'base' => $base_url,
+					'url'   => array(
+						'base'   => $base_url,
 						'iframe' => $iframe_url,
 					),
 					'nonce' => array(
-						'setWidget' => $set_widget_nonce,
+						'setWidget'    => $set_widget_nonce,
 						'removeWidget' => $remove_widget_nonce,
 					),
 				) );
@@ -113,19 +113,19 @@ $has_woocommerce = in_array(
 			$visibility = get_option( 'tawkto-visibility-options', false );
 			if ( false === $visibility ) {
 				$visibility = array (
-					'always_display'			 => 1,
-					'show_onfrontpage'			 => 0,
-					'show_oncategory'			 => 0,
-					'show_ontagpage'			 => 0,
-					'show_onarticlepages'		 => 0,
-					'exclude_url'				 => 0,
-					'excluded_url_list'			 => '',
-					'include_url'				 => 0,
-					'included_url_list'			 => '',
-					'display_on_shop'			 => 0,
+					'always_display'             => 1,
+					'show_onfrontpage'           => 0,
+					'show_oncategory'            => 0,
+					'show_ontagpage'             => 0,
+					'show_onarticlepages'        => 0,
+					'exclude_url'                => 0,
+					'excluded_url_list'          => '',
+					'include_url'                => 0,
+					'included_url_list'          => '',
+					'display_on_shop'            => 0,
 					'display_on_productcategory' => 0,
-					'display_on_productpage'	 => 0,
-					'display_on_producttag'		 => 0,
+					'display_on_productpage'     => 0,
+					'display_on_producttag'      => 0,
 					'enable_visitor_recognition' => 1,
 				);
 			}

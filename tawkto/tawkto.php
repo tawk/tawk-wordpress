@@ -18,19 +18,19 @@ if ( !class_exists( 'TawkTo_Settings' ) ) {
 		public function __construct() {
 			if( !get_option( 'tawkto-visibility-options', false ) ) {
 				$visibility = array(
-					'always_display'			 => 1,
-					'show_onfrontpage'			 => 0,
-					'show_oncategory'			 => 0,
-					'show_ontagpage'			 => 0,
-					'show_onarticlepages'		 => 0,
-					'exclude_url'				 => 0,
-					'excluded_url_list'			 => '',
-					'include_url'				 => 0,
-					'included_url_list'			 => '',
-					'display_on_shop'			 => 0,
+					'always_display'             => 1,
+					'show_onfrontpage'           => 0,
+					'show_oncategory'            => 0,
+					'show_ontagpage'             => 0,
+					'show_onarticlepages'        => 0,
+					'exclude_url'                => 0,
+					'excluded_url_list'          => '',
+					'include_url'                => 0,
+					'included_url_list'          => '',
+					'display_on_shop'            => 0,
 					'display_on_productcategory' => 0,
-					'display_on_productpage'	 => 0,
-					'display_on_producttag'		 => 0,
+					'display_on_productpage'     => 0,
+					'display_on_producttag'      => 0,
 					'enable_visitor_recognition' => 1,
 				);
 				update_option( 'tawkto-visibility-options', $visibility );
@@ -260,19 +260,19 @@ if ( !class_exists( 'TawkTo' ) ) {
 
 		public static function activate() {
 			$visibility = array (
-				'always_display'			 => 1,
-				'show_onfrontpage'			 => 0,
-				'show_oncategory'			 => 0,
-				'show_ontagpage'			 => 0,
-				'show_onarticlepages'		 => 0,
-				'exclude_url'				 => 0,
-				'excluded_url_list'			 => '',
-				'include_url'				 => 0,
-				'included_url_list'			 => '',
-				'display_on_shop'			 => 0,
+				'always_display'             => 1,
+				'show_onfrontpage'           => 0,
+				'show_oncategory'            => 0,
+				'show_ontagpage'             => 0,
+				'show_onarticlepages'        => 0,
+				'exclude_url'                => 0,
+				'excluded_url_list'          => '',
+				'include_url'                => 0,
+				'included_url_list'          => '',
+				'display_on_shop'            => 0,
 				'display_on_productcategory' => 0,
-				'display_on_productpage'	 => 0,
-				'display_on_producttag'		 => 0,
+				'display_on_productpage'     => 0,
+				'display_on_producttag'      => 0,
 				'enable_visitor_recognition' => 1,
 			);
 
@@ -295,7 +295,7 @@ if ( !class_exists( 'TawkTo' ) ) {
 			if( is_user_logged_in() ){
 				$current_user = wp_get_current_user();
 				$user_info = array(
-					'name' => $current_user->display_name,
+					'name'  => $current_user->display_name,
 					'email' => $current_user->user_email,
 				);
 				return json_encode( $user_info );
