@@ -1,0 +1,22 @@
+{
+    "name": "tawk/tawk-wordpress",
+    "description": "Wordpress plugin for tawk.to",
+    "type": "project",
+    "license": "OSL-3",
+    "version": "0.6.0",
+    "require": {
+        "phpunit/phpunit": "^9.5",
+        "php-webdriver/webdriver": "^1.10",
+        "phpunit/phpunit-selenium": "^9.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tawk\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:chrome": "phpunit --testsuite Chrome",
+        "test:firefox": "phpunit --testsuite Firefox"
+    }
+}

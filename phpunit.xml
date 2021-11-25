@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="vendor/autoload.php"
+		 colors="true"
+		 verbose="true"
+		 stopOnFailure="false"
+		 testdox="true">
+	<testsuites>
+		<testsuite name="Chrome">
+			<directory>tests/UITests/Chrome</directory>
+		</testsuite>
+		<testsuite name="Firefox">
+			<directory>tests/UITests/Firefox</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
