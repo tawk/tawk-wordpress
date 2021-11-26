@@ -16,7 +16,7 @@ class Webdriver {
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(ChromeOptions::CAPABILITY_W3C, $options);
 
-        return RemoteWebDriver::create('chrome:4444', $capabilities);
+        return RemoteWebDriver::create('selenium:4444', $capabilities);
 	}
 
 	public static function createFirefox() {
@@ -26,6 +26,6 @@ class Webdriver {
         $capabilities = DesiredCapabilities::firefox();
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        return RemoteWebDriver::create('firefox:4444', $capabilities);
+        return RemoteWebDriver::create('selenium:4444', $capabilities);
 	}
 }

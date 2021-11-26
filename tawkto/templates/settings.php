@@ -38,20 +38,23 @@ $has_woocommerce = in_array(
 	<div id="tawk-tabs">
 		<button class="tawk-tab-links"
 				onclick="opentab( event, 'account' )"
-				id="defaultOpen">
+				id="account-settings-tab">
 			Account Settings
 		</button>
 		<button class="tawk-tab-links"
-				onclick="opentab( event, 'visibility' )">
+				onclick="opentab( event, 'visibility' )"
+				id="visibility-options-tab">
 			Visibility Options
 		</button>
 		<button class="tawk-tab-links"
-				onclick="opentab( event, 'privacy' )">
+				onclick="opentab( event, 'privacy' )"
+				id="privacy-options-tab">
 			Privacy Options
 		</button>
 		<?php if ( $has_woocommerce ) { ?>
 			<button class="tawk-tab-links"
-					onclick="opentab( event, 'woocommerce' )">
+					onclick="opentab( event, 'woocommerce' )"
+					id="woocommerce-options-tab">
 				Woocomerce Options
 			</button>
 		<?php } ?>
@@ -100,7 +103,7 @@ $has_woocommerce = in_array(
 			} else {
 				echo '<h2>Property and widget is already set.</h2>';
 				$tawk_admin_url = admin_url( 'options-general.php?page=tawkto_plugin&override=1' );
-				echo 'if you wish to reselect property or widget <a href="'.$tawk_admin_url.'">click here</a>';
+				echo 'if you wish to reselect property or widget <a id="reselect" href="'.$tawk_admin_url.'">click here</a>';
 			}
 		?>
 	</div>

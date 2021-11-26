@@ -1,5 +1,5 @@
 jQuery( function() {
-	document.getElementById( 'defaultOpen' ).click();
+	document.getElementById( 'account-settings-tab' ).click();
 
 	if ( jQuery( '#always-display' ).prop( 'checked' ) ) {
 		jQuery( '.tawk-selected-display' ).hide();
