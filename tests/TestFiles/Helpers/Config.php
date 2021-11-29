@@ -15,6 +15,8 @@ class Config {
 			'admin' => array(
 				'user' => 'admin',
 				'pass' => 'admin',
+				'name' => 'admin',
+				'email' => 'admin@example.com',
 			),
 			'base_tawk_embed_url' => 'https://embed.tawk.to/',
 		);
