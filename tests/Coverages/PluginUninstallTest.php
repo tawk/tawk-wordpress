@@ -1,21 +1,18 @@
 <?php
 
-namespace Tawk\Tests\TestFiles\Coverages;
+namespace Tawk\Tests\Coverages;
 
 use Facebook\WebDriver\WebDriverBy;
 
-use Tawk\Tests\TestFiles\Helpers\Web;
-
-abstract class PluginUninstall extends BaseCoverage {
+class PluginUninstallTest extends BaseCoverage {
 	public function setup(): void {
-		$this->create_driver();
+		parent::setup();
+		$this->web->login();
 
-		Web::login( $this->driver );
+		$this->assertEquals( $this->web->get_admin_url(), $this->driver->getCurrentURL() );
 
-		$this->assertEquals( $this::BASE_TEST_URL.'wp-admin/', $this->driver->getCurrentURL() );
-
-		Web::install_plugin( $this->driver );
-		Web::activate_plugin( $this->driver );
+		$this->web->install_plugin();
+		$this->web->activate_plugin();
 	}
 
 	public function tearDown(): void {
@@ -24,16 +21,15 @@ abstract class PluginUninstall extends BaseCoverage {
 
 	/**
 	 * @test
-	 * @runInSeparateProcess
 	 */
 	public function should_deactivate_and_uninstall_plugin(): void {
-		Web::deactivate_plugin( $this->driver );
+		$this->web->deactivate_plugin();
 
 		$plugin = $this->driver->findElement( WebDriverBy::cssSelector( 'tr[data-slug="tawkto-live-chat"]' ) );
 		$plugin_classes = explode( ' ', $plugin->getAttribute( 'class' ) );
 		$this->assertTrue( in_array( 'inactive', $plugin_classes ) );
 
-		Web::uninstall_plugin( $this->driver );
+		$this->web->uninstall_plugin();
 
 		$plugin = $this->driver->findElement( WebDriverBy::cssSelector( 'tr[data-slug="tawkto-live-chat"]' ) );
 		$plugin_classes = explode( ' ', $plugin->getAttribute( 'class' ) );

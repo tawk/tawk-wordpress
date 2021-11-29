@@ -6,11 +6,8 @@
 		 stopOnFailure="false"
 		 testdox="true">
 	<testsuites>
-		<testsuite name="Chrome">
-			<directory>tests/UITests/Chrome</directory>
-		</testsuite>
-		<testsuite name="Firefox">
-			<directory>tests/UITests/Firefox</directory>
+		<testsuite name="Coverage">
+			<directory suffix="Test.php">tests/Coverages</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>

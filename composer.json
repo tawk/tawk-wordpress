@@ -15,8 +15,6 @@
         }
     },
     "scripts": {
-        "test": "phpunit",
-        "test:chrome": "phpunit --testsuite Chrome",
-        "test:firefox": "phpunit --testsuite Firefox"
+        "test": "phpunit"
     }
 }

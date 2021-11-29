@@ -1,27 +1,24 @@
 <?php
 
-namespace Tawk\Tests\TestFiles\Coverages;
+namespace Tawk\Tests\Coverages;
 
 use Facebook\WebDriver\WebDriverBy;
 
-use Tawk\Tests\TestFiles\Helpers\Web;
-
-abstract class WidgetSet extends BaseCoverage {
+class WidgetSetTest extends BaseCoverage {
 	public function setup(): void {
-		$this->create_driver();
+		parent::setup();
+		$this->web->login();
 
-		Web::login( $this->driver );
+		$this->assertEquals( $this->web->get_admin_url(), $this->driver->getCurrentURL() );
 
-		$this->assertEquals( $this::BASE_TEST_URL.'wp-admin/', $this->driver->getCurrentURL() );
-
-		Web::install_plugin( $this->driver );
-		Web::activate_plugin( $this->driver );
+		$this->web->install_plugin();
+		$this->web->activate_plugin();
 	}
 
 	public function tearDown(): void {
 		try {
-			Web::deactivate_plugin( $this->driver );
-			Web::uninstall_plugin( $this->driver );
+			$this->web->deactivate_plugin();
+			$this->web->uninstall_plugin();
 		} catch (Exception $e) {
 			// Do nothing
 		}
@@ -31,15 +28,14 @@ abstract class WidgetSet extends BaseCoverage {
 
 	/**
 	 * @test
-	 * @runInSeparateProcess
 	 */
 	public function should_set_widget(): void {
-		$property_id = '6045e421385de407571da88d'; // TODO: move this to config
-		$widget_id = '1f08g81vl'; // TODO: move this to config
+		$property_id = $this->config['property_id'];
+		$widget_id = $this->config['widget_id'];
 
-		Web::set_widget( $this->driver, $property_id, $widget_id );
+		$this->web->set_widget( $property_id, $widget_id );
 
-		Web::goto_widget_selection( $this->driver );
+		$this->web->goto_widget_selection();
 
 		$property_field = $this->driver->findElement( WebDriverBy::id( 'property' ) );
 		$selected_property = $property_field->findElement( WebDriverBy::cssSelector( 'li.change-item.active' ) )->getAttribute('data-id');
