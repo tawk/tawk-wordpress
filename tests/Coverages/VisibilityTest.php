@@ -45,7 +45,7 @@ class VisibilityTest extends BaseCoverage {
 	public function should_show_widget_on_frontpage(): void {
 		$this->frontend_driver->get( $this->web->get_base_test_url() );
 
-		$embed_script = $this->config['base_tawk_embed_url'].$this->property_id.'/'.$this->widget_id;
+		$embed_script = $this->config['urls']['embed'].$this->property_id.'/'.$this->widget_id;
 		$script_els = $this->frontend_driver->findElements( WebDriverBy::cssSelector( 'script[src="'.$embed_script.'"]' ) );
 
 		$this->assertEquals( 1, count( $script_els ) );

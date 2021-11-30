@@ -18,7 +18,17 @@ class Config {
 				'name' => 'admin',
 				'email' => 'admin@example.com',
 			),
-			'base_tawk_embed_url' => 'https://embed.tawk.to/',
+			'urls' => array(
+				'embed' => 'https://embed.tawk.to/',
+				'web' => array(
+					'host' => getenv('WEB_HOST'),
+					'port' => getenv('WEB_PORT'),
+				),
+				'selenium' => array(
+					'host' => getenv('SELENIUM_HOST'),
+					'port' => getenv('SELENIUM_PORT'),
+				)
+			)
 		);
 	}
 }

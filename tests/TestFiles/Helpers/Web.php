@@ -19,7 +19,7 @@ class Web {
 	function __construct( &$driver, $config ) {
 		$this->driver = $driver;
 
-		$this->base_test_url = 'http://wordpress/';
+		$this->base_test_url = Common::build_url($config['web']['host'], $config['web']['port']);
 		$this->admin_url = $this->base_test_url.'wp-admin/';
 		$this->plugin_page_url = $this->admin_url.'plugins.php';
 		$this->plugin_settings_url = $this->admin_url.'options-general.php?page=tawkto_plugin';
