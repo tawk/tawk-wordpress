@@ -93,4 +93,4 @@ jobs:
           WEB_HOST: wordpress
           SELENIUM_HOST: localhost
           SELENIUM_PORT: 4444
-        run: composer run test-${{matrix.browser}}
+        run: composer run test
