@@ -1,0 +1,91 @@
+name: ui-tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: cached dependencies
+        uses: actions/cache@v2
+        id: cached-dependencies
+        with:
+          path: ./vendor
+          # the key will change if composer.lock changes
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
+
+      - name: install dependencies
+        if: steps.cached-dependencies.outputs.cache-hit != 'true'
+        uses: php-actions/composer@v5
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: [build]
+    strategy:
+      matrix:
+        browser: ['chrome', 'firefox']
+    services:
+      selenium:
+        image: selenium/standalone-${{matrix.browser}}:latest
+        ports:
+          - 4444:4444
+      db:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: somewordpress
+          MYSQL_DATABASE: wordpress
+          MYSQL_USER: wordpress
+          MYSQL_PASSWORD: wordpress
+      wordpress:
+        image: wordpress:latest
+        env:
+          WORDPRESS_DB_HOST: db:3306
+          WORDPRESS_DB_NAME: wordpress
+          WORDPRESS_DB_USER: wordpress
+          WORDPRESS_DB_PASSWORD: wordpress
+        volumes:
+          - wp_data:/var/www/html
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup wordpress
+        run: |
+          docker run --rm \
+          --volumes-from ${{ job.services.wordpress.id }} \
+          --network ${{ job.container.network }} \
+          -e WORDPRESS_DB_HOST=db:3306 \
+          -e WORDPRESS_DB_NAME=wordpress \
+          -e WORDPRESS_DB_USER=wordpress \
+          -e WORDPRESS_DB_PASSWORD=wordpress \
+          wordpress:cli \
+          wp core install \
+          --path="/var/www/html" \
+          --url=wordpress \
+          --title="Local Wordpress By Docker" \
+          --admin_user=admin \
+          --admin_password=admin \
+          --admin_email=admin@example.com
+
+      - name: cached dependencies
+        uses: actions/cache@v2
+        id: cached-dependencies
+        with:
+          path: ./vendor
+          # the key will change if composer.lock changes
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
+
+      - name: run tests
+        env:
+          BROWSER: ${{matrix.browser}}
+          PROPERTY_ID: ${{secrets.PROPERTY_ID}}
+          WIDGET_ID: ${{secrets.WIDGET_ID}}
+          TAWK_USER: ${{secrets.TAWK_USER}}
+          TAWK_PASS: ${{secrets.TAWK_PASS}}
+          WEB_HOST: wordpress
+          SELENIUM_HOST: localhost
+          SELENIUM_PORT: 4444
+        run: composer run test-${{matrix.browser}}
