@@ -20,6 +20,8 @@ jobs:
       - name: install dependencies
         if: steps.cached-dependencies.outputs.cache-hit != 'true'
         uses: php-actions/composer@v6
+        with:
+          php_extensions: zip
 
   tests:
     runs-on: ubuntu-latest
@@ -32,6 +34,9 @@ jobs:
         image: selenium/standalone-${{matrix.browser}}:latest
         ports:
           - 4444:4444
+        env:
+          SE_NODE_MAX_SESSIONS: 2
+          SE_NODE_OVERRIDE_MAX_SESSIONS: 'true'
       db:
         image: mysql:5.7
         env:
