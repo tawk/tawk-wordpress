@@ -19,8 +19,9 @@ abstract class BaseCoverage extends TestCase {
 
 		$urls = $this->config['urls'];
 		$selenium_port = isset( $urls['selenium']['port'] ) ? $urls['selenium']['port'] : 4444;
-		$selenium_url = Common::build_url( $urls['selenium']['host'],  );
-		$this->driver = Webdriver::create_driver( $this->config['browser'] );
+		$selenium_url = Common::build_url( $urls['selenium']['host'], $selenium_port );
+
+		$this->driver = Webdriver::create_driver( $this->config['browser'], $selenium_url );
 
 		$this->web = new Web( $this->driver, array(
 			'base_test_url' => $this->config['base_test_url'],

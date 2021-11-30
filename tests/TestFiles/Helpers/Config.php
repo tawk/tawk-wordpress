@@ -5,12 +5,12 @@ namespace Tawk\Tests\TestFiles\Helpers;
 class Config {
 	public static function get_config() {
 		return array(
-			'browser' => getenv('BROWSER'),
-			'property_id' => getenv('PROPERTY_ID'),
-			'widget_id' => getenv('WIDGET_ID'),
+			'browser' => Common::get_env( 'BROWSER' ),
+			'property_id' => Common::get_env( 'PROPERTY_ID' ),
+			'widget_id' => Common::get_env( 'WIDGET_ID' ),
 			'tawk' => array(
-				'user' => getenv('TAWK_USER'),
-				'pass' => getenv('TAWK_PASS'),
+				'user' => Common::get_env( 'TAWK_USER' ),
+				'pass' => Common::get_env( 'TAWK_PASS' ),
 			),
 			'admin' => array(
 				'user' => 'admin',
@@ -21,12 +21,12 @@ class Config {
 			'urls' => array(
 				'embed' => 'https://embed.tawk.to/',
 				'web' => array(
-					'host' => getenv('WEB_HOST'),
-					'port' => getenv('WEB_PORT'),
+					'host' => Common::get_env( 'WEB_HOST' ),
+					'port' => Common::get_env( 'WEB_PORT' ),
 				),
 				'selenium' => array(
-					'host' => getenv('SELENIUM_HOST'),
-					'port' => getenv('SELENIUM_PORT'),
+					'host' => Common::get_env( 'SELENIUM_HOST' ),
+					'port' => Common::get_env( 'SELENIUM_PORT' ),
 				)
 			)
 		);

@@ -4,6 +4,7 @@ namespace Tawk\Tests\Coverages;
 
 use Facebook\WebDriver\WebDriverBy;
 
+use Tawk\Tests\TestFiles\Helpers\Common;
 use Tawk\Tests\TestFiles\Helpers\Webdriver;
 
 class VisibilityTest extends BaseCoverage {
@@ -13,7 +14,10 @@ class VisibilityTest extends BaseCoverage {
 	public function setup(): void {
 		parent::setup();
 
-		$this->frontend_driver = Webdriver::create_driver( $this->config['browser'] );
+		$urls = $this->config['urls'];
+		$selenium_port = isset( $urls['selenium']['port'] ) ? $urls['selenium']['port'] : 4444;
+		$selenium_url = Common::build_url( $urls['selenium']['host'], $selenium_port );
+		$this->frontend_driver = Webdriver::create_driver( $this->config['browser'], $selenium_url );
 
 		$this->web->login();
 
