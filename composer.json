@@ -4,10 +4,10 @@
     "type": "project",
     "license": "OSL-3",
     "version": "0.6.0",
-    "require": {
+    "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "php-webdriver/webdriver": "^1.10",
-        "phpunit/phpunit-selenium": "^9.0"
+        "phpunit/phpunit-selenium": "^9.0",
+        "php-webdriver/webdriver": "1.10.0"
     },
     "autoload-dev": {
         "psr-4": {
