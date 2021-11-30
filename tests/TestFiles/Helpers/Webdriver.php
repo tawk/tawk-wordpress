@@ -24,7 +24,7 @@ class Webdriver {
 		$options->addArguments(array('--headless'));
 
 		$capabilities = DesiredCapabilities::firefox();
-		$capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
+		$capabilities->setCapability(FirefoxOptions::CAPABILITY, $options);
 
 		return RemoteWebDriver::create( $selenium_url, $capabilities );
 	}
