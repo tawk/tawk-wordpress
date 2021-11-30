@@ -24,7 +24,6 @@ abstract class BaseCoverage extends TestCase {
 		$this->driver = Webdriver::create_driver( $this->config['browser'], $selenium_url );
 
 		$this->web = new Web( $this->driver, array(
-			'base_test_url' => $this->config['base_test_url'],
 			'admin' => $this->config['admin'],
 			'tawk' => $this->config['tawk'],
 			'web' => $urls['web'],
