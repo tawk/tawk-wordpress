@@ -83,6 +83,9 @@ jobs:
           # the key will change if composer.lock changes
           key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
 
+      - name: prepare test artifact
+        run: zip -9 -rq tawkto-live-chat.zip tawkto
+
       - name: run tests
         env:
           BROWSER: ${{matrix.browser}}

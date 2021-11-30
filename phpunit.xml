@@ -3,7 +3,7 @@
 <phpunit bootstrap="vendor/autoload.php"
 		 colors="true"
 		 verbose="true"
-		 stopOnFailure="false"
+		 stopOnFailure="true"
 		 testdox="true">
 	<testsuites>
 		<testsuite name="Coverage">
