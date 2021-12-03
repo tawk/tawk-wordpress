@@ -1,0 +1,248 @@
+<?php
+
+namespace Tawk\Tests\TestFiles\Modules;
+
+use Tawk\Tests\TestFiles\Objects\TawkConfig;
+use Tawk\Tests\TestFiles\Objects\WebConfig;
+
+use Tawk\Tests\TestFiles\Helpers\Common;
+use Tawk\Tests\TestFiles\Objects\Web\WebConfiguration;
+use Tawk\Tests\TestFiles\Objects\Web\WebDependencies;
+use Tawk\Tests\TestFiles\Objects\WebUserConfig;
+
+class Web {
+	private Webdriver $driver;
+	private string $base_url;
+	private string $admin_url;
+	private string $plugin_page_url;
+	private string $plugin_settings_url;
+	private WebUserConfig $admin;
+	private TawkConfig $tawk;
+
+	// states
+	private bool $logged_in;
+	private bool $plugin_installed;
+	private bool $plugin_activated;
+	private bool $widget_set;
+
+	function __construct( WebDependencies $dependencies, WebConfiguration $config ) {
+		$this->driver = $dependencies->driver;
+
+		$this->base_url = Common::build_url( $config->web->url );
+		$this->admin_url = $this->base_url.'wp-admin/';
+		$this->plugin_page_url = $this->admin_url.'plugins.php';
+		$this->plugin_settings_url = $this->admin_url.'options-general.php?page=tawkto_plugin';
+		$this->admin = $config->web->admin;
+		$this->tawk = $config->tawk;
+
+		$this->logged_in = false;
+		$this->plugin_installed = false;
+		$this->plugin_activated = false;
+		$this->widget_set = false;
+	}
+
+	public function get_base_url () {
+		return $this->base_url;
+	}
+
+	public function get_admin_url () {
+		return $this->admin_url;
+	}
+
+	public function get_plugin_page_url () {
+		return $this->plugin_page_url;
+	}
+
+	public function get_plugin_settings_url () {
+		return $this->plugin_settings_url;
+	}
+
+	public function login() {
+		if ( true === $this->logged_in ) {
+			return;
+		}
+
+		$this->driver->goto_page( $this->base_url.'wp-login.php' );
+
+		$this->driver->find_element_and_input( '#user_login', $this->admin->username );
+		$this->driver->find_element_and_input( '#user_pass', $this->admin->password );
+		$this->driver->find_element_and_click( '#wp-submit' );
+		$this->driver->wait_until_url_contains( $this->admin_url );
+
+		$this->logged_in = true;
+	}
+
+	public function logout() {
+		if ( false === $this->logged_in ) {
+			return;
+		}
+
+		$this->driver->move_mouse_to( '#wp-admin-bar-my-account' );
+		$this->driver->find_element_and_click( '#wp-admin-bar-logout > a.ab-item' );
+
+		$this->logged_in = false;
+	}
+
+	public function install_plugin() {
+		if ( true === $this->plugin_installed ) {
+			return;
+		}
+
+		$file_upload_id = '#pluginzip';
+		$file_path = getcwd().'/tawkto-live-chat.zip';
+
+		$this->driver->goto_page( $this->admin_url.'plugin-install.php?tab=upload' );
+		$this->driver->wait_until_element_is_located( $file_upload_id );
+
+		// find the upload input and send the zip file there
+		$this->driver->upload_file( $file_upload_id, $file_path );
+
+		// find the install button and click
+		$this->driver->find_element_and_click( '#install-plugin-submit' );
+		$this->driver->wait_until_url_contains( $this->admin_url.'update.php?action=upload-plugin' );
+
+		// this ensures that the plugin's installed
+		$this->driver->wait_until_element_text_contains( 'a.button.button-primary', 'Activate' );
+
+		$this->plugin_installed = true;
+	}
+
+	public function activate_plugin() {
+		if ( true === $this->plugin_activated ) {
+			return;
+		}
+
+		$this->driver->goto_page( $this->plugin_page_url );
+
+		$activate_id = '#activate-tawkto-live-chat';
+		$this->driver->wait_until_element_is_located( $activate_id );
+		$this->driver->find_element_and_click( $activate_id );
+
+		$this->plugin_activated = true;
+	}
+
+	public function deactivate_plugin() {
+		if ( false === $this->plugin_activated ) {
+			return;
+		}
+
+		$this->driver->goto_page( $this->plugin_page_url );
+
+		$activate_id = '#deactivate-tawkto-live-chat';
+		$this->driver->wait_until_element_is_located( $activate_id );
+		$this->driver->find_element_and_click( $activate_id );
+
+		$this->plugin_activated = false;
+	}
+
+	public function uninstall_plugin() {
+		if ( false === $this->plugin_installed ) {
+			return;
+		}
+
+		$this->driver->goto_page( $this->plugin_page_url );
+
+		$activate_id = '#delete-tawkto-live-chat';
+		$this->driver->wait_until_element_is_located( $activate_id );
+		$this->driver->find_element_and_click( $activate_id );
+
+		$this->driver->wait_for_alert_and_accept();
+
+		$this->driver->wait_until_element_is_located( '#tawkto-live-chat-deleted' );
+
+		$this->plugin_installed = false;
+	}
+
+	public function goto_widget_selection() {
+		// incase current frame is not on the default one
+		$this->driver->switch_to_default_frame();
+
+		$this->driver->goto_page( $this->plugin_settings_url );
+
+		$tab_id = '#account-settings-tab';
+		$this->driver->wait_until_element_is_located( $tab_id );
+		$this->driver->find_element_and_click( $tab_id );
+
+		// incase the "property and widget is already set" notice appears
+		$reselect_link_id = '#reselect';
+		$reselect_link = $this->driver->find_and_check_element( $reselect_link_id );
+		if ( false === is_null( $reselect_link ) ) {
+			$reselect_link->click();
+		}
+
+		$this->driver->wait_for_frame_and_switch( '#tawk-iframe', 10 );
+
+		// driver currently on tawk-iframe frame
+		// incase the current session hasn't logged in to the plugin yet
+		$login_form_id = '#loginForm';
+		$login_form = $this->driver->find_and_check_element( $login_form_id );
+		if ( false === is_null( $login_form ) ) {
+			$this->driver->find_element_and_input( '#email', $this->tawk->username );
+			$this->driver->find_element_and_input( '#password', $this->tawk->password );
+			$this->driver->find_element_and_click( '#login-button' );
+		}
+	}
+
+	public function goto_visibility_options() {
+		// incase current frame is not on the default one
+		$this->driver->switch_to_default_frame();
+
+		$this->driver->goto_page( $this->plugin_settings_url );
+
+		$tab_id = '#visibility-options-tab';
+		$this->driver->wait_until_element_is_located( $tab_id );
+		$this->driver->find_element_and_click( $tab_id );
+	}
+
+	public function goto_privacy_options() {
+		// incase current frame is not on the default one
+		$this->driver->switch_to_default_frame();
+
+		$this->driver->goto_page( $this->plugin_settings_url );
+
+		$tab_id = '#privacy-options-tab';
+		$this->driver->wait_until_element_is_located( $tab_id );
+		$this->driver->find_element_and_click( $tab_id );
+	}
+
+	public function set_widget( $property_id, $widget_id ) {
+		if ( true === $this->widget_set ) {
+			return;
+		}
+
+		$this->goto_widget_selection();
+
+		$property_form_id = '#propertyForm';
+		$this->driver->wait_until_element_is_located( $property_form_id );
+		$this->driver->find_element_and_click( '#property' );
+		$this->driver->find_element_and_click( 'li[data-id="'.$property_id.'"]' );
+		$this->driver->find_element_and_click( '#widget-'.$property_id );
+		$this->driver->find_element_and_click( 'li[data-id="'.$widget_id.'"]' );
+		$this->driver->find_element_and_click( '#addWidgetToPage' );
+
+		sleep( 1 ); // ensures widget is added
+
+		$this->widget_set = true;
+
+		// go back to original frame
+		$this->driver->switch_to_default_frame();
+	}
+
+	public function remove_widget() {
+		if ( false === $this->widget_set ) {
+			return;
+		}
+
+		$this->goto_widget_selection();
+
+		$this->driver->wait_until_element_is_located( '#propertyForm' );
+		$this->driver->find_element_and_click( '#removeCurrentWidget' );
+
+		sleep( 1 ); // ensures widget is added
+
+		$this->widget_set = false;
+
+		// go back to original frame
+		$this->driver->switch_to_default_frame();
+	}
+}

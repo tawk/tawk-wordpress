@@ -2,39 +2,69 @@
 
 namespace Tawk\Tests\Coverages;
 
-use Facebook\WebDriver\WebDriverBy;
+use PHPUnit\Framework\TestCase;
 
-class PluginInstallTest extends BaseCoverage {
-	public function setup(): void {
-		parent::setup();
-		$this->web->login();
+use Tawk\Tests\TestFiles\Enums\BrowserStackStatus;
+use Tawk\Tests\TestFiles\Config;
+use Tawk\Tests\TestFiles\Helpers\Common;
+use Tawk\Tests\TestFiles\Modules\Web;
+use Tawk\Tests\TestFiles\Modules\Webdriver;
 
-		$this->assertEquals( $this->web->get_admin_url(), $this->driver->getCurrentURL() );
+class PluginInstallTest extends TestCase {
+	protected static Webdriver $driver;
+	protected static Web $web;
+
+	public static function setupBeforeClass(): void {
+		$config = Config::get_config();
+
+		self::$driver = Common::create_driver( 'Plugin Install Test', $config );
+		self::$web = Common::create_web( self::$driver, $config );
 	}
 
-	public function tearDown(): void {
-		try {
-			$this->web->deactivate_plugin();
-			$this->web->uninstall_plugin();
-		} catch (Exception $e) {
-			// Do nothing
-		}
+	public function setup(): void {
+		self::$web->login();
 
-		$this->driver->quit();
+		$this->assertEquals( self::$web->get_admin_url(), self::$driver->get_current_url() );
+	}
+
+	protected function onNotSuccessfulTest( $err ): void {
+		self::$driver->update_test_status( BrowserStackStatus::FAILED, $err->getMessage());
+		throw $err;
+	}
+
+	public static function tearDownAfterClass(): void {
+		self::$web->deactivate_plugin();
+		self::$web->uninstall_plugin();
+
+		self::$driver->quit();
 	}
 
 	/**
 	 * @test
 	 */
 	public function should_install_and_activate_plugin(): void {
-		$this->web->install_plugin();
-		$this->web->activate_plugin();
+		self::$web->install_plugin();
+		self::$web->activate_plugin();
 
-		$plugin = $this->driver->findElement( WebDriverBy::cssSelector( 'tr[data-slug="tawkto-live-chat"]' ) );
-		$plugin_classes = explode( ' ', $plugin->getAttribute( 'class' ) );
+
+		$plugin_row_selector = 'tr[data-slug="tawkto-live-chat"]';
+		self::$driver->wait_until_element_is_located( $plugin_row_selector );
+		$plugin_classes = explode(
+			' ',
+			self::$driver->find_element_and_get_attribute_value(
+				$plugin_row_selector,
+				'class'
+			)
+		);
 		$this->assertTrue( in_array( 'active', $plugin_classes ) );
 
-		$this->driver->get( $this->web->get_plugin_settings_url() );
-		$this->assertTrue( 0 < count( $this->driver->findElements( WebDriverBy::id( 'tawk-settings-body' ) ) ) );
+		self::$driver->goto_page( self::$web->get_plugin_settings_url() );
+
+		$settings_body_id = '#tawk-settings-body';
+		self::$driver->wait_until_element_is_located( $settings_body_id );
+
+		$settings_body = self::$driver->find_and_check_element( $settings_body_id );
+
+		$this->assertNotNull( $settings_body );
 	}
 }

@@ -2,42 +2,62 @@
 
 namespace Tawk\Tests\Coverages;
 
-use Facebook\WebDriver\WebDriverBy;
+use PHPUnit\Framework\TestCase;
 
-class WidgetRemoveTest extends BaseCoverage {
-	public function setup(): void {
-		parent::setup();
-		$this->web->login();
+use Tawk\Tests\TestFiles\Enums\BrowserStackStatus;
+use Tawk\Tests\TestFiles\Config;
+use Tawk\Tests\TestFiles\Helpers\Common;
+use Tawk\Tests\TestFiles\Modules\Web;
+use Tawk\Tests\TestFiles\Modules\Webdriver;
 
-		$this->assertEquals( $this->web->get_admin_url(), $this->driver->getCurrentURL() );
+class WidgetRemoveTest extends TestCase {
+	protected static Webdriver $driver;
+	protected static Web $web;
+	protected static string $property_id;
+	protected static string $widget_id;
 
-		$this->web->install_plugin();
-		$this->web->activate_plugin();
+	public static function setupBeforeClass(): void {
+		$config = Config::get_config();
 
-		$this->web->set_widget( $this->config['property_id'], $this->config['widget_id'] );
+		self::$driver = Common::create_driver( 'Widget Remove Test', $config );
+		self::$web = Common::create_web( self::$driver, $config );
+
+		self::$property_id = $config->tawk->property_id;
+		self::$widget_id = $config->tawk->widget_id;
 	}
 
-	public function tearDown(): void {
-		try {
-			$this->web->deactivate_plugin();
-			$this->web->uninstall_plugin();
-		} catch (Exception $e) {
-			// Do nothing
-		}
+	public function setup(): void {
+		self::$web->login();
 
-		$this->driver->quit();
+		$this->assertEquals( self::$web->get_admin_url(), self::$driver->get_current_url() );
+
+		self::$web->install_plugin();
+		self::$web->activate_plugin();
+
+		self::$web->set_widget( self::$property_id, self::$widget_id );
+	}
+
+	protected function onNotSuccessfulTest( $err ): void {
+		self::$driver->update_test_status( BrowserStackStatus::FAILED, $err->getMessage());
+		throw $err;
+	}
+
+	public static function tearDownAfterClass(): void {
+		self::$web->deactivate_plugin();
+		self::$web->uninstall_plugin();
+
+		self::$driver->quit();
 	}
 
 	/**
 	 * @test
 	 */
 	public function should_remove_widget(): void {
-		$this->web->remove_widget();
+		self::$web->remove_widget();
 
-		$this->web->goto_widget_selection();
+		self::$web->goto_widget_selection();
 
-		$property_field = $this->driver->findElement( WebDriverBy::id( 'property' ) );
-		$selected_property = $property_field->findElements( WebDriverBy::cssSelector( 'li.change-item.active' ) );
-		$this->assertTrue( 0 === count( $selected_property ) );
+		$selected_property = self::$driver->find_and_check_element( '#property li.change-item.active' );
+		$this->assertNull( $selected_property );
 	}
 }

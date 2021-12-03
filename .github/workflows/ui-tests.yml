@@ -1,6 +1,6 @@
 name: ui-tests
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -28,15 +28,8 @@ jobs:
     needs: [build]
     strategy:
       matrix:
-        browser: ['chrome', 'firefox']
+        browser: ['chrome', 'firefox', 'safari']
     services:
-      selenium:
-        image: selenium/standalone-${{matrix.browser}}:latest
-        ports:
-          - 4444:4444
-        env:
-          SE_NODE_MAX_SESSIONS: 2
-          SE_NODE_OVERRIDE_MAX_SESSIONS: 'true'
       db:
         image: mysql:5.7
         env:
@@ -51,11 +44,28 @@ jobs:
           WORDPRESS_DB_NAME: wordpress
           WORDPRESS_DB_USER: wordpress
           WORDPRESS_DB_PASSWORD: wordpress
+        ports:
+          - 8000:80
         volumes:
           - wp_data:/var/www/html
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: 'BrowserStack Env Setup'
+        uses: 'browserstack/github-actions/setup-env@master'
+        with:
+          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          project-name: tawk-wordpress
+          build-name: ${{ matrix.browser }}-ui-test
+
+      - name: 'Start BrowserStackLocal Tunnel'
+        uses: 'browserstack/github-actions/setup-local@master'
+        with:
+          local-testing: 'start'
+          local-logging-level: 'all-logs'
+          local-identifier: 'random'
 
       - name: setup wordpress
         run: |
@@ -69,7 +79,7 @@ jobs:
           wordpress:cli \
           wp core install \
           --path="/var/www/html" \
-          --url=wordpress \
+          --url=http://localhost:8000 \
           --title="Local Wordpress By Docker" \
           --admin_user=admin \
           --admin_password=admin \
@@ -88,12 +98,20 @@ jobs:
 
       - name: run tests
         env:
-          BROWSER: ${{matrix.browser}}
-          PROPERTY_ID: ${{secrets.PROPERTY_ID}}
-          WIDGET_ID: ${{secrets.WIDGET_ID}}
-          TAWK_USER: ${{secrets.TAWK_USER}}
-          TAWK_PASS: ${{secrets.TAWK_PASS}}
-          WEB_HOST: wordpress
-          SELENIUM_HOST: localhost
-          SELENIUM_PORT: 4444
+          TAWK_PROPERTY_ID: ${{ secrets.TAWK_PROPERTY_ID }}
+          TAWK_WIDGET_ID: ${{ secrets.TAWK_WIDGET_ID }}
+          TAWK_USERNAME: ${{ secrets.TAWK_USERNAME }}
+          TAWK_PASSWORD: ${{ secrets.TAWK_PASSWORD }}
+          WEB_HOST: localhost
+          WEB_PORT: 8000
+          SELENIUM_BROWSER: ${{ matrix.browser }}
+          SELENIUM_HOST: ${{ env.BROWSERSTACK_USERNAME }}:${{ env.BROWSERSTACK_ACCESS_KEY }}@hub-cloud.browserstack.com
+          SELENIUM_HTTPS_FLAG: 'true'
+          SELENIUM_HUB_FLAG: 'true'
         run: composer run test
+
+      - name: 'Stop BrowserStackLocal'
+        if: always()
+        uses: 'browserstack/github-actions/setup-local@master'
+        with:
+          local-testing: 'stop'
