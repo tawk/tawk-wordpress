@@ -7,12 +7,16 @@
     "test": "tests"
   },
   "scripts": {
-    "eslint": "eslint ./tawkto"
+    "lint": "npm run eslint && npm run stylelint",
+    "eslint": "eslint ./tawkto/**/*.js",
+    "stylelint": "stylelint ./tawkto/**/*.css"
   },
   "author": "tawk.to",
   "license": "ISC",
   "devDependencies": {
+    "@wordpress/stylelint-config": "^19.1.0",
     "eslint": "^8.4.1",
-    "eslint-config-wordpress": "^2.0.0"
+    "eslint-config-wordpress": "^2.0.0",
+    "stylelint": "^13.13.1"
   }
 }
