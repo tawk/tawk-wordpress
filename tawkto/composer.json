@@ -1,7 +1,7 @@
 {
     "name": "tawk/wp-plugin",
     "type": "project",
-    "version" : "0.6.0",
+    "version" : "0.7.0",
     "require": {
         "tawk/url-utils": "^1.0.0"
     },

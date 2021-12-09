@@ -3,7 +3,7 @@
 Plugin Name: Tawk.to Live Chat
 Plugin URI: https://www.tawk.to
 Description: Embeds Tawk.to live chat widget to your site
-Version: 0.6.0
+Version: 0.7.0
 Author: Tawkto
 Text Domain: tawk-to-live-chat
 */
@@ -18,6 +18,8 @@ if(!class_exists('TawkTo_Settings')){
 		const TAWK_WIDGET_ID_VARIABLE = 'tawkto-embed-widget-widget-id';
 		const TAWK_PAGE_ID_VARIABLE = 'tawkto-embed-widget-page-id';
 		const TAWK_VISIBILITY_OPTIONS = 'tawkto-visibility-options';
+		const TAWK_ACTION_SET_WIDGET = 'tawkto-set-widget';
+		const TAWK_ACTION_REMOVE_WIDGET = 'tawkto-remove-widget';
 
 		public function __construct(){
 
@@ -57,10 +59,10 @@ if(!class_exists('TawkTo_Settings')){
 			if($hook != 'settings_page_tawkto_plugin')
 				return;
 
-			wp_register_style( 'tawk_admin_style', plugins_url( 'assets/tawk.admin.css' , __FILE__ ) );
-        	wp_enqueue_style( 'tawk_admin_style' );
+			wp_register_style( 'tawk_admin_style', plugins_url( 'assets/css/tawk.admin.css' , __FILE__ ) );
+			wp_enqueue_style( 'tawk_admin_style' );
 
-        	wp_enqueue_script( 'tawk_admin_script', plugins_url( 'assets/tawk.admin.js' , __FILE__ ) );
+			wp_enqueue_script( 'tawk_admin_script', plugins_url( 'assets/js/tawk.admin.js' , __FILE__ ) );
 
 		}
 
@@ -71,22 +73,43 @@ if(!class_exists('TawkTo_Settings')){
 		public function action_setwidget() {
 			header('Content-Type: application/json');
 
-			if (!isset($_POST['pageId']) || !isset($_POST['widgetId'])) {
-				echo json_encode(array('success' => FALSE));
-				die();
+			if (wp_is_json_request() === false) {
+				$response['success'] = false;
+				$response['message'] = 'Invalid request';
+				wp_send_json($response);
+				wp_die();
+			};
+
+			$postData = json_decode(file_get_contents('php://input'), true);
+
+			$response = array(
+				'success' => true
+			);
+
+			if ($this->validate_request_auth($postData, self::TAWK_ACTION_SET_WIDGET) === false) {
+				$response['success'] = false;
+				$response['message'] = 'Unauthorized';
+				wp_send_json($response);
+				wp_die();
+			};
+
+			if (!isset($postData['pageId']) || !isset($postData['widgetId'])) {
+				$response['success'] = false;
+				wp_send_json($response);
+				wp_die();
 			}
 
-			if (!self::ids_are_correct($_POST['pageId'], $_POST['widgetId'])) {
-				echo json_encode(array('success' => FALSE));
-				die();
+			if (!self::ids_are_correct($postData['pageId'], $postData['widgetId'])) {
+				$response['success'] = false;
+				wp_send_json($response);
+				wp_die();
 			}
 
-			update_option(self::TAWK_PAGE_ID_VARIABLE, $_POST['pageId']);
-			update_option(self::TAWK_WIDGET_ID_VARIABLE, $_POST['widgetId']);
+			update_option(self::TAWK_PAGE_ID_VARIABLE, $postData['pageId']);
+			update_option(self::TAWK_WIDGET_ID_VARIABLE, $postData['widgetId']);
 
-
-			echo json_encode(array('success' => TRUE));
-			die();
+			wp_send_json($response);
+			wp_die();
 		}
 
 		function tawk_admin_notice() {
@@ -104,11 +127,47 @@ if(!class_exists('TawkTo_Settings')){
 		public function action_removewidget() {
 			header('Content-Type: application/json');
 
+			if (wp_is_json_request() === false) {
+				$response['success'] = false;
+				$response['message'] = 'Invalid request';
+				wp_send_json($response);
+				wp_die();
+			};
+
+			$postData = json_decode(file_get_contents('php://input'), true);
+
+			$response = array(
+				'success' => true
+			);
+
+			if ($this->validate_request_auth($postData, self::TAWK_ACTION_REMOVE_WIDGET) === false) {
+				$response['success'] = false;
+				$response['message'] = 'Unauthorized';
+				wp_send_json($response);
+				wp_die();
+			};
+
 			update_option(self::TAWK_PAGE_ID_VARIABLE, '');
 			update_option(self::TAWK_WIDGET_ID_VARIABLE, '');
 
-			echo json_encode(array('success' => TRUE));
-			die();
+			wp_send_json($response);
+			wp_die();
+		}
+
+		private function validate_request_auth($postData = array(), $action) {
+			if (current_user_can('administrator') === false) {
+				return false;
+			}
+
+			if (isset($postData['nonce']) === false) {
+				return false;
+			}
+
+			if (wp_verify_nonce($postData['nonce'], $action) === false) {
+				return false;
+			}
+
+			return true;
 		}
 
 		public function validate_options($input){
@@ -172,6 +231,8 @@ if(!class_exists('TawkTo_Settings')){
 					.'&currentPageId='.$page_id
 					.'&transparentBackground=1'
 					.'&pltf=wordpress';
+			$set_widget_nonce = wp_create_nonce(self::TAWK_ACTION_SET_WIDGET);
+			$remove_widget_nonce = wp_create_nonce(self::TAWK_ACTION_REMOVE_WIDGET);
 
 
 			include(sprintf("%s/templates/settings.php", dirname(__FILE__)));
