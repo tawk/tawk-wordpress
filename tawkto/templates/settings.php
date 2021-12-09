@@ -82,7 +82,7 @@ $has_woocommerce = in_array(
 
 			if ( true === $display_widget_settings ) {
 				wp_enqueue_script( 'tawk-selection', plugin_dir_url( __DIR__ ).'assets/js/tawk.selection.js' );
-				wp_localize_script( 'tawk-selection', 'tawk_selection_data', array(
+				wp_localize_script( 'tawk-selection', 'tawkSelectionData', array(
 					'url'   => array(
 						'base'   => $base_url,
 						'iframe' => $iframe_url,

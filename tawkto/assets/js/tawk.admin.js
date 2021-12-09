@@ -1,3 +1,5 @@
+'use strict';
+
 jQuery( function() {
 	document.getElementById( 'defaultOpen' ).click();
 
@@ -30,7 +32,7 @@ jQuery( function() {
 		}
 	});
 
-	jQuery( '#exclude-url' ).change(function() {
+	jQuery( '#exclude-url' ).change( function() {
 		if ( this.checked ) {
 			jQuery( '#exlucded-urls-container' ).fadeIn();
 		} else {
@@ -56,16 +58,15 @@ jQuery( function() {
 });
 
 function opentab( evt, tabName ) {
-	// Declare all variables
-	let i, tabcontent, tablinks;
+	var i, tabcontent, tablinks;
 
 	tabcontent = document.getElementsByClassName( 'tawk-tab-content' );
-	for (i = 0; i < tabcontent.length; i++ ) {
+	for ( i = 0; i < tabcontent.length; i++ ) {
 		tabcontent[i].style.display = 'none';
 	}
 
 	tablinks = document.getElementsByClassName( 'tawk-tab-links' );
-	for (i = 0; i < tablinks.length; i++ ) {
+	for ( i = 0; i < tablinks.length; i++ ) {
 		tablinks[i].className = tablinks[i].className.replace( ' active', '' );
 	}
 
