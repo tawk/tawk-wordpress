@@ -24,10 +24,4 @@
 		<exclude name="WooCommerce.Commenting"/>
 	</rule>
 	<rule ref="PHPCompatibility"/>
-
-	<rule ref="Generic.Metrics.NestingLevel">
-		<properties>
-			<property name="absoluteNestingLevel" value="3"/>
-		</properties>
-	</rule>
 </ruleset>

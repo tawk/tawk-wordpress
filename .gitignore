@@ -1,4 +1,5 @@
 tawkto.zip
 node_modules
 .phpcs.cache
+.eslintcache
 vendor
