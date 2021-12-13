@@ -9,7 +9,8 @@
   "scripts": {
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint ./tawkto/**/*.js",
-    "stylelint": "stylelint ./tawkto/**/*.css"
+    "stylelint": "stylelint ./tawkto/**/*.css",
+    "build": "grunt"
   },
   "author": "tawk.to",
   "license": "ISC",
@@ -17,6 +18,10 @@
     "@wordpress/stylelint-config": "^19.1.0",
     "eslint": "^8.4.1",
     "eslint-config-wordpress": "^2.0.0",
+    "grunt": "^1.4.1",
+    "grunt-eslint": "^24.0.0",
+    "grunt-phpcs": "^0.4.0",
+    "grunt-stylelint": "^0.17.0",
     "stylelint": "^13.13.1"
   }
 }

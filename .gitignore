@@ -1,2 +1,4 @@
 tawkto.zip
 node_modules
+.phpcs.cache
+vendor
