@@ -1,2 +1,7 @@
 tawkto.zip
 tawkto/vendor
+node_modules
+.phpcs.cache
+.eslintcache
+.stylelintcache
+vendor
