@@ -23,14 +23,17 @@ jobs:
       - name: install dependencies
         uses: php-actions/composer@v6
         with:
-          command: composer run build:prod
+          command: run build:prod
 
       - name: version
         id: version
-        run: echo "::set-output name=version::$(jq -r '.version' ./tawkto/composer.json)"
+        run: echo "::set-output name=version::$(jq -r '.version' ./composer.json)"
+
+      - name: rename folder to tawkto-live-chat
+        run: mv tawkto tawkto-live-chat
 
       - name: build artifact
-        run: zip -9 -rq tawkto-${{ steps.version.outputs.version }}.zip tawkto
+        run: zip -9 -rq tawkto-live-chat-${{ steps.version.outputs.version }}.zip tawkto-live-chat
 
       - name: upload artifact
         uses: actions/upload-release-asset@v1
@@ -38,6 +41,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./tawkto-${{ steps.version.outputs.version }}.zip
-          asset_name: tawkto-${{ steps.version.outputs.version }}.zip
+          asset_path: ./tawkto-live-chat-${{ steps.version.outputs.version }}.zip
+          asset_name: tawkto-live-chat-${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
