@@ -1,84 +1,92 @@
-// variables
+'use strict';
+
 var currentHost = window.location.protocol + '//' + window.location.host;
-var iframeUrl = tawk_selection_data.url.iframe + '&parentDomain=' + currentHost;
-var baseUrl = tawk_selection_data.url.base;
+var iframeUrl   = tawkSelectionData.url.iframe + '&parentDomain=' + currentHost;
+var baseUrl     = tawkSelectionData.url.base;
 
-jQuery('#tawkIframe').attr('src', iframeUrl);
+jQuery( '#tawk-iframe' ).attr( 'src', iframeUrl );
 
-window.addEventListener('message', function (e) {
-	if(e.origin === baseUrl) {
+window.addEventListener(
+	'message',
+	function( e ) {
+		if ( baseUrl === e.origin ) {
 
-		if(e.data.action === 'setWidget') {
-			setWidget(e);
-		}
+			if ( 'setWidget' === e.data.action ) {
+				setWidget( e );
+			}
 
-		if(e.data.action === 'removeWidget') {
-			removeWidget(e);
-		}
+			if ( 'removeWidget' === e.data.action ) {
+				removeWidget( e );
+			}
 
-		if(e.data.action === 'reloadHeight') {
-			reloadIframeHeight(e.data.height);
+			if ( 'reloadHeight' === e.data.action ) {
+				reloadIframeHeight( e.data.height );
+			}
 		}
 	}
-});
+);
 
-function setWidget (e) {
-	const data = {
-		pageId : e.data.pageId,
-		widgetId : e.data.widgetId,
-		nonce : tawk_selection_data.nonce.setWidget
+function setWidget( e ) {
+	var data = {
+		pageId: e.data.pageId,
+		widgetId: e.data.widgetId,
+		nonce: tawkSelectionData.nonce.setWidget
 	};
 
-	jQuery.ajax({
-		type : 'POST',
-		url : ajaxurl + '?action=tawkto_setwidget',
-		contentType : 'application/json',
-		dataType : 'json',
-		data : JSON.stringify(data),
-		success : function (r) {
-			if (!r.success) {
-				return e.source.postMessage({action: 'setFail'}, baseUrl);
+	jQuery.ajax(
+		{
+			type: 'POST',
+			url: ajaxurl + '?action=tawkto_setwidget',
+			contentType: 'application/json',
+			dataType: 'json',
+			data: JSON.stringify( data ),
+			success: function( r ) {
+				if ( ! r.success ) {
+					return e.source.postMessage({ action: 'setFail' }, baseUrl );
+				}
+				e.source.postMessage({ action: 'setDone' }, baseUrl );
+			},
+			error: function() {
+				e.source.postMessage({ action: 'setFail' }, baseUrl );
 			}
-			e.source.postMessage({action: 'setDone'}, baseUrl);
-		},
-		error : function () {
-			e.source.postMessage({action: 'setFail'}, baseUrl);
 		}
-	});
+	);
 }
 
-function removeWidget (e) {
-	const data = {
-		nonce : tawk_selection_data.nonce.removeWidget
+function removeWidget( e ) {
+	var data = {
+		nonce: tawkSelectionData.nonce.removeWidget
+	};
+
+	jQuery.ajax(
+		{
+			type: 'POST',
+			url: ajaxurl + '?action=tawkto_removewidget',
+			contentType: 'application/json',
+			dataType: 'json',
+			data: JSON.stringify( data ),
+			success: function( r ) {
+				if ( ! r.success ) {
+					return e.source.postMessage({ action: 'removeFail' }, baseUrl );
+				}
+				e.source.postMessage({ action: 'removeDone' }, baseUrl );
+			},
+			error: function() {
+				e.source.postMessage({ action: 'removeFail' }, baseUrl );
+			}
+		}
+	);
+}
+
+function reloadIframeHeight( height ) {
+	var iframe = jQuery( '#tawk-iframe' );
+
+	if ( ! height ) {
+		return;
 	}
-
-	jQuery.ajax({
-		type : 'POST',
-		url : ajaxurl + '?action=tawkto_removewidget',
-		contentType : 'application/json',
-		dataType : 'json',
-		data : JSON.stringify(data),
-		success : function (r) {
-			if (!r.success) {
-				return e.source.postMessage({action: 'removeFail'}, baseUrl);
-			}
-			e.source.postMessage({action: 'removeDone'}, baseUrl);
-		},
-		error : function () {
-			e.source.postMessage({action: 'removeFail'}, baseUrl);
-		}
-	});
-}
-
-function reloadIframeHeight(height) {
-	if (!height) {
+	if ( height === iframe.height() ) {
 		return;
 	}
 
-	var iframe = jQuery('#tawkIframe');
-	if (height === iframe.height()) {
-		return;
-	}
-
-	iframe.height(height);
+	iframe.height( height );
 }
