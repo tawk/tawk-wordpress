@@ -4,8 +4,43 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ee2c6d4f8eb2887ec2df8334dab5f8e",
-    "packages": [],
+    "content-hash": "4aeccc7aabeabf3b23352b2fa14a9bbc",
+    "packages": [
+        {
+            "name": "tawk/url-utils",
+            "version": "dev-feature/url-and-path-matching-modules",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alvinjohnsonso/tawk-url-utils.git",
+                "reference": "dbd0c3363dac1af9bcbd302d02f53a7cbdcc683a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alvinjohnsonso/tawk-url-utils/zipball/dbd0c3363dac1af9bcbd302d02f53a7cbdcc683a",
+                "reference": "dbd0c3363dac1af9bcbd302d02f53a7cbdcc683a",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tawk\\": "lib",
+                    "Tawk\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ]
+            },
+            "support": {
+                "source": "https://github.com/alvinjohnsonso/tawk-url-utils/tree/feature/url-and-path-matching-modules"
+            },
+            "time": "2021-12-14T14:03:04+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -403,7 +438,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "tawk/url-utils": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

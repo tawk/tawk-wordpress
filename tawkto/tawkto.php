@@ -470,26 +470,6 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		}
 
 		/**
-		 * Matches current URL with the provided pattern.
-		 *
-		 * @param  string $url - Current URL.
-		 * @param  string $url_pattern - Pattern to be matched with.
-		 * @return boolean
-		 */
-		private function match_url( $url, $url_pattern ) {
-			// do partial match if wildcard character matched at the end pattern.
-			if ( '*' === substr( $url_pattern, -1 ) ) {
-				$url_pattern = substr( $url_pattern, 0, -1 );
-
-				return ( 0 === strpos( $url, $url_pattern ) );
-			}
-
-			// do extact match if wildcard character not matched at the end pattern.
-			return ( 0 === strcmp( $url, $url_pattern ) );
-		}
-
-
-		/**
 		 * Prints the embed code when it is allowed to be displayed.
 		 *
 		 * @return void
@@ -540,7 +520,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				$current_url = $this->get_current_url();
 
 				$included_url_list = $vsibility['included_url_list'];
-				$included_url_list = preg_split( '/,/', $included_url_list );
+				$included_url_list = array_map( 'trim', preg_split( '/,/', $included_url_list ) );
 
 				if ( UrlPatternMatcher::match( $current_url, $included_url_list ) ) {
 					$display = true;
@@ -551,7 +531,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				$current_url = $this->get_current_url();
 
 				$excluded_url_list = $vsibility['excluded_url_list'];
-				$excluded_url_list = preg_split( '/,/', $excluded_url_list );
+				$excluded_url_list = array_map( 'trim', preg_split( '/,/', $excluded_url_list ) );
 
 				if ( UrlPatternMatcher::match( $current_url, $excluded_url_list ) ) {
 					$display = false;
