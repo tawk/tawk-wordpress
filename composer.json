@@ -11,7 +11,6 @@
         "woocommerce/woocommerce-sniffs": "^0.1.1"
     },
     "scripts": {
-        "post-install-cmd": "phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/php-compatibility",
         "lint": "phpcs -p -s -v --runtime-set ignore_warnings_on_exit true tawkto",
         "lint:fix": "phpcbf -p -s -v tawkto; err=$?; if [ $err -eq 1 ]; then exit 0; else exit $err; fi;"
     }
