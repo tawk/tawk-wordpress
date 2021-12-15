@@ -1,12 +1,12 @@
-name: release
+name: create-release-artifact
 
 on:
   release:
     types: [published]
 
 jobs:
-  release:
-    name: release
+  create-release-artifact:
+    name: Creating release artifact
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -23,15 +23,14 @@ jobs:
       - name: install dependencies
         uses: php-actions/composer@v6
         with:
-          dev: no
-          args: -d ./tawkto
+          command: composer run build:prod
 
       - name: version
         id: version
         run: echo "::set-output name=version::$(jq -r '.version' ./tawkto/composer.json)"
 
       - name: build artifact
-        run: rm tawkto/composer.json tawkto/composer.lock && zip -9 -rq tawkto-${{ steps.version.outputs.version }}.zip tawkto
+        run: zip -9 -rq tawkto-${{ steps.version.outputs.version }}.zip tawkto
 
       - name: upload artifact
         uses: actions/upload-release-asset@v1
