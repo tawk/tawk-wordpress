@@ -1,3 +1,7 @@
 tawkto.zip
 vendor
 .phpunit*
+node_modules
+.phpcs.cache
+.eslintcache
+.stylelintcache
