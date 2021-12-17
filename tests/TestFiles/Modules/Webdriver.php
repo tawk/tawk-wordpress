@@ -1,4 +1,8 @@
 <?php
+/**
+ * @phpcs:disable Squiz.Commenting.FileComment
+ * @phpcs:disable PHPCompatibility
+ */
 
 namespace Tawk\Tests\TestFiles\Modules;
 
@@ -10,9 +14,9 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 use Tawk\Tests\TestFiles\Enums\BrowserStackStatus;
 use Tawk\Tests\TestFiles\Helpers\Common;
 use Tawk\Tests\TestFiles\Helpers\Webdriver as WebdriverHelper;
-use Tawk\Tests\TestFiles\Objects\BrowserStackConfig;
-use Tawk\Tests\TestFiles\Objects\SeleniumConfig;
-use Tawk\Tests\TestFiles\Objects\Webdriver\WebdriverConfig;
+use Tawk\Tests\TestFiles\Types\BrowserStackConfig;
+use Tawk\Tests\TestFiles\Types\SeleniumConfig;
+use Tawk\Tests\TestFiles\Types\Webdriver\WebdriverConfig;
 
 use Exception;
 
@@ -23,8 +27,8 @@ class Webdriver {
 	protected string $test_status;
 	protected string $test_message;
 
-	function __construct( string $session_name, WebdriverConfig $config ) {
-		$this->selenium = $config->selenium;
+	public function __construct( string $session_name, WebdriverConfig $config ) {
+		$this->selenium     = $config->selenium;
 		$this->browserstack = $config->browserstack;
 
 		$selenium_url = Common::build_selenium_url(
@@ -45,7 +49,7 @@ class Webdriver {
 			$this->selenium->request_timeout_ms
 		);
 
-		$this->test_status = BrowserStackStatus::PASSED;
+		$this->test_status  = BrowserStackStatus::PASSED;
 		$this->test_message = 'All test passed';
 	}
 
@@ -54,11 +58,11 @@ class Webdriver {
 	}
 
 	public function update_test_status( string $status, string $message ): void {
-		if ( false === BrowserStackStatus::isValidValue( $status ) ) {
+		if ( false === BrowserStackStatus::is_valid_value( $status ) ) {
 			throw new Exception( 'Browserstack status is invalid' );
 		}
 
-		$this->test_status = $status;
+		$this->test_status  = $status;
 		$this->test_message = $message;
 	}
 
@@ -116,20 +120,20 @@ class Webdriver {
 
 	public function wait_until_url_contains(
 		string $url_to_compare,
-		int $wait_sec=10,
-		int $interval_ms=500
+		int $wait_sec = 10,
+		int $interval_ms = 500
 	) {
-		return $this->driver->wait($wait_sec, $interval_ms)->until(
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
 			WebDriverExpectedCondition::urlContains( $url_to_compare )
 		);
 	}
 
 	public function wait_until_element_is_located(
 		string $selector,
-		int $wait_sec=10,
-		int $interval_ms=500
+		int $wait_sec = 10,
+		int $interval_ms = 500
 	) {
-		return $this->driver->wait($wait_sec, $interval_ms)->until(
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
 			WebDriverExpectedCondition::presenceOfElementLocated(
 				WebDriverBy::cssSelector( $selector )
 			)
@@ -139,13 +143,25 @@ class Webdriver {
 	public function wait_until_element_text_contains(
 		string $selector,
 		string $text_to_compare,
-		int $wait_sec=10,
-		int $interval_ms=500
+		int $wait_sec = 10,
+		int $interval_ms = 500
 	) {
-		return $this->driver->wait($wait_sec, $interval_ms)->until(
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
 			WebDriverExpectedCondition::elementTextContains(
 				WebDriverBy::cssSelector( $selector ),
 				$text_to_compare
+			)
+		);
+	}
+
+	public function wait_until_element_is_clickable(
+		string $selector,
+		int $wait_sec = 10,
+		int $interval_ms = 500
+	) {
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
+			WebDriverExpectedCondition::elementToBeClickable(
+				WebDriverBy::cssSelector( $selector )
 			)
 		);
 	}
@@ -158,19 +174,23 @@ class Webdriver {
 
 	public function wait_for_frame_and_switch(
 		string $selector,
-		int $wait_sec=10,
-		int $interval_ms=500
+		int $wait_sec = 10,
+		int $interval_ms = 500
 	): void {
-		$this->driver->wait($wait_sec, $interval_ms)->until(
+		$this->driver->wait( $wait_sec, $interval_ms )->until(
 			WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt(
 				$this->find_element( $selector )
 			)
 		);
 	}
 
+	public function clear_input( $selector ): void {
+		$this->find_element( $selector )->clear();
+	}
+
 	public function quit(): void {
 		if ( true === $this->browserstack->is_browserstack ) {
-			$this->driver->executeScript( 'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"'.$this->test_status.'", "reason": "'.$this->test_message.'"}}' );
+			$this->driver->executeScript( 'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"' . $this->test_status . '", "reason": "' . $this->test_message . '"}}' );
 		}
 
 		$this->driver->quit();

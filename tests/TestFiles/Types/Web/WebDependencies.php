@@ -1,6 +1,6 @@
 <?php
 
-namespace Tawk\Tests\TestFiles\Objects\Web;
+namespace Tawk\Tests\TestFiles\Types\Web;
 
 use Tawk\Tests\TestFiles\Modules\Webdriver;
 

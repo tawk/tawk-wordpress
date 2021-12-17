@@ -1,7 +1,6 @@
 <?php
 
-namespace Tawk\Tests\TestFiles\Objects;
-
+namespace Tawk\Tests\TestFiles\Types;
 
 class Config {
 	public TawkConfig $tawk;

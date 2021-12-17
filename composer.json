@@ -21,8 +21,8 @@
     },
     "scripts": {
         "test": "phpunit",
-        "lint": "phpcs -p -s -v --runtime-set ignore_warnings_on_exit true tawkto",
-        "lint:fix": "phpcbf -p -s -v tawkto; err=$?; if [ $err -eq 1 ]; then exit 0; else exit $err; fi;"
+        "lint": "phpcs -p -s -v --runtime-set ignore_warnings_on_exit true .",
+        "lint:fix": "phpcbf -p -s -v .; err=$?; if [ $err -eq 1 ]; then exit 0; else exit $err; fi;"
     },
     "config": {
         "process-timeout": 0

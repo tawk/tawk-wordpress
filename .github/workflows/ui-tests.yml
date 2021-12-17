@@ -67,7 +67,7 @@ jobs:
           local-logging-level: 'all-logs'
           local-identifier: 'random'
 
-      - name: setup wordpress
+      - name: install wordpress
         run: |
           docker run --rm \
           --volumes-from ${{ job.services.wordpress.id }} \
@@ -84,6 +84,25 @@ jobs:
           --admin_user=admin \
           --admin_password=admin \
           --admin_email=admin@example.com
+
+      - name: setup wordpress
+        run: |
+          docker run --rm \
+          --volumes-from ${{ job.services.wordpress.id }} \
+          --network ${{ job.container.network }} \
+          -e WORDPRESS_DB_HOST=db:3306 \
+          -e WORDPRESS_DB_NAME=wordpress \
+          -e WORDPRESS_DB_USER=wordpress \
+          -e WORDPRESS_DB_PASSWORD=wordpress \
+          wordpress:cli \
+          /bin/bash -c \
+          "wp rewrite structure /%postname%/; \
+          wp term create category Category-A --description="Category A"; \
+          wp term create category Category-B --description="Category B"; \
+          wp term create category Category-C --description="Category C"; \
+          wp post term add 1 post_tag tag-a tag-b tag-c;"
+
+      - name: add category
 
       - name: cached dependencies
         uses: actions/cache@v2
