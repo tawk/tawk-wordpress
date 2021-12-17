@@ -102,8 +102,6 @@ jobs:
           wp term create category Category-C --description="Category C"; \
           wp post term add 1 post_tag tag-a tag-b tag-c;"
 
-      - name: add category
-
       - name: cached dependencies
         uses: actions/cache@v2
         id: cached-dependencies
