@@ -143,6 +143,21 @@ div.tawk-footer-text {
 	padding: 15px;
 }
 
+#visibility-content {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+#visibility-content #visibility-info {
+	max-width: 250px;
+}
+
+.list-type-bullet {
+	list-style: circle;
+	padding: 0 20px;
+}
+
 /**
  * #.# Switch and Slider
  *
@@ -217,4 +232,36 @@ a.tawk-link {
 
 a.tawk-link:hover {
 	text-decoration: underline;
+}
+
+/**
+ * #.# Media Queries
+ *
+ * Mobile view
+ */
+
+@media only screen and (max-width: 712px) {
+
+	/**
+	 * #.# Settings Body
+	 *
+	 * Styles for the settings panel body container
+	 */
+	#tawk-settings-body {
+		max-width: 712px;
+		width: 100%;
+		padding: 0 0 0 0;
+	}
+
+	/**
+	 * #.# Tabs
+	 *
+	 * Styles for the tabs section in the settings panel
+	 */
+	#tawk-tabs {
+		background-color: #fff;
+		min-width: 75px;
+		width: 100%;
+		border-bottom: 1px solid #ccc;
+	}
 }

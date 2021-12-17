@@ -149,7 +149,8 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 		}
 		?>
 		<div id="visibility" class="tawk-tab-content">
-			<div id="tawk-visibility-settings">
+			<div id="visibility-content">
+				<div id="tawk-visibility-settings">
 				<h2><?php esc_html_e( 'Visibility Options', 'tawk-to-live-chat' ); ?></h2>
 				<p class='tawk-notice'>
 					<?php esc_html_e( 'Please Note: that you can use the visibility options below, or you can show the tawk.to widget', 'tawk-to-live-chat' ); ?>
@@ -162,144 +163,165 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 				</p>
 				<table class="form-table">
 					<tr valign="top">
-						<th class="tawk-setting" scope="row">
-							<?php esc_html_e( 'Always show Tawk.To widget on every page', 'tawk-to-live-chat' ); ?>
-						</th>
-						<td>
-							<label class="switch">
-								<input type="checkbox"
-										class="slider round"
-										id="always-display"
-										name="tawkto-visibility-options[always_display]"
-										value="1"
-										<?php echo checked( 1, $visibility['always_display'], false ); ?> />
-								<div class="slider round"></div>
-							</label>
-						</td>
+					<th class="tawk-setting" scope="row">
+						<?php esc_html_e( 'Always show Tawk.To widget on every page', 'tawk-to-live-chat' ); ?>
+					</th>
+					<td>
+						<label class="switch">
+						<input type="checkbox"
+							class="slider round"
+							id="always-display"
+							name="tawkto-visibility-options[always_display]"
+							value="1"
+							<?php echo checked( 1, $visibility['always_display'], false ); ?> />
+						<div class="slider round"></div>
+						</label>
+					</td>
 					</tr>
 					<tr valign="top" class="tawk-selected-display">
-						<th class="tawk-setting" scope="row">
-							<?php esc_html_e( 'Show on front page', 'tawk-to-live-chat' ); ?>
-						</th>
-						<td>
-							<label class="switch">
-								<input type="checkbox"
-										class="slider round"
-										id="show-onfrontpage" name="tawkto-visibility-options[show_onfrontpage]"
-										value="1"
-										<?php echo checked( 1, $visibility['show_onfrontpage'], false ); ?> />
-								<div class="slider round"></div>
-							</label>
-						</td>
+					<th class="tawk-setting" scope="row">
+						<?php esc_html_e( 'Show on front page', 'tawk-to-live-chat' ); ?>
+					</th>
+					<td>
+						<label class="switch">
+						<input type="checkbox"
+							class="slider round"
+							id="show-onfrontpage" name="tawkto-visibility-options[show_onfrontpage]"
+							value="1"
+							<?php echo checked( 1, $visibility['show_onfrontpage'], false ); ?> />
+						<div class="slider round"></div>
+						</label>
+					</td>
 					</tr>
 					<tr valign="top" class="tawk-selected-display">
-						<th class="tawk-setting" scope="row">
-							<?php esc_html_e( 'Show on Category pages', 'tawk-to-live-chat' ); ?>
-						</th>
-						<td>
-							<label class="switch">
-								<input type="checkbox"
-										class="slider round"
-										id="show-oncategory" name="tawkto-visibility-options[show_oncategory]"
-										value="1"
-										<?php echo checked( 1, $visibility['show_oncategory'], false ); ?> />
-								<div class="slider round"></div>
-							</label>
-						</td>
+					<th class="tawk-setting" scope="row">
+						<?php esc_html_e( 'Show on Category pages', 'tawk-to-live-chat' ); ?>
+					</th>
+					<td>
+						<label class="switch">
+						<input type="checkbox"
+							class="slider round"
+							id="show-oncategory" name="tawkto-visibility-options[show_oncategory]"
+							value="1"
+							<?php echo checked( 1, $visibility['show_oncategory'], false ); ?> />
+						<div class="slider round"></div>
+						</label>
+					</td>
 					</tr>
 					<tr valign="top"  class="tawk-selected-display">
-						<th class="tawk-setting" scope="row">
-							<?php esc_html_e( 'Show on Tag pages', 'tawk-to-live-chat' ); ?>
-						</th>
-						<td>
-							<label class="switch">
-								<input type="checkbox"
-										class="slider round"
-										id="show-ontagpage"
-										name="tawkto-visibility-options[show_ontagpage]"
-										value="1"
-										<?php echo checked( 1, $visibility['show_ontagpage'], false ); ?> />
-								<div class="slider round"></div>
-							</label>
-						</td>
+					<th class="tawk-setting" scope="row">
+						<?php esc_html_e( 'Show on Tag pages', 'tawk-to-live-chat' ); ?>
+					</th>
+					<td>
+						<label class="switch">
+						<input type="checkbox"
+							class="slider round"
+							id="show-ontagpage"
+							name="tawkto-visibility-options[show_ontagpage]"
+							value="1"
+							<?php echo checked( 1, $visibility['show_ontagpage'], false ); ?> />
+						<div class="slider round"></div>
+						</label>
+					</td>
 					</tr>
 					<tr valign="top"  class="tawk-selected-display">
-						<th class="tawk-setting" scope="row">
-							<?php esc_html_e( 'Show on Single Post Pages', 'tawk-to-live-chat' ); ?>
-						</th>
-						<td>
-							<label class="switch">
-								<input type="checkbox"
-										class="slider round"
-										id="show-onarticlepages"
-										name="tawkto-visibility-options[show_onarticlepages]"
-										value="1"
-										<?php echo checked( 1, $visibility['show_onarticlepages'], false ); ?> />
-								<div class="slider round"></div>
-							</label>
-						</td>
+					<th class="tawk-setting" scope="row">
+						<?php esc_html_e( 'Show on Single Post Pages', 'tawk-to-live-chat' ); ?>
+					</th>
+					<td>
+						<label class="switch">
+						<input type="checkbox"
+							class="slider round"
+							id="show-onarticlepages"
+							name="tawkto-visibility-options[show_onarticlepages]"
+							value="1"
+							<?php echo checked( 1, $visibility['show_onarticlepages'], false ); ?> />
+						<div class="slider round"></div>
+						</label>
+					</td>
 					</tr>
 					<tr valign="top">
-						<th class="tawk-setting" scope="row">
-							<?php esc_html_e( 'Exclude on specific url', 'tawk-to-live-chat' ); ?>
-						</th>
-						<td>
-							<label class="switch">
-								<input type="checkbox"
-										class="slider round"
-										id="exclude-url"
-										name="tawkto-visibility-options[exclude_url]"
-										value="1"
-										<?php echo checked( 1, $visibility['exclude_url'], false ); ?> />
-								<div class="slider round"></div>
-							</label>
-							<div id="exlucded-urls-container" style="display:none;">
-								<textarea id="excluded-url-list"
-										name="tawkto-visibility-options[excluded_url_list]"
-										cols="50"
-										rows="10"><?php echo esc_html( $visibility['excluded_url_list'] ); ?></textarea>
-								<br>
-								<?php esc_html_e( 'Enter the url where you', 'tawk-to-live-chat' ); ?>
-								<b><?php esc_html_e( 'DO NOT', 'tawk-to-live-chat' ); ?></b>
-								<?php esc_html_e( 'want the widget to display.', 'tawk-to-live-chat' ); ?>
-								<br>
-								<?php esc_html_e( 'Separate entries with comma', 'tawk-to-live-chat' ); ?>(,).
-								<br>
-								<?php esc_html_e( 'Add (*) at the end of the entry to match wildcard url.', 'tawk-to-live-chat' ); ?>
-								<br>
-							</div>
-						</td>
+					<th class="tawk-setting" scope="row">
+						<?php esc_html_e( 'Exclude on specific url', 'tawk-to-live-chat' ); ?>
+					</th>
+					<td>
+						<label class="switch">
+						<input type="checkbox"
+							class="slider round"
+							id="exclude-url"
+							name="tawkto-visibility-options[exclude_url]"
+							value="1"
+							<?php echo checked( 1, $visibility['exclude_url'], false ); ?> />
+						<div class="slider round"></div>
+						</label>
+						<div id="exlucded-urls-container" style="display:none;">
+						<textarea id="excluded-url-list"
+							name="tawkto-visibility-options[excluded_url_list]"
+							cols="50"
+							rows="10"><?php echo esc_html( $visibility['excluded_url_list'] ); ?></textarea>
+						<br>
+						<?php esc_html_e( 'Enter the url where you', 'tawk-to-live-chat' ); ?>
+						<b><?php esc_html_e( 'DO NOT', 'tawk-to-live-chat' ); ?></b>
+						<?php esc_html_e( 'want the widget to display.', 'tawk-to-live-chat' ); ?>
+						<br>
+						<?php esc_html_e( 'Separate entries with comma', 'tawk-to-live-chat' ); ?>(,).
+						<br>
+						</div>
+					</td>
 					</tr>
 					<tr valign="top"  class="tawk-selected-display">
-						<th class="tawk-setting" scope="row"><?php esc_html_e( 'Include on specific url', 'tawk-to-live-chat' ); ?></th>
-						<td>
-							<label class="switch">
-								<input type="checkbox"
-										class="slider round"
-										id="include-url"
-										name="tawkto-visibility-options[include_url]"
-										value="1"
-										<?php echo checked( 1, $visibility['include_url'], false ); ?> />
-								<div class="slider round"></div>
-							</label>
-							<div id="included-urls-container" style="display:none;">
-								<textarea id="included-url-list"
-									name="tawkto-visibility-options[included_url_list]"
-									cols="50"
-									rows="10"><?php echo esc_html( $visibility['included_url_list'] ); ?></textarea>
-								<br>
-								<?php esc_html_e( 'Enter the url where you', 'tawk-to-live-chat' ); ?>
-								<b><?php esc_html_e( 'WANT', 'tawk-to-live-chat' ); ?></b>
-								<?php esc_html_e( 'the widget to display.', 'tawk-to-live-chat' ); ?>
-								<br>
-								<?php esc_html_e( 'Separate entries with comma ', 'tawk-to-live-chat' ); ?>(,).
-								<br>
-								<?php esc_html_e( 'Add (*) at the end of the entry to match wildcard url.', 'tawk-to-live-chat' ); ?>
-								<br>
-							</div>
-						</td>
+					<th class="tawk-setting" scope="row"><?php esc_html_e( 'Include on specific url', 'tawk-to-live-chat' ); ?></th>
+					<td>
+						<label class="switch">
+						<input type="checkbox"
+							class="slider round"
+							id="include-url"
+							name="tawkto-visibility-options[include_url]"
+							value="1"
+							<?php echo checked( 1, $visibility['include_url'], false ); ?> />
+						<div class="slider round"></div>
+						</label>
+						<div id="included-urls-container" style="display:none;">
+						<textarea id="included-url-list"
+							name="tawkto-visibility-options[included_url_list]"
+							cols="50"
+							rows="10"><?php echo esc_html( $visibility['included_url_list'] ); ?></textarea>
+						<br>
+						<?php esc_html_e( 'Enter the url where you', 'tawk-to-live-chat' ); ?>
+						<b><?php esc_html_e( 'WANT', 'tawk-to-live-chat' ); ?></b>
+						<?php esc_html_e( 'the widget to display.', 'tawk-to-live-chat' ); ?>
+						<br>
+						<?php esc_html_e( 'Separate entries with comma ', 'tawk-to-live-chat' ); ?>(,).
+						<br>
+						</div>
+					</td>
 					</tr>
 				</table>
+				</div>
+				<div id="visibility-info">
+					<div id="include_exclude_url">
+						<h2>Wildcards for exclude/include on specific url</h3>
+						<p>You may enter a wildcard at the start, middle, or at the end of the URL. Enter the wildcard at the start, middle, or end of the URL. Only one wildcard may be included in each URL.</p>
+						<p>You can also enter the paths only instead of the full URL. Begin each path entry with a forward slash (/).</p>
+						<h3>Valid formats</h3>
+						<ul class="list-type-bullet">
+							<li>*</li>
+							<li>*/to/somewhere</li>
+							<li>/path/*/somewhere</li>
+							<li>/path/to/*</li>
+							<li>http://www.example.com/</li>
+							<li>http://www.example.com/*</li>
+							<li>http://www.example.com/*/to/somewhere</li>
+							<li>http://www.example.com/path/*/somewhere</li>
+							<li>http://www.example.com/path/to/*</li>
+						</ul>
+						<h3>Invalid formats</h3>
+						<ul class="list-type-bullet">
+							<li>path/to/somewhere - “path” will be considered as a host and not a start of a path</li>
+							<li>*/that/*/to/* - wildcards at multiple positions are not valid</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 
