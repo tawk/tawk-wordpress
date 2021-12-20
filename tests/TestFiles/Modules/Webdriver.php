@@ -77,6 +77,7 @@ class Webdriver {
 
 		$this->driver->get( $page_url );
 		$this->wait_until_url_contains( $page_url );
+		$this->wait_until_page_fully_loads();
 	}
 
 	public function find_element( string $selector ) {
@@ -163,6 +164,14 @@ class Webdriver {
 			WebDriverExpectedCondition::elementToBeClickable(
 				WebDriverBy::cssSelector( $selector )
 			)
+		);
+	}
+
+	public function wait_until_page_fully_loads() {
+		return $this->driver->wait()->until(
+			function () {
+				return $this->driver->executeScript( 'return document.readyState' ) === 'complete';
+			}
 		);
 	}
 

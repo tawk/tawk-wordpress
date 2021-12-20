@@ -271,15 +271,12 @@ class Web {
 	}
 
 	public function toggle_switch( $field_id, $enabled_flag ) {
-		$selector = $field_id . ' + .slider.round';
-
-		$this->driver->wait_until_element_is_clickable( $selector );
-
 		$checkbox = $this->driver->find_element( $field_id );
+
 		if ( $checkbox->isSelected() === $enabled_flag ) {
 			return;
 		}
 
-		$this->driver->move_mouse_to( $selector )->click();
+		$this->driver->move_mouse_to( $field_id . ' + .slider.round' )->click();
 	}
 }
