@@ -105,7 +105,9 @@ class Webdriver {
 	}
 
 	public function move_mouse_to( string $selector ) {
-		$coordinate = $this->find_element( $selector )->getCoordinates();
+		$element = $this->find_element( $selector );
+		$element->getLocationOnScreenOnceScrolledIntoView();
+		$coordinate = $element->getCoordinates();
 		return $this->driver->getMouse()->mouseMove( $coordinate );
 	}
 

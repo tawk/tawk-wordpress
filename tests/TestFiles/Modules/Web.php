@@ -2,7 +2,6 @@
 
 namespace Tawk\Tests\TestFiles\Modules;
 
-use Facebook\WebDriver\WebDriverBy;
 use Tawk\Tests\TestFiles\Types\TawkConfig;
 
 use Tawk\Tests\TestFiles\Helpers\Common;
