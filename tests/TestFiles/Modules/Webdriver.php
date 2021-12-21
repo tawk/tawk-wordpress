@@ -169,11 +169,26 @@ class Webdriver {
 		);
 	}
 
-	public function wait_until_page_fully_loads() {
-		return $this->driver->wait()->until(
+	public function wait_until_page_fully_loads(
+		int $wait_sec = 10,
+		int $interval_ms = 500
+	) {
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
 			function () {
 				return $this->driver->executeScript( 'return document.readyState' ) === 'complete';
 			}
+		);
+	}
+
+	public function wait_until_element_is_visible(
+		string $selector,
+		int $wait_sec = 10,
+		int $interval_ms = 500
+	) {
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
+			WebDriverExpectedCondition::visibilityOfElementLocated(
+				WebDriverBy::cssSelector( $selector )
+			)
 		);
 	}
 

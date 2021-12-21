@@ -43,6 +43,10 @@ class PrivacyOptionsTest extends TestCase {
 		self::$web->set_widget( self::$property_id, self::$widget_id );
 	}
 
+	public function setup(): void {
+		self::$web->login();
+	}
+
 	protected function onNotSuccessfulTest( $err ): void {
 		self::$driver->update_test_status( BrowserStackStatus::FAILED, $err->getMessage() );
 		throw $err;

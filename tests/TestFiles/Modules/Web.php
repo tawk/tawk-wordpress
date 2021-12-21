@@ -2,6 +2,7 @@
 
 namespace Tawk\Tests\TestFiles\Modules;
 
+use Facebook\WebDriver\WebDriverBy;
 use Tawk\Tests\TestFiles\Types\TawkConfig;
 
 use Tawk\Tests\TestFiles\Helpers\Common;
@@ -58,6 +59,7 @@ class Web {
 
 	public function login() {
 		if ( true === $this->logged_in ) {
+			$this->driver->goto_page( $this->admin_url );
 			return;
 		}
 
@@ -76,8 +78,9 @@ class Web {
 			return;
 		}
 
-		$this->driver->move_mouse_to( '#wp-admin-bar-my-account' );
-		$this->driver->find_element_and_click( '#wp-admin-bar-logout > a.ab-item' );
+		$logout_url = $this->driver->find_element_and_get_attribute_value( '#wp-admin-bar-logout > a', 'href' );
+
+		$this->driver->get_driver()->get( $logout_url );
 
 		$this->logged_in = false;
 	}
@@ -204,6 +207,18 @@ class Web {
 		$this->driver->find_element_and_click( $tab_id );
 	}
 
+	public function goto_woocommerce_options() {
+		// incase current frame is not on the default one.
+		$this->driver->switch_to_default_frame();
+
+		$this->driver->goto_page( $this->plugin_settings_url );
+
+		$tab_id = '#woocommerce-options-tab';
+		$this->driver->wait_until_element_is_located( $tab_id );
+		$this->driver->find_element_and_click( $tab_id );
+		$this->driver->wait_until_element_is_visible( '#woocommerce' );
+	}
+
 	public function set_widget( $property_id, $widget_id ) {
 		if ( true === $this->widget_set ) {
 			return;
@@ -266,7 +281,17 @@ class Web {
 		$this->toggle_switch( '#include-url', false );
 		$this->toggle_switch( '#always-display', true );
 
-		$this->driver->find_element_and_click( '#submit-header' );
+		$this->driver->move_mouse_to( '#submit-header' )->click();
+	}
+
+	public function reset_woocommerce_options() {
+		$this->goto_woocommerce_options();
+		$this->toggle_switch( '#display-on-shop', false );
+		$this->toggle_switch( '#display-on-productcategory', false );
+		$this->toggle_switch( '#display-on-productpage', false );
+		$this->toggle_switch( '#display-on-producttag', false );
+
+		$this->driver->move_mouse_to( '#submit-header' )->click();
 	}
 
 	public function toggle_switch( $field_id, $enabled_flag ) {
