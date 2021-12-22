@@ -108,8 +108,8 @@ jobs:
           -u 33 \
           -e HOME=/tmp \
           --rm \
-          --volumes-from docker_wordpress_1 \
-          --network docker_default \
+          --volumes-from ${{ job.services.wordpress.id }} \
+          --network ${{ job.container.network }} \
           -e WORDPRESS_DB_HOST=db:3306 \
           -e WORDPRESS_DB_NAME=wordpress \
           -e WORDPRESS_DB_USER=wordpress \
