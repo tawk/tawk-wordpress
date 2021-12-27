@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/alvinjohnsonso/tawk-url-utils.git",
-                "reference": "1ba2eeed240ea97455a368aea1cd9684bc57702f"
+                "reference": "3a2bd7a836322730a0c2f0b0cc528e192e2faa01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alvinjohnsonso/tawk-url-utils/zipball/1ba2eeed240ea97455a368aea1cd9684bc57702f",
-                "reference": "1ba2eeed240ea97455a368aea1cd9684bc57702f",
+                "url": "https://api.github.com/repos/alvinjohnsonso/tawk-url-utils/zipball/3a2bd7a836322730a0c2f0b0cc528e192e2faa01",
+                "reference": "3a2bd7a836322730a0c2f0b0cc528e192e2faa01",
                 "shasum": ""
             },
             "require-dev": {
@@ -38,7 +38,7 @@
             "support": {
                 "source": "https://github.com/alvinjohnsonso/tawk-url-utils/tree/feature/url-and-path-matching-modules"
             },
-            "time": "2021-12-15T11:01:56+00:00"
+            "time": "2021-12-22T15:33:31+00:00"
         }
     ],
     "packages-dev": [
