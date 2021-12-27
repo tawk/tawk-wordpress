@@ -353,9 +353,8 @@ if ( ! class_exists( 'TawkTo' ) ) {
 	 * Main tawk.to module
 	 */
 	class TawkTo {
-		const PLUGIN_VERSION           = '0.7.0';
-		const PLUGIN_VERSION_VARIABLE  = 'tawkto-version';
-		const PLUGIN_UPDATED_TRANSIENT = 'tawkto-updated';
+		const PLUGIN_VERSION          = '0.7.0';
+		const PLUGIN_VERSION_VARIABLE = 'tawkto-version';
 
 		/**
 		 * List of important upgrade steps
