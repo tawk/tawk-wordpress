@@ -679,6 +679,18 @@ if ( ! class_exists( 'TawkTo' ) ) {
 
 			update_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility );
 		}
+
+		/**
+		 * Registers hooks in admin area
+		 */
+		public function register_hooks_in_admin() {
+			if ( ! is_admin() ) {
+				// do nothing.
+				return;
+			}
+
+			add_action( 'plugins_loaded', array( $this, 'upgrade' ) );
+		}
 	}
 }
 
@@ -691,7 +703,7 @@ if ( class_exists( 'TawkTo' ) ) {
 	if ( isset( $tawkto ) ) {
 		// these are called every page load.
 		$tawkto->migrate_embed_code();
-		add_action( 'plugins_loaded', array( &$tawkto, 'upgrade' ) );
+		$tawkto->register_hooks_in_admin();
 
 		/**
 		 * Adds plugin settings link
