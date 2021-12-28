@@ -154,13 +154,13 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 				<h2><?php esc_html_e( 'Visibility Options', 'tawk-to-live-chat' ); ?></h2>
 				<p class='tawk-notice'>
 					<?php esc_html_e( 'Please Note: that you can use the visibility options below, or you can show the tawk.to widget', 'tawk-to-live-chat' ); ?>
-					<br>
 					<?php esc_html_e( 'on any page independent of these visibility options by simply using the', 'tawk-to-live-chat' ); ?>
 					<b><?php esc_html_e( '[tawkto]', 'tawk-to-live-chat' ); ?></b>
 					<?php esc_html_e( 'shortcode in', 'tawk-to-live-chat' ); ?>
-					<br>
 					<?php esc_html_e( 'the post or page.', 'tawk-to-live-chat' ); ?>
 				</p>
+
+				<h2><?php esc_html_e( 'General Visibility', 'tawk-to-live-chat' ); ?></h2>
 				<table class="form-table">
 					<tr valign="top">
 					<th class="tawk-setting" scope="row">
@@ -186,7 +186,8 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 						<label class="switch">
 						<input type="checkbox"
 							class="slider round"
-							id="show-onfrontpage" name="tawkto-visibility-options[show_onfrontpage]"
+							id="show-onfrontpage"
+							name="tawkto-visibility-options[show_onfrontpage]"
 							value="1"
 							<?php echo checked( 1, $visibility['show_onfrontpage'], false ); ?> />
 						<div class="slider round"></div>
@@ -201,7 +202,8 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 						<label class="switch">
 						<input type="checkbox"
 							class="slider round"
-							id="show-oncategory" name="tawkto-visibility-options[show_oncategory]"
+							id="show-oncategory"
+							name="tawkto-visibility-options[show_oncategory]"
 							value="1"
 							<?php echo checked( 1, $visibility['show_oncategory'], false ); ?> />
 						<div class="slider round"></div>
@@ -240,9 +242,46 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 						</label>
 					</td>
 					</tr>
-					<tr valign="top">
+				</table>
+
+				<h2><?php esc_html_e( 'URL Exclusion', 'tawk-to-live-chat' ); ?></h2>
+				<p class='tawk-notice'>
+					<?php esc_html_e( 'To show or hide the widget on one or more specific URLs or paths, enable this functionality and specify the rule. ', 'tawk-to-live-chat' ); ?>
+					<strong><?php esc_html_e( 'Separate entries with comma', 'tawk-to-live-chat' ); ?> (,).</strong>
+					<div class="tooltip">
+						<?php esc_html_e( 'Examples of accepted path patterns.', 'tawk-to-live-chat' ); ?>
+						<ul class="tooltiptext">
+							<li>*</li>
+							<li>*/to/somewhere</li>
+							<li>/*/to/somewhere</li>
+							<li>/path/*/somewhere</li>
+							<li>/path/*/lead/*/somewhere</li>
+							<li>/path/*/*/somewhere</li>
+							<li>/path/to/*</li>
+							<li>/path/to/*/</li>
+							<li>*/to/*/page</li>
+							<li>/*/to/*/page</li>
+							<li>/path/*/other/*</li>
+							<li>/path/*/other/*/</li>
+							<li>http://www.example.com/</li>
+							<li>http://www.example.com/*</li>
+							<li>http://www.example.com/*/to/somewhere</li>
+							<li>http://www.example.com/path/*/somewhere</li>
+							<li>http://www.example.com/path/*/lead/*/somewhere</li>
+							<li>http://www.example.com/path/*/*/somewhere</li>
+							<li>http://www.example.com/path/to/*</li>
+							<li>http://www.example.com/path/to/*/</li>
+							<li>http://www.example.com/*/to/*/page</li>
+							<li>http://www.example.com/path/*/other/*</li>
+							<li>http://www.example.com/path/*/other/*/</li>
+						</ul>
+					</div>
+				</p>
+
+				<table class="form-table">
+				<tr valign="top">
 					<th class="tawk-setting" scope="row">
-						<?php esc_html_e( 'Exclude on specific url', 'tawk-to-live-chat' ); ?>
+						<?php esc_html_e( 'HIDE widget only on specific URLs or paths', 'tawk-to-live-chat' ); ?>
 					</th>
 					<td>
 						<label class="switch">
@@ -259,18 +298,13 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 							name="tawkto-visibility-options[excluded_url_list]"
 							cols="50"
 							rows="10"><?php echo esc_html( $visibility['excluded_url_list'] ); ?></textarea>
-						<br>
-						<?php esc_html_e( 'Enter the url where you', 'tawk-to-live-chat' ); ?>
-						<b><?php esc_html_e( 'DO NOT', 'tawk-to-live-chat' ); ?></b>
-						<?php esc_html_e( 'want the widget to display.', 'tawk-to-live-chat' ); ?>
-						<br>
-						<?php esc_html_e( 'Separate entries with comma', 'tawk-to-live-chat' ); ?>(,).
-						<br>
 						</div>
 					</td>
 					</tr>
 					<tr valign="top"  class="tawk-selected-display">
-					<th class="tawk-setting" scope="row"><?php esc_html_e( 'Include on specific url', 'tawk-to-live-chat' ); ?></th>
+					<th class="tawk-setting" scope="row">
+						<?php esc_html_e( 'SHOW widget only on specific URLs or paths', 'tawk-to-live-chat' ); ?>
+					</th>
 					<td>
 						<label class="switch">
 						<input type="checkbox"
@@ -286,41 +320,9 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 							name="tawkto-visibility-options[included_url_list]"
 							cols="50"
 							rows="10"><?php echo esc_html( $visibility['included_url_list'] ); ?></textarea>
-						<br>
-						<?php esc_html_e( 'Enter the url where you', 'tawk-to-live-chat' ); ?>
-						<b><?php esc_html_e( 'WANT', 'tawk-to-live-chat' ); ?></b>
-						<?php esc_html_e( 'the widget to display.', 'tawk-to-live-chat' ); ?>
-						<br>
-						<?php esc_html_e( 'Separate entries with comma ', 'tawk-to-live-chat' ); ?>(,).
-						<br>
-						</div>
 					</td>
 					</tr>
 				</table>
-				</div>
-				<div id="visibility-info">
-					<div id="include_exclude_url">
-						<h2>Wildcards for exclude/include on specific url</h3>
-						<p>You may enter a wildcard at the start, middle, or at the end of the URL. Enter the wildcard at the start, middle, or end of the URL. Only one wildcard may be included in each URL.</p>
-						<p>You can also enter the paths only instead of the full URL. Begin each path entry with a forward slash (/).</p>
-						<h3>Valid formats</h3>
-						<ul class="list-type-bullet">
-							<li>*</li>
-							<li>*/to/somewhere</li>
-							<li>/path/*/somewhere</li>
-							<li>/path/to/*</li>
-							<li>http://www.example.com/</li>
-							<li>http://www.example.com/*</li>
-							<li>http://www.example.com/*/to/somewhere</li>
-							<li>http://www.example.com/path/*/somewhere</li>
-							<li>http://www.example.com/path/to/*</li>
-						</ul>
-						<h3>Invalid formats</h3>
-						<ul class="list-type-bullet">
-							<li>path/to/somewhere - “path” will be considered as a host and not a start of a path</li>
-							<li>*/that/*/to/* - wildcards at multiple positions are not valid</li>
-						</ul>
-					</div>
 				</div>
 			</div>
 		</div>
