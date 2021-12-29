@@ -49,9 +49,6 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->goto_visibility_options();
 		self::$web->toggle_switch( '#always-display', false );
 
-		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
-
 		self::$web->goto_woocommerce_options();
 	}
 
@@ -62,7 +59,7 @@ class WoocommerceOptionsTest extends TestCase {
 
 	public function teardown(): void {
 		self::$web->login();
-		self::$web->reset_woocommerce_options();
+		self::$web->reset_woocommerce_options( false );
 		self::$web->reset_visibility_options();
 	}
 

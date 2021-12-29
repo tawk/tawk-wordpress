@@ -216,7 +216,6 @@ class Web {
 		$tab_id = '#woocommerce-options-tab';
 		$this->driver->wait_until_element_is_located( $tab_id );
 		$this->driver->find_element_and_click( $tab_id );
-		$this->driver->wait_until_element_is_visible( '#woocommerce' );
 	}
 
 	public function set_widget( $property_id, $widget_id ) {
@@ -262,7 +261,7 @@ class Web {
 		$this->driver->switch_to_default_frame();
 	}
 
-	public function reset_visibility_options() {
+	public function reset_visibility_options( $save_flag = true ) {
 		$this->goto_visibility_options();
 		$this->toggle_switch( '#always-display', false );
 
@@ -281,17 +280,21 @@ class Web {
 		$this->toggle_switch( '#include-url', false );
 		$this->toggle_switch( '#always-display', true );
 
-		$this->driver->move_mouse_to( '#submit-header' )->click();
+		if ( $save_flag ) {
+			$this->driver->move_mouse_to( '#submit-header' )->click();
+		}
 	}
 
-	public function reset_woocommerce_options() {
+	public function reset_woocommerce_options( $save_flag = true ) {
 		$this->goto_woocommerce_options();
 		$this->toggle_switch( '#display-on-shop', false );
 		$this->toggle_switch( '#display-on-productcategory', false );
 		$this->toggle_switch( '#display-on-productpage', false );
 		$this->toggle_switch( '#display-on-producttag', false );
 
-		$this->driver->move_mouse_to( '#submit-header' )->click();
+		if ( $save_flag ) {
+			$this->driver->move_mouse_to( '#submit-header' )->click();
+		}
 	}
 
 	public function toggle_switch( $field_id, $enabled_flag ) {
@@ -301,6 +304,8 @@ class Web {
 			return;
 		}
 
-		$this->driver->move_mouse_to( $field_id . ' + .slider.round' )->click();
+		$slider_selector = $field_id . ' + .slider.round';
+		$this->driver->wait_until_element_is_clickable( $slider_selector );
+		$this->driver->move_mouse_to( $slider_selector )->click();
 	}
 }
