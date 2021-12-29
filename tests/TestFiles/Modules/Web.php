@@ -305,7 +305,6 @@ class Web {
 		}
 
 		$slider_selector = $field_id . ' + .slider.round';
-		$this->driver->wait_until_element_is_clickable( $slider_selector );
 		$this->driver->move_mouse_to( $slider_selector )->click();
 	}
 }
