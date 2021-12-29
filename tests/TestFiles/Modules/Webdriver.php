@@ -210,6 +210,10 @@ class Webdriver {
 		);
 	}
 
+	public function wait_for_seconds( int $seconds = 5 ) {
+		$this->driver->manage()->timeouts()->implicitlyWait( $seconds );
+	}
+
 	public function clear_input( $selector ): void {
 		$this->find_element( $selector )->clear();
 	}

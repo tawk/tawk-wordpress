@@ -234,7 +234,7 @@ class Web {
 		$this->driver->find_element_and_click( '#addWidgetToPage' );
 
 		// ensures widget is added.
-		sleep( 1 );
+		$this->driver->wait_for_seconds( 1 );
 
 		$this->widget_set = true;
 
@@ -253,7 +253,7 @@ class Web {
 		$this->driver->find_element_and_click( '#removeCurrentWidget' );
 
 		// ensures widget is added.
-		sleep( 1 );
+		$this->driver->wait_for_seconds( 1 );
 
 		$this->widget_set = false;
 
@@ -282,6 +282,7 @@ class Web {
 
 		if ( $save_flag ) {
 			$this->driver->move_mouse_to( '#submit-header' )->click();
+			$this->driver->wait_for_seconds( 1 );
 		}
 	}
 
@@ -294,6 +295,7 @@ class Web {
 
 		if ( $save_flag ) {
 			$this->driver->move_mouse_to( '#submit-header' )->click();
+			$this->driver->wait_for_seconds( 1 );
 		}
 	}
 

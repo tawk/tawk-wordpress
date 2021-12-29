@@ -97,7 +97,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#display-on-shop', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'shop/' );
 	}
@@ -113,7 +113,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#always-display', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'shop/' );
 	}
@@ -126,7 +126,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#display-on-shop', false );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_not_on_page( self::$web->get_base_url() . 'shop/' );
 	}
@@ -139,7 +139,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#display-on-productcategory', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'product-category/music/' );
 	}
@@ -155,7 +155,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#always-display', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'product-category/music/' );
 	}
@@ -168,7 +168,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#display-on-productcategory', false );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product-category/music/' );
 	}
@@ -181,7 +181,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#display-on-productpage', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'product/album/' );
 	}
@@ -197,7 +197,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#always-display', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'product/album/' );
 	}
@@ -210,7 +210,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#display-on-productpage', false );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/album/' );
 	}
@@ -223,7 +223,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#display-on-producttag', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'product-tag/product-tag-a/' );
 	}
@@ -239,7 +239,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#always-display', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'product-tag/product-tag-a/' );
 	}
@@ -252,7 +252,7 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#display-on-producttag', false );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_until_page_fully_loads();
+		self::$driver->wait_for_seconds( 1 );
 
 		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product-tag/product-tag-a/' );
 	}
