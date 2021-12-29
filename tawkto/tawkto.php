@@ -12,10 +12,9 @@
  **/
 
 require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+require_once dirname( __FILE__ ) . '/upgrade.manager.php';
 
 use Tawk\Modules\UrlPatternMatcher;
-use Tawk\Helpers\PathHelper;
-use Tawk\Helpers\Common as CommonHelper;
 
 if ( ! class_exists( 'TawkTo_Settings' ) ) {
 	/**
@@ -581,115 +580,6 @@ if ( ! class_exists( 'TawkTo' ) ) {
 
 			delete_option( 'tawkto-embed-code' );
 		}
-
-		/**
-		 * Upgrades plugin data based on the current version.
-		 *
-		 * @return void
-		 */
-		public function upgrade() {
-			// check current plugin version.
-			$current = self::PLUGIN_VERSION;
-
-			// compare against prev version.
-			$prev = get_option( self::PLUGIN_VERSION_VARIABLE );
-
-			if ( ! empty( $prev ) && version_compare( $prev, $current ) >= 0 ) {
-				// do not do anything.
-				return;
-			}
-
-			// special case: we've never set the version before.
-			// All plugins prior to the current version needs the upgrade.
-			if ( version_compare( $prev, $current ) < 0 ) {
-				// are there upgrade steps depending on how out-of-date?
-				foreach ( self::UPGRADES as $next_version ) {
-					$this->do_upgrade( $next_version );
-					$prev = $next_version;
-				}
-			}
-
-			// update stored plugin version for next time.
-			update_option( self::PLUGIN_VERSION_VARIABLE, $current );
-		}
-
-		/**
-		 * Does the version upgrade depending on the provided plugin version.
-		 *
-		 * @param  string $version Plugin version.
-		 * @return void
-		 */
-		protected function do_upgrade( $version ) {
-			switch ( $version ) {
-				case self::V_0_7_0:
-					$this->upgrade_0_7_0();
-					break;
-			}
-		}
-
-		/**
-		 * Upgrade for version 0.7.0
-		 *
-		 * @return void
-		 */
-		protected function upgrade_0_7_0() {
-			$visibility            = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
-			$included_url_list     = array_map( 'trim', preg_split( '/,/', $visibility['included_url_list'] ) );
-			$excluded_url_list     = array_map( 'trim', preg_split( '/,/', $visibility['excluded_url_list'] ) );
-			$new_included_url_list = array();
-			$new_excluded_url_list = array();
-
-			foreach ( $included_url_list as $included_url ) {
-				$new_included_url_list[] = $included_url;
-
-				$wildcard = PathHelper::get_wildcard();
-
-				if ( CommonHelper::text_ends_with( $included_url, $wildcard ) ) {
-					continue;
-				}
-
-				$new_included_url = rtrim( $included_url, '/' . $wildcard );
-				if ( in_array( $new_included_url, $included_url_list, true ) ) {
-					continue;
-				}
-
-				$new_included_url_list[] = $new_included_url;
-			}
-
-			foreach ( $excluded_url_list as $excluded_url ) {
-				$new_excluded_url_list[] = $excluded_url;
-
-				$wildcard = PathHelper::get_wildcard();
-
-				if ( CommonHelper::text_ends_with( $excluded_url, $wildcard ) === false ) {
-					continue;
-				}
-
-				$new_excluded_url = rtrim( $excluded_url, '/' . $wildcard );
-				if ( in_array( $new_excluded_url, $excluded_url_list, true ) ) {
-					continue;
-				}
-
-				$new_excluded_url_list[] = $new_excluded_url;
-			}
-
-			$visibility['included_url_list'] = join( ', ', $new_included_url_list );
-			$visibility['excluded_url_list'] = join( ', ', $new_excluded_url_list );
-
-			update_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility );
-		}
-
-		/**
-		 * Registers hooks in admin area
-		 */
-		public function register_hooks_in_admin() {
-			if ( ! is_admin() ) {
-				// do nothing.
-				return;
-			}
-
-			add_action( 'plugins_loaded', array( $this, 'upgrade' ) );
-		}
 	}
 }
 
@@ -699,10 +589,15 @@ if ( class_exists( 'TawkTo' ) ) {
 
 	$tawkto = new TawkTo();
 
+	$upgrade_manager = new TawkToUpgradeManager(
+		TawkTo::PLUGIN_VERSION,
+		TawkTo::PLUGIN_VERSION_VARIABLE
+	);
+	$upgrade_manager->register_hooks();
+
 	if ( isset( $tawkto ) ) {
 		// these are called every page load.
 		$tawkto->migrate_embed_code();
-		$tawkto->register_hooks_in_admin();
 
 		/**
 		 * Adds plugin settings link
