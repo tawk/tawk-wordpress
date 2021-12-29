@@ -2,7 +2,6 @@
 
 namespace Tawk\Tests\TestFiles\Modules;
 
-use Facebook\WebDriver\WebDriverBy;
 use Tawk\Tests\TestFiles\Types\TawkConfig;
 
 use Tawk\Tests\TestFiles\Helpers\Common;
@@ -78,7 +77,9 @@ class Web {
 			return;
 		}
 
-		$logout_url = $this->driver->find_element_and_get_attribute_value( '#wp-admin-bar-logout > a', 'href' );
+		$logout_selector = '#wp-admin-bar-logout > a';
+		$this->driver->wait_until_element_is_located( $logout_selector );
+		$logout_url = $this->driver->find_element_and_get_attribute_value( $logout_selector, 'href' );
 
 		$this->driver->get_driver()->get( $logout_url );
 
