@@ -122,6 +122,30 @@ jobs:
           wp import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=skip;
           wp wc product_tag create --name=product-tag-a --user=admin;"
 
+      - name: setup woocommerce profile
+        run: |
+          docker run \
+          -u 33 \
+          -e HOME=/tmp \
+          --rm \
+          --volumes-from ${{ job.services.wordpress.id }} \
+          --network ${{ job.container.network }} \
+          -e WORDPRESS_DB_HOST=db:3306 \
+          -e WORDPRESS_DB_NAME=wordpress \
+          -e WORDPRESS_DB_USER=wordpress \
+          -e WORDPRESS_DB_PASSWORD=wordpress \
+          wordpress:cli \
+          /bin/bash -c \
+          "wp option set woocommerce_store_address '123 Main Street'; \
+          wp option set woocommerce_store_address_2 ''; \
+          wp option set woocommerce_store_city 'Toronto'; \
+          wp option set woocommerce_default_country 'CA:ON'; \
+          wp option set woocommerce_store_postalcode 'A1B2C3'; \
+          wp option set woocommerce_currency 'CAD'; \
+          wp option set woocommerce_product_type 'physical'; \
+          wp option set woocommerce_allow_tracking 'no'; \
+          wp wc --user=admin tool run install_pages;"
+
       - name: cached dependencies
         uses: actions/cache@v2
         id: cached-dependencies
