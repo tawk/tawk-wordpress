@@ -77,9 +77,10 @@ class Web {
 			return;
 		}
 
+		$this->driver->get_driver()->navigate()->refresh();
+
 		$logout_selector = '#wp-admin-bar-logout > a';
-		$this->driver->wait_until_element_is_located( $logout_selector );
-		$logout_url = $this->driver->find_element_and_get_attribute_value( $logout_selector, 'href' );
+		$logout_url      = $this->driver->find_element_and_get_attribute_value( $logout_selector, 'href' );
 
 		$this->driver->get_driver()->get( $logout_url );
 
@@ -118,7 +119,6 @@ class Web {
 		$this->driver->goto_page( $this->plugin_page_url );
 
 		$activate_id = '#activate-tawkto-live-chat';
-		$this->driver->wait_until_element_is_located( $activate_id );
 		$this->driver->find_element_and_click( $activate_id );
 
 		$this->plugin_activated = true;
@@ -132,7 +132,6 @@ class Web {
 		$this->driver->goto_page( $this->plugin_page_url );
 
 		$activate_id = '#deactivate-tawkto-live-chat';
-		$this->driver->wait_until_element_is_located( $activate_id );
 		$this->driver->find_element_and_click( $activate_id );
 
 		$this->plugin_activated = false;
@@ -146,7 +145,6 @@ class Web {
 		$this->driver->goto_page( $this->plugin_page_url );
 
 		$activate_id = '#delete-tawkto-live-chat';
-		$this->driver->wait_until_element_is_located( $activate_id );
 		$this->driver->find_element_and_click( $activate_id );
 
 		$this->driver->wait_for_alert_and_accept();
@@ -163,7 +161,6 @@ class Web {
 		$this->driver->goto_page( $this->plugin_settings_url );
 
 		$tab_id = '#account-settings-tab';
-		$this->driver->wait_until_element_is_located( $tab_id );
 		$this->driver->find_element_and_click( $tab_id );
 
 		// incase the "property and widget is already set" notice appears.
@@ -193,7 +190,6 @@ class Web {
 		$this->driver->goto_page( $this->plugin_settings_url );
 
 		$tab_id = '#visibility-options-tab';
-		$this->driver->wait_until_element_is_located( $tab_id );
 		$this->driver->find_element_and_click( $tab_id );
 	}
 
@@ -204,7 +200,6 @@ class Web {
 		$this->driver->goto_page( $this->plugin_settings_url );
 
 		$tab_id = '#privacy-options-tab';
-		$this->driver->wait_until_element_is_located( $tab_id );
 		$this->driver->find_element_and_click( $tab_id );
 	}
 
@@ -215,7 +210,6 @@ class Web {
 		$this->driver->goto_page( $this->plugin_settings_url );
 
 		$tab_id = '#woocommerce-options-tab';
-		$this->driver->wait_until_element_is_located( $tab_id );
 		$this->driver->find_element_and_click( $tab_id );
 	}
 

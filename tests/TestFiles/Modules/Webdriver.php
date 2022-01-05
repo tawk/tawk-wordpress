@@ -81,6 +81,7 @@ class Webdriver {
 	}
 
 	public function find_element( string $selector ) {
+		$this->wait_until_element_is_located( $selector );
 		return $this->driver->findElement( WebDriverBy::cssSelector( $selector ) );
 	}
 
