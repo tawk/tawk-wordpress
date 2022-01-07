@@ -4,7 +4,6 @@ namespace Tawk\Tests\Coverages;
 
 use PHPUnit\Framework\TestCase;
 
-use Tawk\Tests\TestFiles\Enums\BrowserStackStatus;
 use Tawk\Tests\TestFiles\Config;
 use Tawk\Tests\TestFiles\Helpers\Common;
 use Tawk\Tests\TestFiles\Modules\Web;
@@ -13,8 +12,6 @@ use Tawk\Tests\TestFiles\Modules\Webdriver;
 class WoocommerceOptionsTest extends TestCase {
 	protected static Webdriver $driver;
 	protected static Web $web;
-	protected static string $property_id;
-	protected static string $widget_id;
 	protected static string $script_selector;
 	protected static string $admin_name;
 	protected static string $admin_email;
@@ -22,25 +19,19 @@ class WoocommerceOptionsTest extends TestCase {
 	public static function setupBeforeClass(): void {
 		$config = Config::get_config();
 
-		self::$driver = Common::create_driver( 'Woocommerce Options Test', $config );
+		self::$driver = Common::create_driver( $config );
 		self::$web    = Common::create_web( self::$driver, $config );
 
-		self::$property_id = $config->tawk->property_id;
-		self::$widget_id   = $config->tawk->widget_id;
-
-		$embed_script_url      = $config->tawk->embed_url . self::$property_id . '/' . self::$widget_id;
-		self::$script_selector = 'script[src="' . $embed_script_url . '"]';
+		self::$script_selector = '#tawk-script';
 
 		self::$admin_name  = $config->web->admin->name;
 		self::$admin_email = $config->web->admin->email;
 
 		self::$web->login();
 
-		self::assertEquals( self::$web->get_admin_url(), self::$driver->get_current_url() );
-
 		self::$web->install_plugin();
 		self::$web->activate_plugin();
-		self::$web->set_widget( self::$property_id, self::$widget_id );
+		self::$web->set_widget( $config->tawk->property_id, $config->tawk->widget_id );
 	}
 
 	public function setup(): void {
@@ -50,11 +41,6 @@ class WoocommerceOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#always-display', false );
 
 		self::$web->goto_woocommerce_options();
-	}
-
-	protected function onNotSuccessfulTest( $err ): void {
-		self::$driver->update_test_status( BrowserStackStatus::FAILED, $err->getMessage() );
-		throw $err;
 	}
 
 	public function teardown(): void {

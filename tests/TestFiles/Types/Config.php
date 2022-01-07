@@ -5,7 +5,6 @@ namespace Tawk\Tests\TestFiles\Types;
 class Config {
 	public TawkConfig $tawk;
 	public SeleniumConfig $selenium;
-	public BrowserStackConfig $browserstack;
 	public WebConfig $web;
 }
 
@@ -39,15 +38,4 @@ class SeleniumConfig {
 	public string $browser;
 	public bool $hub_flag;
 	public UrlConfig $url;
-}
-
-class BrowserStackConfig {
-	public ?string $username;
-	public ?string $access_key;
-	public ?string $local_identifier;
-	public ?string $build_name;
-	public ?string $project_name;
-	public int $session_timeout_ms;
-	public int $request_timeout_ms;
-	public bool $is_browserstack;
 }

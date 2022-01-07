@@ -3,8 +3,8 @@
 namespace Tawk\Tests\Coverages;
 
 use PHPUnit\Framework\TestCase;
+
 use Tawk\Tests\TestFiles\Config;
-use Tawk\Tests\TestFiles\Enums\BrowserStackStatus;
 use Tawk\Tests\TestFiles\Helpers\Common;
 use Tawk\Tests\TestFiles\Modules\Web;
 use Tawk\Tests\TestFiles\Modules\Webdriver;
@@ -17,29 +17,20 @@ class WidgetSelectionTest extends TestCase {
 	protected static Web $web;
 	protected static string $property_id;
 	protected static string $widget_id;
-	protected static string $embed_script_url;
 
 	public static function setUpBeforeClass(): void {
 		$config = Config::get_config();
 
-		self::$driver = Common::create_driver( 'Widget Selection Test', $config );
+		self::$driver = Common::create_driver( $config );
 		self::$web    = Common::create_web( self::$driver, $config );
 
-		self::$property_id      = $config->tawk->property_id;
-		self::$widget_id        = $config->tawk->widget_id;
-		self::$embed_script_url = $config->tawk->embed_url . self::$property_id . '/' . self::$widget_id;
+		self::$property_id = $config->tawk->property_id;
+		self::$widget_id   = $config->tawk->widget_id;
 
 		self::$web->login();
 
-		self::assertEquals( self::$web->get_admin_url(), self::$driver->get_current_url() );
-
 		self::$web->install_plugin();
 		self::$web->activate_plugin();
-	}
-
-	protected function onNotSuccessfulTest( $err ): void {
-		self::$driver->update_test_status( BrowserStackStatus::FAILED, $err->getMessage() );
-		throw $err;
 	}
 
 	public static function tearDownAfterClass(): void {
@@ -55,7 +46,7 @@ class WidgetSelectionTest extends TestCase {
 	 * @group widget_selection_test
 	 */
 	public function should_be_able_to_set_and_remove_widget() {
-		$script_selector = 'script[src="' . self::$embed_script_url . '"]';
+		$script_selector = '#tawk-script';
 
 		self::$web->set_widget( self::$property_id, self::$widget_id );
 

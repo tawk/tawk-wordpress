@@ -3,7 +3,6 @@
 namespace Tawk\Tests\TestFiles;
 
 use Tawk\Tests\TestFiles\Helpers\Common;
-use Tawk\Tests\TestFiles\Types\BrowserStackConfig;
 use Tawk\Tests\TestFiles\Types\Config as FullConfig;
 use Tawk\Tests\TestFiles\Types\SeleniumConfig;
 use Tawk\Tests\TestFiles\Types\TawkConfig;
@@ -13,11 +12,10 @@ use Tawk\Tests\TestFiles\Types\WebUserConfig;
 
 class Config {
 	public static function get_config() {
-		$config               = new FullConfig();
-		$config->browserstack = self::get_browserstack_config();
-		$config->selenium     = self::get_selenium_config();
-		$config->tawk         = self::get_tawk_config();
-		$config->web          = self::get_web_config();
+		$config           = new FullConfig();
+		$config->selenium = self::get_selenium_config();
+		$config->tawk     = self::get_tawk_config();
+		$config->web      = self::get_web_config();
 
 		return $config;
 	}
@@ -45,18 +43,6 @@ class Config {
 		$config->url                = $url;
 		$config->session_timeout_ms = 90 * 1000;
 		$config->request_timeout_ms = 90 * 1000;
-
-		return $config;
-	}
-
-	private static function get_browserstack_config(): BrowserStackConfig {
-		$config                   = new BrowserStackConfig();
-		$config->username         = Common::get_env( 'BROWSERSTACK_USERNAME' );
-		$config->access_key       = Common::get_env( 'BROWSERSTACK_ACCESS_KEY' );
-		$config->local_identifier = Common::get_env( 'BROWSERSTACK_LOCAL_IDENTIFIER' );
-		$config->build_name       = Common::get_env( 'BROWSERSTACK_BUILD_NAME' );
-		$config->project_name     = Common::get_env( 'BROWSERSTACK_PROJECT_NAME' );
-		$config->is_browserstack  = false === empty( $config->username );
 
 		return $config;
 	}

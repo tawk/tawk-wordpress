@@ -3,8 +3,8 @@
 namespace Tawk\Tests\Coverages;
 
 use PHPUnit\Framework\TestCase;
+
 use Tawk\Tests\TestFiles\Config;
-use Tawk\Tests\TestFiles\Enums\BrowserStackStatus;
 use Tawk\Tests\TestFiles\Helpers\Common;
 use Tawk\Tests\TestFiles\Modules\Web;
 use Tawk\Tests\TestFiles\Modules\Webdriver;
@@ -15,39 +15,27 @@ use Tawk\Tests\TestFiles\Modules\Webdriver;
 class VisibilityOptionsTest extends TestCase {
 	protected static Webdriver $driver;
 	protected static Web $web;
-	protected static string $property_id;
 	protected static string $widget_id;
 	protected static string $script_selector;
 
 	public static function setUpBeforeClass(): void {
 		$config = Config::get_config();
 
-		self::$driver = Common::create_driver( 'Visibility Options Test', $config );
+		self::$driver = Common::create_driver( $config );
 		self::$web    = Common::create_web( self::$driver, $config );
 
-		self::$property_id = $config->tawk->property_id;
-		self::$widget_id   = $config->tawk->widget_id;
-
-		$embed_script_url      = $config->tawk->embed_url . self::$property_id . '/' . self::$widget_id;
-		self::$script_selector = 'script[src="' . $embed_script_url . '"]';
+		self::$script_selector = '#tawk-script';
 
 		self::$web->login();
 
-		self::assertEquals( self::$web->get_admin_url(), self::$driver->get_current_url() );
-
 		self::$web->install_plugin();
 		self::$web->activate_plugin();
-		self::$web->set_widget( self::$property_id, self::$widget_id );
+		self::$web->set_widget( $config->tawk->property_id, $config->tawk->widget_id );
 	}
 
 	public function setup(): void {
 		self::$web->login();
 		self::$web->goto_visibility_options();
-	}
-
-	protected function onNotSuccessfulTest( $err ): void {
-		self::$driver->update_test_status( BrowserStackStatus::FAILED, $err->getMessage() );
-		throw $err;
 	}
 
 	public function teardown(): void {

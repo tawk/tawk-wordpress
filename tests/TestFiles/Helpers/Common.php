@@ -46,13 +46,12 @@ class Common {
 		return $env_var;
 	}
 
-	public static function create_driver( string $session_name, Config $config ): Webdriver {
+	public static function create_driver( Config $config ): Webdriver {
 		$webdriver_config = new WebdriverConfig();
 
-		$webdriver_config->browserstack = $config->browserstack;
-		$webdriver_config->selenium     = $config->selenium;
+		$webdriver_config->selenium = $config->selenium;
 
-		return new Webdriver( $session_name, $webdriver_config );
+		return new Webdriver( $webdriver_config );
 	}
 
 	public static function create_web( Webdriver $driver, Config $config ): Web {

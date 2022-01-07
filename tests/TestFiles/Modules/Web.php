@@ -67,7 +67,8 @@ class Web {
 		$this->driver->find_element_and_input( '#user_login', $this->admin->username );
 		$this->driver->find_element_and_input( '#user_pass', $this->admin->password );
 		$this->driver->find_element_and_click( '#wp-submit' );
-		$this->driver->wait_until_url_contains( $this->admin_url );
+
+		$this->driver->wait_for_seconds( 1 );
 
 		$this->logged_in = true;
 	}
