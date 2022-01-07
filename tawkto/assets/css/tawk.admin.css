@@ -132,6 +132,7 @@ div.tawk-footer-text {
 
 .tawk-notice {
 	font-size: 14px;
+	max-width: 578px;
 }
 
 .form-table th.tawk-setting {
@@ -141,6 +142,21 @@ div.tawk-footer-text {
 #exlucded-urls-container,
 #included-urls-container {
 	padding: 15px;
+}
+
+#visibility-content {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+#visibility-content #visibility-info {
+	max-width: 250px;
+}
+
+.list-type-bullet {
+	list-style: circle;
+	padding: 0 20px;
 }
 
 /**
@@ -217,4 +233,83 @@ a.tawk-link {
 
 a.tawk-link:hover {
 	text-decoration: underline;
+}
+
+/**
+ * #.# Tooltip
+ *
+ * Styles for tooltip
+ */
+.tooltip {
+	position: relative;
+	display: inline;
+	color: #03a84e;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	background-color: #545454;
+	color: #fff;
+	text-align: center;
+	padding: 0.5rem;
+	max-width: 300px;
+	border-radius: 0.5rem;
+	font-size: 0.7rem;
+	font-weight: 600;
+	line-height: 0.8;
+
+	/* Position the tooltip text - see examples below! */
+	position: absolute;
+	z-index: 1000;
+	top: 5px;
+}
+
+.tooltip .tooltiptext::before {
+	content: "";
+	display: block;
+	width: 0;
+	height: 0;
+	position: absolute;
+
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 5px solid #545454;
+	top: -5px;
+	left: 5px;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+}
+
+/**
+ * #.# Media Queries
+ *
+ * Mobile view
+ */
+
+@media only screen and (max-width: 712px) {
+
+	/**
+	 * #.# Settings Body
+	 *
+	 * Styles for the settings panel body container
+	 */
+	#tawk-settings-body {
+		max-width: 712px;
+		width: 100%;
+		padding: 0 0 0 0;
+	}
+
+	/**
+	 * #.# Tabs
+	 *
+	 * Styles for the tabs section in the settings panel
+	 */
+	#tawk-tabs {
+		background-color: #fff;
+		min-width: 75px;
+		width: 100%;
+		border-bottom: 1px solid #ccc;
+	}
 }

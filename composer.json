@@ -2,8 +2,11 @@
     "name": "tawk/tawk-wordpress",
     "description": "Wordpress plugin for tawk.to",
     "type": "project",
-    "license": "OSL-3",
-    "version": "0.6.0",
+    "license": "OSL-3.0",
+    "version": "0.7.0",
+    "require": {
+        "tawk/url-utils": "^2.0"
+    },
     "require-dev": {
         "browserstack/browserstack-local": "^1.1",
         "php-webdriver/webdriver": "^1.12",
@@ -19,8 +22,17 @@
             "Tawk\\Tests\\": "tests"
         }
     },
+    "repositories": {
+        "tawk-url-utils": {
+            "type": "vcs",
+            "url": "https://github.com/tawk/tawk-url-utils.git"
+        }
+    },
     "scripts": {
         "test": "phpunit",
+        "build": "composer run build:dev && composer run build:prod",
+        "build:dev": "COMPOSER_VENDOR_DIR=vendor composer install",
+        "build:prod": "COMPOSER_VENDOR_DIR=tawkto/vendor composer install --no-dev",
         "lint": "phpcs -p -s -v --runtime-set ignore_warnings_on_exit true .",
         "lint:fix": "phpcbf -p -s -v .; err=$?; if [ $err -eq 1 ]; then exit 0; else exit $err; fi;"
     },
