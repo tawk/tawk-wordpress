@@ -10,7 +10,7 @@
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint ./tawkto/**/*.js",
     "stylelint": "stylelint ./tawkto/**/*.css",
-    "build": "grunt"
+    "build": "npm install && composer build && grunt"
   },
   "author": "tawk.to",
   "license": "ISC",
