@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b78558c7b0c990a1d1d1223584e497b",
+    "content-hash": "e7d588a77ad40597aa5f25b3a6d9223c",
     "packages": [
         {
             "name": "tawk/url-utils",
-            "version": "dev-feature/url-and-path-matching-modules",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/alvinjohnsonso/tawk-url-utils.git",
-                "reference": "4e855901f28fcda0a2779ba030c9082c5dd5466c"
+                "url": "https://github.com/tawk/tawk-url-utils.git",
+                "reference": "ec70275363ff0dac9d70c9a93399161e5e561a88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alvinjohnsonso/tawk-url-utils/zipball/4e855901f28fcda0a2779ba030c9082c5dd5466c",
-                "reference": "4e855901f28fcda0a2779ba030c9082c5dd5466c",
+                "url": "https://api.github.com/repos/tawk/tawk-url-utils/zipball/ec70275363ff0dac9d70c9a93399161e5e561a88",
+                "reference": "ec70275363ff0dac9d70c9a93399161e5e561a88",
                 "shasum": ""
             },
             "require-dev": {
@@ -36,9 +36,10 @@
                 ]
             },
             "support": {
-                "source": "https://github.com/alvinjohnsonso/tawk-url-utils/tree/feature/url-and-path-matching-modules"
+                "source": "https://github.com/tawk/tawk-url-utils/tree/2.0.0",
+                "issues": "https://github.com/tawk/tawk-url-utils/issues"
             },
-            "time": "2021-12-29T07:53:32+00:00"
+            "time": "2021-12-29T08:42:47+00:00"
         }
     ],
     "packages-dev": [
@@ -2869,9 +2870,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "tawk/url-utils": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
