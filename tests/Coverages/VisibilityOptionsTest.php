@@ -89,16 +89,67 @@ class VisibilityOptionsTest extends TestCase {
 	 * @group visibility_opts_always_display_enabled_exclude_url
 	 */
 	public function should_not_display_widget_on_excluded_pages_match_by_wildcard_while_always_display_is_enabled() {
-		$excluded_url = self::$web->get_base_url() . 'category/*';
+		$excluded_urls = join(
+			', ',
+			array(
+				self::$web->get_base_url() . 'category/*',
+				self::$web->get_base_url() . 'tag/*/',
+				'*/product/product-a',
+				'/*/product/product-b',
+				'/product/*/product-c',
+				'*/product/*/product-d',
+				'/*/product/*/product-e',
+				'/product/*/product-f/*',
+				'/product/*/product-g/*/',
+			)
+		);
 		self::$web->toggle_switch( '#exclude-url', true );
-		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_url );
+		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_urls );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
 		self::$driver->wait_for_seconds( 1 );
 
-		$this->check_widget_not_on_page( self::$web->get_base_url() . 'category/' );
+		// assertion for '<host>/category/*'.
 		$this->check_widget_not_on_page( self::$web->get_base_url() . 'category/category-a/' );
 		$this->check_widget_not_on_page( self::$web->get_base_url() . 'category/category-b/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'category/category-b/something/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'category/' );
+
+		// assertion for '<host>/tag/*/'.
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'tag/tag-a/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'tag/tag-a/something/' );
+
+		// assertion for '*/product/product-a'.
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/product/product-a/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/other/product/product-a/' );
+
+		// assertion for '/*/product/product-b'.
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/product/product-b/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/other/product/product-b/' );
+
+		// assertion for '/product/*/product-c'.
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/some/product-c/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'product/some/other/product-c/' );
+
+		// assertion for '*/product/*/product-d'.
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/product/some/product-d/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/other/product/some/product-d/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/product/some/other/product-d/' );
+
+		// assertion for '/*/product/*/product-e'.
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/product/some/product-e/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/other/product/some/product-e/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/product/some/other/product-e/' );
+
+		// assertion for '/product/*/product-f/*'.
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/some/product-f/some/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/some/product-f/some/other/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'product/some/other/product-f/some/' );
+
+		// assertion for '/product/*/product-g/*/'.
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/some/product-g/some/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'product/some/product-g/some/other/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'product/some/other/product-g/some/' );
 	}
 
 	/**
@@ -149,17 +200,68 @@ class VisibilityOptionsTest extends TestCase {
 	 * @group visibility_opts_always_display_disabled_include_url_enabled
 	 */
 	public function should_display_widget_on_included_pages_matched_by_wildcard_while_always_display_is_disabled() {
-		$included_url = self::$web->get_base_url() . 'category/*';
+		$included_urls = join(
+			', ',
+			array(
+				self::$web->get_base_url() . 'category/*',
+				self::$web->get_base_url() . 'tag/*/',
+				'*/product/product-a',
+				'/*/product/product-b',
+				'/product/*/product-c',
+				'*/product/*/product-d',
+				'/*/product/*/product-e',
+				'/product/*/product-f/*',
+				'/product/*/product-g/*/',
+			)
+		);
 		self::$web->toggle_switch( '#always-display', false );
 		self::$web->toggle_switch( '#include-url', true );
-		self::$driver->find_element_and_input( '#included-url-list', $included_url );
+		self::$driver->find_element_and_input( '#included-url-list', $included_urls );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
 		self::$driver->wait_for_seconds( 1 );
 
-		$this->check_widget_on_page( self::$web->get_base_url() . 'category/' );
+		// assertion for '<host>/category/*'.
 		$this->check_widget_on_page( self::$web->get_base_url() . 'category/category-a/' );
 		$this->check_widget_on_page( self::$web->get_base_url() . 'category/category-b/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'category/category-b/something/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'category/' );
+
+		// assertion for '<host>/tag/*/'.
+		$this->check_widget_on_page( self::$web->get_base_url() . 'tag/tag-a/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'tag/tag-a/something/' );
+
+		// assertion for '*/product/product-a'.
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/product/product-a/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/other/product/product-a/' );
+
+		// assertion for '/*/product/product-b'.
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/product/product-b/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/other/product/product-b/' );
+
+		// assertion for '/product/*/product-c'.
+		$this->check_widget_on_page( self::$web->get_base_url() . 'product/some/product-c/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/some/other/product-c/' );
+
+		// assertion for '*/product/*/product-d'.
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/product/some/product-d/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/other/product/some/product-d/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/product/some/other/product-d/' );
+
+		// assertion for '/*/product/*/product-e'.
+		$this->check_widget_on_page( self::$web->get_base_url() . 'some/product/some/product-e/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/other/product/some/product-e/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'some/product/some/other/product-e/' );
+
+		// assertion for '/product/*/product-f/*'.
+		$this->check_widget_on_page( self::$web->get_base_url() . 'product/some/product-f/some/' );
+		$this->check_widget_on_page( self::$web->get_base_url() . 'product/some/product-f/some/other/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/some/other/product-f/some/' );
+
+		// assertion for '/product/*/product-g/*/'.
+		$this->check_widget_on_page( self::$web->get_base_url() . 'product/some/product-g/some/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/some/product-g/some/other/' );
+		$this->check_widget_not_on_page( self::$web->get_base_url() . 'product/some/other/product-g/some/' );
 	}
 
 	/**
