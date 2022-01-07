@@ -101,7 +101,7 @@ class Webdriver {
 
 	public function wait_until_url_contains(
 		string $url_to_compare,
-		int $wait_sec = 30,
+		int $wait_sec = 60,
 		int $interval_ms = 500
 	) {
 		return $this->driver->wait( $wait_sec, $interval_ms )->until(
@@ -111,7 +111,7 @@ class Webdriver {
 
 	public function wait_until_element_is_located(
 		string $selector,
-		int $wait_sec = 30,
+		int $wait_sec = 60,
 		int $interval_ms = 500
 	) {
 		return $this->driver->wait( $wait_sec, $interval_ms )->until(
@@ -124,7 +124,7 @@ class Webdriver {
 	public function wait_until_element_text_contains(
 		string $selector,
 		string $text_to_compare,
-		int $wait_sec = 30,
+		int $wait_sec = 60,
 		int $interval_ms = 500
 	) {
 		return $this->driver->wait( $wait_sec, $interval_ms )->until(
@@ -137,7 +137,7 @@ class Webdriver {
 
 	public function wait_until_element_is_clickable(
 		string $selector,
-		int $wait_sec = 30,
+		int $wait_sec = 60,
 		int $interval_ms = 500
 	) {
 		return $this->driver->wait( $wait_sec, $interval_ms )->until(
@@ -148,7 +148,7 @@ class Webdriver {
 	}
 
 	public function wait_until_page_fully_loads(
-		int $wait_sec = 30,
+		int $wait_sec = 60,
 		int $interval_ms = 500
 	) {
 		return $this->driver->wait( $wait_sec, $interval_ms )->until(
@@ -160,7 +160,7 @@ class Webdriver {
 
 	public function wait_until_element_is_visible(
 		string $selector,
-		int $wait_sec = 30,
+		int $wait_sec = 60,
 		int $interval_ms = 500
 	) {
 		return $this->driver->wait( $wait_sec, $interval_ms )->until(
@@ -178,7 +178,7 @@ class Webdriver {
 
 	public function wait_for_frame_and_switch(
 		string $selector,
-		int $wait_sec = 30,
+		int $wait_sec = 60,
 		int $interval_ms = 500
 	): void {
 		$this->driver->wait( $wait_sec, $interval_ms )->until(

@@ -70,6 +70,8 @@ class Web {
 
 		$this->driver->wait_for_seconds( 1 );
 
+		$this->driver->wait_until_page_fully_loads();
+
 		$this->logged_in = true;
 	}
 
