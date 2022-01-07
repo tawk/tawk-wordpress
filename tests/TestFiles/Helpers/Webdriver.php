@@ -7,6 +7,9 @@ use Facebook\WebDriver\Firefox\FirefoxOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 
 use Exception;
+use Facebook\WebDriver\Remote\WebDriverCapabilityType;
+use Facebook\WebDriver\WebDriverCapabilities;
+use Facebook\WebDriver\WebDriverPlatform;
 
 class Webdriver {
 	private static function get_chrome_capabilities() {
@@ -14,6 +17,7 @@ class Webdriver {
 		$options      = new ChromeOptions();
 		$options->addArguments( array( '--headless' ) );
 		$capabilities->setCapability( ChromeOptions::CAPABILITY_W3C, $options );
+		$capabilities->setCapability( WebDriverCapabilityType::APPLICATION_CACHE_ENABLED, false );
 
 		return $capabilities;
 	}
@@ -23,12 +27,25 @@ class Webdriver {
 		$options      = new FirefoxOptions();
 		$options->addArguments( array( '--headless' ) );
 		$capabilities->setCapability( FirefoxOptions::CAPABILITY, $options );
+		$capabilities->setCapability( WebDriverCapabilityType::APPLICATION_CACHE_ENABLED, false );
 
 		return $capabilities;
 	}
 
 	private static function get_edge_capabilities() {
-		return DesiredCapabilities::microsoftEdge();
+		$capabilities = DesiredCapabilities::microsoftEdge();
+		$capabilities->setCapability(
+			'ms:edgeOptions',
+			array(
+				'args' => array(
+					'--headless',
+				),
+			)
+		);
+		$capabilities->setCapability( WebDriverCapabilityType::PLATFORM, WebDriverPlatform::LINUX );
+		$capabilities->setCapability( WebDriverCapabilityType::APPLICATION_CACHE_ENABLED, false );
+
+		return $capabilities;
 	}
 
 	public static function build_capabilities( string $browser ) {

@@ -62,6 +62,8 @@ class Web {
 			return;
 		}
 
+		$this->driver->get_driver()->manage()->deleteAllCookies();
+
 		$this->driver->goto_page( $this->base_url . 'wp-login.php' );
 
 		$this->driver->find_element_and_input( '#user_login', $this->admin->username );
@@ -71,6 +73,13 @@ class Web {
 		$this->driver->wait_for_seconds( 1 );
 
 		$this->driver->wait_until_page_fully_loads();
+
+		// prevent reauth=1 loop.
+		$this->driver->goto_page( $this->plugin_page_url );
+		$current_url = $this->driver->get_current_url();
+		if ( false !== strpos( $current_url, 'reauth=1' ) ) {
+			return $this->login();
+		}
 
 		$this->logged_in = true;
 	}

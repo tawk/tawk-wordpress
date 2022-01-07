@@ -13,22 +13,25 @@ jobs:
         uses: actions/cache@v2
         id: cached-dependencies
         with:
-          path: ./vendor
+          path: |
+            ./vendor
+            ./tawkto/vendor
           # the key will change if composer.lock changes
-          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-dependencies-${{ hashFiles('**/composer.lock') }}
 
       - name: install dependencies
         if: steps.cached-dependencies.outputs.cache-hit != 'true'
         uses: php-actions/composer@v6
         with:
           php_extensions: zip
+          command: run build
 
   tests:
     needs: [build]
     strategy:
       fail-fast: false
       matrix:
-        browser: ['chrome', 'firefox']
+        browser: ['chrome', 'firefox', 'edge']
 
     runs-on: ubuntu-latest
     services:
@@ -47,6 +50,10 @@ jobs:
           WORDPRESS_DB_USER: wordpress
           WORDPRESS_DB_PASSWORD: wordpress
           WORDPRESS_DEBUG: 1
+          WORDPRESS_CONFIG_EXTRA: |
+            define('WP_HOME', 'http://localhost:8000');
+            define('WP_SITEURL', 'http://localhost:8000');
+            define('FORCE_SSL_ADMIN', false);
         ports:
           - 8000:80
         volumes:
@@ -54,6 +61,19 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
+      - name: Ubuntu - Install Edgedriver
+        run: |
+          wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -;
+          sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main";
+          sudo apt install microsoft-edge-stable;
+          MS_EDGE_VERSION=$(microsoft-edge --version);
+          MS_EDGE_DRIVER_VERSION=$(echo $MS_EDGE_VERSION | rev | cut -d ' ' -f '1' | rev);
+          mkdir /tmp/edgedriver;
+          wget -O /tmp/edgedriver/edgedriver.zip https://msedgedriver.azureedge.net/$MS_EDGE_DRIVER_VERSION/edgedriver_linux64.zip;
+          sudo unzip /tmp/edgedriver/edgedriver.zip -d /tmp/edgedriver/;
+          sudo cp /tmp/edgedriver/msedgedriver /usr/local/bin/;
+        if: matrix.browser == 'edge'
 
       - name: Start Selenium Server
         run: java -jar $SELENIUM_JAR_PATH standalone &
@@ -144,9 +164,11 @@ jobs:
         uses: actions/cache@v2
         id: cached-dependencies
         with:
-          path: ./vendor
+          path: |
+            ./vendor
+            ./tawkto/vendor
           # the key will change if composer.lock changes
-          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-dependencies-${{ hashFiles('**/composer.lock') }}
 
       - name: prepare test artifact
         run: zip -9 -rq tawkto-live-chat.zip tawkto
