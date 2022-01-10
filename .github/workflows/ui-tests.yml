@@ -10,7 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # adds a way to have this workflow reflect on the pull request
       - uses: haya14busa/action-workflow_run-status@v1
 
       - name: checkout
@@ -66,7 +65,6 @@ jobs:
         volumes:
           - wp_data:/var/www/html
     steps:
-      # adds a way to have this workflow reflect on the pull request
       - uses: haya14busa/action-workflow_run-status@v1
 
       - name: checkout
