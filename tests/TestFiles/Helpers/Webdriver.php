@@ -27,7 +27,7 @@ class Webdriver {
 		$options      = new FirefoxOptions();
 		$options->addArguments(
 			array(
-				'--headless',
+				'-headless',
 				'--disable-dev-shm-usage',
 				'--no-sandbox',
 				'--disable-gpu',
