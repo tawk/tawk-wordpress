@@ -1,4 +1,4 @@
-name: Notify UI test
+name: notify-ui-test
 
 on: [pull_request]
 

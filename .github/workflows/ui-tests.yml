@@ -2,7 +2,7 @@ name: ui-tests
 
 on:
   workflow_run:
-    workflows: ["Notify UI test"]
+    workflows: ["notify-ui-test"]
     types:
       - completed
 
