@@ -5,7 +5,7 @@
     "license": "OSL-3.0",
     "version": "0.7.0",
     "require": {
-        "tawk/url-utils": "dev-feature/url-and-path-matching-modules"
+        "tawk/url-utils": "^2.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.6",
@@ -16,7 +16,7 @@
     "repositories": {
         "tawk-url-utils": {
             "type": "vcs",
-            "url": "https://github.com/alvinjohnsonso/tawk-url-utils.git"
+            "url": "https://github.com/tawk/tawk-url-utils.git"
         }
     },
     "scripts": {
