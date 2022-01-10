@@ -3,6 +3,8 @@ name: ui-tests
 on:
   workflow_run:
     workflows: ["Notify ui test"]
+    types:
+      - completed
 
 jobs:
   build:
