@@ -17,7 +17,7 @@ jobs:
         id: cached-dependencies
         with:
           path: ./tawkto/vendor
-          # the key will change if composer.lock changes
+          # the key will change if composer.lock changesasdasd
           key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
 
       - name: install dependencies
