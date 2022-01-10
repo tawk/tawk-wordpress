@@ -25,7 +25,15 @@ class Webdriver {
 	private static function get_firefox_capabilities() {
 		$capabilities = DesiredCapabilities::firefox();
 		$options      = new FirefoxOptions();
-		$options->addArguments( array( '--headless' ) );
+		$options->addArguments(
+			array(
+				'--headless',
+				'--disable-dev-shm-usage',
+				'--no-sandbox',
+				'--disable-gpu',
+				'--disable-setuid-sandbox',
+			)
+		);
 		$capabilities->setCapability( FirefoxOptions::CAPABILITY, $options );
 		$capabilities->setCapability( WebDriverCapabilityType::APPLICATION_CACHE_ENABLED, false );
 
