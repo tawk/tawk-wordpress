@@ -1,0 +1,10 @@
+name: Notify ui test
+
+on: [pull_request]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notifying ui-tests workflow
+        run: echo 'done';

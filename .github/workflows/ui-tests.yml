@@ -1,11 +1,17 @@
 name: ui-tests
 
-on: [pull_request]
+on:
+  workflow_run:
+    workflows: ["Notify ui test"]
+    types:
+      - completed
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: bansan85/action-workflow_run-status@main
+
       - name: checkout
         uses: actions/checkout@v2
 
@@ -59,6 +65,11 @@ jobs:
         volumes:
           - wp_data:/var/www/html
     steps:
+      - name: Report to PR
+        env:
+          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+        uses: bansan85/action-workflow_run-status@main
+
       - name: checkout
         uses: actions/checkout@v2
 
