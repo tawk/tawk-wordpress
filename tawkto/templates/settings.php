@@ -164,7 +164,7 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 				<table class="form-table">
 					<tr valign="top">
 					<th class="tawk-setting" scope="row">
-						<?php esc_html_e( 'Always show Tawk.To widget on every page', 'tawk-to-live-chat' ); ?>
+						<?php esc_html_e( 'Always show tawk.to widget on every page', 'tawk-to-live-chat' ); ?>
 					</th>
 					<td>
 						<label class="switch">
@@ -196,7 +196,7 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 					</tr>
 					<tr valign="top" class="tawk-selected-display">
 					<th class="tawk-setting" scope="row">
-						<?php esc_html_e( 'Show on Category pages', 'tawk-to-live-chat' ); ?>
+						<?php esc_html_e( 'Show on category pages', 'tawk-to-live-chat' ); ?>
 					</th>
 					<td>
 						<label class="switch">
@@ -212,7 +212,7 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 					</tr>
 					<tr valign="top"  class="tawk-selected-display">
 					<th class="tawk-setting" scope="row">
-						<?php esc_html_e( 'Show on Tag pages', 'tawk-to-live-chat' ); ?>
+						<?php esc_html_e( 'Show on tag pages', 'tawk-to-live-chat' ); ?>
 					</th>
 					<td>
 						<label class="switch">
@@ -228,7 +228,7 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 					</tr>
 					<tr valign="top"  class="tawk-selected-display">
 					<th class="tawk-setting" scope="row">
-						<?php esc_html_e( 'Show on Single Post Pages', 'tawk-to-live-chat' ); ?>
+						<?php esc_html_e( 'Show on single post pages', 'tawk-to-live-chat' ); ?>
 					</th>
 					<td>
 						<label class="switch">
@@ -247,9 +247,9 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 				<h2><?php esc_html_e( 'URL Exclusion', 'tawk-to-live-chat' ); ?></h2>
 				<p class='tawk-notice'>
 					<?php esc_html_e( 'To show or hide the widget on one or more specific URLs or paths, enable this functionality and specify the rule. ', 'tawk-to-live-chat' ); ?>
-					<strong><?php esc_html_e( 'Separate entries with comma', 'tawk-to-live-chat' ); ?> (,).</strong>
+					<strong><?php esc_html_e( 'Separate entries with comma', 'tawk-to-live-chat' ); ?> (,)</strong>
 					<div class="tooltip">
-						<?php esc_html_e( 'Examples of accepted path patterns.', 'tawk-to-live-chat' ); ?>
+						<?php esc_html_e( 'Examples of accepted path patterns', 'tawk-to-live-chat' ); ?>
 						<ul class="tooltiptext">
 							<li>*</li>
 							<li>*/to/somewhere</li>
@@ -339,12 +339,12 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 				?>
 				<div id="woocommerce">
 					<h2>
-					<?php esc_html_e( 'Woocommerce visibility Options', 'tawk-to-live-chat' ); ?>
+					<?php esc_html_e( 'Woocommerce Visibility Options', 'tawk-to-live-chat' ); ?>
 					</h2>
 					<table class="form-table">
 						<tr valign="top">
 							<th class="tawk-setting" scope="row">
-							<?php esc_html_e( 'Display on Shop main page', 'tawk-to-live-chat' ); ?>
+							<?php esc_html_e( 'Display on shop main page', 'tawk-to-live-chat' ); ?>
 							</th>
 							<td>
 								<label class="switch">
@@ -419,7 +419,7 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 			<table class="form-table">
 				<tr valign="top">
 					<th class="tawk-setting" scope="row">
-						<?php esc_html_e( 'Enable Visitor Recognition', 'tawk-to-live-chat' ); ?>
+						<?php esc_html_e( 'Enable visitor recognition', 'tawk-to-live-chat' ); ?>
 					</th>
 					<td>
 						<label class="switch">
