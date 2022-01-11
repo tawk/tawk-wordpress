@@ -2,7 +2,7 @@
     "name": "tawk/tawk-wordpress",
     "description": "Wordpress plugin for tawk.to",
     "type": "project",
-    "license": "OSL-3",
+    "license": "GPL-3.0",
     "version": "0.6.0",
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.6",
