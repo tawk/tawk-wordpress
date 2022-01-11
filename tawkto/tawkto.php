@@ -12,6 +12,7 @@
  **/
 
 require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+require_once dirname( __FILE__ ) . '/upgrade.manager.php';
 
 use Tawk\Modules\UrlPatternMatcher;
 
@@ -351,6 +352,17 @@ if ( ! class_exists( 'TawkTo' ) ) {
 	 * Main tawk.to module
 	 */
 	class TawkTo {
+		const PLUGIN_VERSION          = '0.7.0';
+		const PLUGIN_VERSION_VARIABLE = 'tawkto-version';
+
+		/**
+		 * List of important upgrade steps
+		 */
+		const V_0_7_0  = '0.7.0';
+		const UPGRADES = array(
+			self::V_0_7_0,
+		);
+
 		/**
 		 * __construct
 		 *
@@ -385,6 +397,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			add_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility, '', 'yes' );
+			add_option( self::PLUGIN_VERSION_VARIABLE, self::PLUGIN_VERSION, '', 'yes' );
 		}
 
 		/**
@@ -394,6 +407,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			delete_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
 			delete_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
 			delete_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
+			delete_option( self::PLUGIN_VERSION_VARIABLE );
 		}
 
 		/**
@@ -575,7 +589,14 @@ if ( class_exists( 'TawkTo' ) ) {
 
 	$tawkto = new TawkTo();
 
+	$upgrade_manager = new TawkToUpgradeManager(
+		TawkTo::PLUGIN_VERSION,
+		TawkTo::PLUGIN_VERSION_VARIABLE
+	);
+	$upgrade_manager->register_hooks();
+
 	if ( isset( $tawkto ) ) {
+		// these are called every page load.
 		$tawkto->migrate_embed_code();
 
 		/**
