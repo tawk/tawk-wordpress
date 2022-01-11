@@ -4,18 +4,18 @@ module.exports = function( grunt ) {
 	grunt.initConfig({
 		eslint: {
 			target: {
-				src: [ '**/*.js', '!node_modules/**/*', '!vendor/**/*', '!node_modules/**/*' ],
+				src: [ '**/*.js', '!node_modules/**/*', '!vendor/**/*' ],
 				dot: true
 			}
 		},
 		stylelint: {
 			target: {
-				src: [ '**/*.css', '!node_modules/**/*', '!vendor/**/*', '!node_modules/**/*' ]
+				src: [ '**/*.css', '!node_modules/**/*', '!vendor/**/*' ]
 			}
 		},
 		phpcs: {
 			target: {
-				src: [ '**/*.php', '!node_modules/**/*', '!vendor/**/*', '!node_modules/**/*' ]
+				src: [ '**/*.php', '!node_modules/**/*', '!vendor/**/*' ]
 			},
 			options: {
 				bin: 'vendor/bin/phpcs'

@@ -8,7 +8,6 @@ use Facebook\WebDriver\Remote\DesiredCapabilities;
 
 use Exception;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
-use Facebook\WebDriver\WebDriverCapabilities;
 use Facebook\WebDriver\WebDriverPlatform;
 
 class Webdriver {

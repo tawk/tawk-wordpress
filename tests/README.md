@@ -21,11 +21,11 @@ Run `composer run build` to build both dev and prod dependencies.
 
 #### Docker containers
 
-You can pull the imaged from [Selenium Docker Hub](https://hub.docker.com/u/selenium).
+You can pull the images from [Selenium Docker Hub](https://hub.docker.com/u/selenium).
 
 #### Local Selenium Server
 
-You can download the Selenium jar file from their [Downloads page](https://www.selenium.dev/downloads/).
+You can download the selenium jar file from their [Downloads page](https://www.selenium.dev/downloads/).
 
 Do note you'll also need to install the webdrivers locally. Here are some examples on how to install the webdrivers on Ubuntu.
 
@@ -55,7 +55,7 @@ sudo update -y;
 sudo apt install firefox-geckodriver -y;
 ```
 
-##### Installing edgedriver
+##### Installing Edgedriver
 ```bash
 # install edge
 sudo apt update -y;
