@@ -1,6 +1,6 @@
 {
   "name": "tawk-wordpress",
-  "version": "1.0.0",
+  "version": "0.6.0",
   "description": "tawk.to wordpress plugin",
   "main": "index.js",
   "directories": {
@@ -9,11 +9,10 @@
   "scripts": {
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint ./tawkto/**/*.js",
-    "stylelint": "stylelint ./tawkto/**/*.css",
-    "build": "npm install && composer build && grunt"
+    "stylelint": "stylelint ./tawkto/**/*.css"
   },
   "author": "tawk.to",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@wordpress/stylelint-config": "^19.1.0",
     "eslint": "^8.4.1",
