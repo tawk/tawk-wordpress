@@ -1,4 +1,8 @@
 <?php
+/**
+ * @phpcs:disable Squiz.Commenting.FileComment
+ * @phpcs:disable PHPCompatibility
+ */
 
 namespace Tawk\Tests\TestFiles\Modules;
 
@@ -7,36 +11,26 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
-use Tawk\Tests\TestFiles\Enums\BrowserStackStatus;
 use Tawk\Tests\TestFiles\Helpers\Common;
 use Tawk\Tests\TestFiles\Helpers\Webdriver as WebdriverHelper;
-use Tawk\Tests\TestFiles\Objects\BrowserStackConfig;
-use Tawk\Tests\TestFiles\Objects\SeleniumConfig;
-use Tawk\Tests\TestFiles\Objects\Webdriver\WebdriverConfig;
+use Tawk\Tests\TestFiles\Types\SeleniumConfig;
+use Tawk\Tests\TestFiles\Types\Webdriver\WebdriverConfig;
 
 use Exception;
 
 class Webdriver {
 	protected RemoteWebDriver $driver;
 	protected SeleniumConfig $selenium;
-	protected BrowserStackConfig $browserstack;
-	protected string $test_status;
-	protected string $test_message;
 
-	function __construct( string $session_name, WebdriverConfig $config ) {
+	public function __construct( WebdriverConfig $config ) {
 		$this->selenium = $config->selenium;
-		$this->browserstack = $config->browserstack;
 
 		$selenium_url = Common::build_selenium_url(
 			$this->selenium->url,
 			$this->selenium->hub_flag
 		);
 
-		$capabilities = WebdriverHelper::build_capabilities(
-			$this->selenium->browser,
-			$session_name,
-			$this->browserstack
-		);
+		$capabilities = WebdriverHelper::build_capabilities( $this->selenium->browser );
 
 		$this->driver = RemoteWebDriver::create(
 			$selenium_url,
@@ -44,22 +38,10 @@ class Webdriver {
 			$this->selenium->session_timeout_ms,
 			$this->selenium->request_timeout_ms
 		);
-
-		$this->test_status = BrowserStackStatus::PASSED;
-		$this->test_message = 'All test passed';
 	}
 
 	public function get_driver() {
 		return $this->driver;
-	}
-
-	public function update_test_status( string $status, string $message ): void {
-		if ( false === BrowserStackStatus::isValidValue( $status ) ) {
-			throw new Exception( 'Browserstack status is invalid' );
-		}
-
-		$this->test_status = $status;
-		$this->test_message = $message;
 	}
 
 	public function get_current_url(): string {
@@ -72,16 +54,17 @@ class Webdriver {
 		}
 
 		$this->driver->get( $page_url );
-		$this->wait_until_url_contains( $page_url );
+		$this->wait_until_page_fully_loads();
 	}
 
 	public function find_element( string $selector ) {
+		$this->wait_until_element_is_located( $selector );
 		return $this->driver->findElement( WebDriverBy::cssSelector( $selector ) );
 	}
 
 	public function find_and_check_element( string $selector ) {
 		try {
-			return $this->find_element( $selector );
+			return $this->driver->findElement( WebDriverBy::cssSelector( $selector ) );
 		} catch ( Exception $err ) {
 			return null;
 		}
@@ -100,7 +83,9 @@ class Webdriver {
 	}
 
 	public function move_mouse_to( string $selector ) {
-		$coordinate = $this->find_element( $selector )->getCoordinates();
+		$element = $this->find_element( $selector );
+		$element->getLocationOnScreenOnceScrolledIntoView();
+		$coordinate = $element->getCoordinates();
 		return $this->driver->getMouse()->mouseMove( $coordinate );
 	}
 
@@ -116,20 +101,20 @@ class Webdriver {
 
 	public function wait_until_url_contains(
 		string $url_to_compare,
-		int $wait_sec=10,
-		int $interval_ms=500
+		int $wait_sec = 60,
+		int $interval_ms = 500
 	) {
-		return $this->driver->wait($wait_sec, $interval_ms)->until(
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
 			WebDriverExpectedCondition::urlContains( $url_to_compare )
 		);
 	}
 
 	public function wait_until_element_is_located(
 		string $selector,
-		int $wait_sec=10,
-		int $interval_ms=500
+		int $wait_sec = 60,
+		int $interval_ms = 500
 	) {
-		return $this->driver->wait($wait_sec, $interval_ms)->until(
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
 			WebDriverExpectedCondition::presenceOfElementLocated(
 				WebDriverBy::cssSelector( $selector )
 			)
@@ -139,13 +124,48 @@ class Webdriver {
 	public function wait_until_element_text_contains(
 		string $selector,
 		string $text_to_compare,
-		int $wait_sec=10,
-		int $interval_ms=500
+		int $wait_sec = 60,
+		int $interval_ms = 500
 	) {
-		return $this->driver->wait($wait_sec, $interval_ms)->until(
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
 			WebDriverExpectedCondition::elementTextContains(
 				WebDriverBy::cssSelector( $selector ),
 				$text_to_compare
+			)
+		);
+	}
+
+	public function wait_until_element_is_clickable(
+		string $selector,
+		int $wait_sec = 60,
+		int $interval_ms = 500
+	) {
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
+			WebDriverExpectedCondition::elementToBeClickable(
+				WebDriverBy::cssSelector( $selector )
+			)
+		);
+	}
+
+	public function wait_until_page_fully_loads(
+		int $wait_sec = 60,
+		int $interval_ms = 500
+	) {
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
+			function () {
+				return $this->driver->executeScript( 'return document.readyState' ) === 'complete';
+			}
+		);
+	}
+
+	public function wait_until_element_is_visible(
+		string $selector,
+		int $wait_sec = 60,
+		int $interval_ms = 500
+	) {
+		return $this->driver->wait( $wait_sec, $interval_ms )->until(
+			WebDriverExpectedCondition::visibilityOfElementLocated(
+				WebDriverBy::cssSelector( $selector )
 			)
 		);
 	}
@@ -158,21 +178,25 @@ class Webdriver {
 
 	public function wait_for_frame_and_switch(
 		string $selector,
-		int $wait_sec=10,
-		int $interval_ms=500
+		int $wait_sec = 60,
+		int $interval_ms = 500
 	): void {
-		$this->driver->wait($wait_sec, $interval_ms)->until(
+		$this->driver->wait( $wait_sec, $interval_ms )->until(
 			WebDriverExpectedCondition::frameToBeAvailableAndSwitchToIt(
 				$this->find_element( $selector )
 			)
 		);
 	}
 
-	public function quit(): void {
-		if ( true === $this->browserstack->is_browserstack ) {
-			$this->driver->executeScript( 'browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"'.$this->test_status.'", "reason": "'.$this->test_message.'"}}' );
-		}
+	public function wait_for_seconds( int $seconds = 5 ) {
+		$this->driver->manage()->timeouts()->implicitlyWait( $seconds );
+	}
 
+	public function clear_input( $selector ): void {
+		$this->find_element( $selector )->clear();
+	}
+
+	public function quit(): void {
 		$this->driver->quit();
 	}
 }

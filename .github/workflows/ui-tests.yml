@@ -1,11 +1,17 @@
 name: ui-tests
 
-on: [pull_request]
+on:
+  workflow_run:
+    workflows: ["Notify ui test"]
+    types:
+      - completed
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: bansan85/action-workflow_run-status@main
+
       - name: checkout
         uses: actions/checkout@v2
 
@@ -13,22 +19,27 @@ jobs:
         uses: actions/cache@v2
         id: cached-dependencies
         with:
-          path: ./vendor
+          path: |
+            ./vendor
+            ./tawkto/vendor
           # the key will change if composer.lock changes
-          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-dependencies-${{ hashFiles('**/composer.lock') }}
 
       - name: install dependencies
         if: steps.cached-dependencies.outputs.cache-hit != 'true'
         uses: php-actions/composer@v6
         with:
           php_extensions: zip
+          command: run build
 
   tests:
-    runs-on: ubuntu-latest
     needs: [build]
     strategy:
+      fail-fast: false
       matrix:
-        browser: ['chrome', 'firefox', 'safari']
+        browser: ['chrome', 'firefox', 'edge']
+
+    runs-on: ubuntu-latest
     services:
       db:
         image: mysql:5.7
@@ -44,30 +55,41 @@ jobs:
           WORDPRESS_DB_NAME: wordpress
           WORDPRESS_DB_USER: wordpress
           WORDPRESS_DB_PASSWORD: wordpress
+          WORDPRESS_DEBUG: 1
+          WORDPRESS_CONFIG_EXTRA: |
+            define('WP_HOME', 'http://localhost:8000');
+            define('WP_SITEURL', 'http://localhost:8000');
+            define('FORCE_SSL_ADMIN', false);
         ports:
           - 8000:80
         volumes:
           - wp_data:/var/www/html
     steps:
+      - name: Report to PR
+        env:
+          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+        uses: bansan85/action-workflow_run-status@main
+
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: 'BrowserStack Env Setup'
-        uses: 'browserstack/github-actions/setup-env@master'
-        with:
-          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
-          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          project-name: tawk-wordpress
-          build-name: ${{ matrix.browser }}-ui-test
+      - name: Ubuntu - Install Edgedriver
+        run: |
+          wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -;
+          sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main";
+          sudo apt install microsoft-edge-stable;
+          MS_EDGE_VERSION=$(microsoft-edge --version);
+          MS_EDGE_DRIVER_VERSION=$(echo $MS_EDGE_VERSION | rev | cut -d ' ' -f '1' | rev);
+          mkdir /tmp/edgedriver;
+          wget -O /tmp/edgedriver/edgedriver.zip https://msedgedriver.azureedge.net/$MS_EDGE_DRIVER_VERSION/edgedriver_linux64.zip;
+          sudo unzip /tmp/edgedriver/edgedriver.zip -d /tmp/edgedriver/;
+          sudo cp /tmp/edgedriver/msedgedriver /usr/local/bin/;
+        if: matrix.browser == 'edge'
 
-      - name: 'Start BrowserStackLocal Tunnel'
-        uses: 'browserstack/github-actions/setup-local@master'
-        with:
-          local-testing: 'start'
-          local-logging-level: 'all-logs'
-          local-identifier: 'random'
+      - name: Start Selenium Server
+        run: java -jar $SELENIUM_JAR_PATH standalone &
 
-      - name: setup wordpress
+      - name: install wordpress
         run: |
           docker run --rm \
           --volumes-from ${{ job.services.wordpress.id }} \
@@ -85,13 +107,79 @@ jobs:
           --admin_password=admin \
           --admin_email=admin@example.com
 
+      - name: setup wordpress
+        run: |
+          docker run --rm \
+          -u 33 \
+          -e HOME=/tmp \
+          --rm \
+          --volumes-from ${{ job.services.wordpress.id }} \
+          --network ${{ job.container.network }} \
+          -e WORDPRESS_DB_HOST=db:3306 \
+          -e WORDPRESS_DB_NAME=wordpress \
+          -e WORDPRESS_DB_USER=wordpress \
+          -e WORDPRESS_DB_PASSWORD=wordpress \
+          wordpress:cli \
+          /bin/bash -c \
+          "wp rewrite structure /%postname%/ &&
+          wp term create category Category-A --description='Category A' &&
+          wp term create category Category-B --description='Category B' &&
+          wp term create category Category-C --description='Category C' &&
+          wp post term add 1 post_tag tag-a tag-b tag-c;"
+
+      - name: setup woocommerce
+        run: |
+          docker run \
+          -u 33 \
+          -e HOME=/tmp \
+          --rm \
+          --volumes-from ${{ job.services.wordpress.id }} \
+          --network ${{ job.container.network }} \
+          -e WORDPRESS_DB_HOST=db:3306 \
+          -e WORDPRESS_DB_NAME=wordpress \
+          -e WORDPRESS_DB_USER=wordpress \
+          -e WORDPRESS_DB_PASSWORD=wordpress \
+          wordpress:cli \
+          /bin/bash -c \
+          "wp plugin install woocommerce --activate &&
+          wp theme install storefront --activate &&
+          wp plugin install wordpress-importer --activate &&
+          wp import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=skip &&
+          wp wc product_tag create --name=product-tag-a --user=admin;"
+
+      - name: setup woocommerce profile
+        run: |
+          docker run \
+          -u 33 \
+          -e HOME=/tmp \
+          --rm \
+          --volumes-from ${{ job.services.wordpress.id }} \
+          --network ${{ job.container.network }} \
+          -e WORDPRESS_DB_HOST=db:3306 \
+          -e WORDPRESS_DB_NAME=wordpress \
+          -e WORDPRESS_DB_USER=wordpress \
+          -e WORDPRESS_DB_PASSWORD=wordpress \
+          wordpress:cli \
+          /bin/bash -c \
+          "wp option set woocommerce_store_address '123 Main Street' &&
+          wp option set woocommerce_store_address_2 '' &&
+          wp option set woocommerce_store_city 'Toronto' &&
+          wp option set woocommerce_default_country 'CA:ON' &&
+          wp option set woocommerce_store_postalcode 'A1B2C3' &&
+          wp option set woocommerce_currency 'CAD' &&
+          wp option set woocommerce_product_type 'physical' &&
+          wp option set woocommerce_allow_tracking 'no' &&
+          wp wc --user=admin tool run install_pages;"
+
       - name: cached dependencies
         uses: actions/cache@v2
         id: cached-dependencies
         with:
-          path: ./vendor
+          path: |
+            ./vendor
+            ./tawkto/vendor
           # the key will change if composer.lock changes
-          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-dependencies-${{ hashFiles('**/composer.lock') }}
 
       - name: prepare test artifact
         run: zip -9 -rq tawkto-live-chat.zip tawkto
@@ -105,13 +193,6 @@ jobs:
           WEB_HOST: localhost
           WEB_PORT: 8000
           SELENIUM_BROWSER: ${{ matrix.browser }}
-          SELENIUM_HOST: ${{ env.BROWSERSTACK_USERNAME }}:${{ env.BROWSERSTACK_ACCESS_KEY }}@hub-cloud.browserstack.com
-          SELENIUM_HTTPS_FLAG: 'true'
-          SELENIUM_HUB_FLAG: 'true'
+          SELENIUM_HOST: localhost
+          SELENIUM_PORT: 4444
         run: composer run test
-
-      - name: 'Stop BrowserStackLocal'
-        if: always()
-        uses: 'browserstack/github-actions/setup-local@master'
-        with:
-          local-testing: 'stop'

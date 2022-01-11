@@ -9,7 +9,7 @@
 ?>
 
 <!--Start of Tawk.to Script (0.7.0)-->
-<script type="text/javascript">
+<script id="tawk-script" type="text/javascript">
 var Tawk_API = Tawk_API || {};
 <?php if ( isset( $customer_details ) && $enable_visitor_recognition ) : ?>
 Tawk_API.visitor = JSON.parse(<?php echo wp_json_encode( $customer_details ); ?>);
