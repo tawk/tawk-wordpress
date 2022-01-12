@@ -4,23 +4,33 @@ jQuery(
 	function() {
 		document.getElementById( 'defaultOpen' ).click();
 
-		jQuery( '.tawk-selected-display input[type="checkbox"]' ).change(
-			function() {
-				if ( this.checked ) {
-					jQuery( '#always-display' ).prop( 'checked', false );
-				}
-			}
-		);
+		if ( jQuery( '#always-display' ).prop( 'checked' ) ) {
+			jQuery( '.tawk-selected-display' ).hide();
+			jQuery( '#show-onfrontpage' ).prop( 'disabled', true );
+			jQuery( '#show-oncategory' ).prop( 'disabled', true );
+			jQuery( '#show-ontagpage' ).prop( 'disabled', true );
+			jQuery( '#show-onarticlepages' ).prop( 'disabled', true );
+			jQuery( '#include-url' ).prop( 'disabled', true );
+		} else {
+			jQuery( '.tawk-selected-display' ).show();
+		}
 
 		jQuery( '#always-display' ).change(
 			function() {
 				if ( this.checked ) {
-					jQuery( '#show-onfrontpage' ).prop( 'checked', false );
-					jQuery( '#show-oncategory' ).prop( 'checked', false );
-					jQuery( '#show-ontagpage' ).prop( 'checked', false );
-					jQuery( '#show-onarticlepages' ).prop( 'checked', false );
-					jQuery( '#include-url' ).prop( 'checked', false );
-					jQuery( '#included-urls-container' ).fadeOut();
+					jQuery( '.tawk-selected-display' ).fadeOut();
+					jQuery( '#show-onfrontpage' ).prop( 'disabled', true );
+					jQuery( '#show-oncategory' ).prop( 'disabled', true );
+					jQuery( '#show-ontagpage' ).prop( 'disabled', true );
+					jQuery( '#show-onarticlepages' ).prop( 'disabled', true );
+					jQuery( '#include-url' ).prop( 'disabled', true );
+				} else {
+					jQuery( '.tawk-selected-display' ).fadeIn();
+					jQuery( '#show-onfrontpage' ).prop( 'disabled', false );
+					jQuery( '#show-oncategory' ).prop( 'disabled', false );
+					jQuery( '#show-ontagpage' ).prop( 'disabled', false );
+					jQuery( '#show-onarticlepages' ).prop( 'disabled', false );
+					jQuery( '#include-url' ).prop( 'disabled', false );
 				}
 			}
 		);
