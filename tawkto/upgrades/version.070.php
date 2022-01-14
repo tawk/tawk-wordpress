@@ -27,11 +27,15 @@ class TawkToUpgradeVersion070 extends TawkToUpgradeBase {
 		$new_excluded_url_list = array();
 
 		foreach ( $included_url_list as $included_url ) {
+			if ( empty( $included_url ) ) {
+				continue;
+			}
+
 			$new_included_url_list[] = $included_url;
 
 			$wildcard = PathHelper::get_wildcard();
 
-			if ( CommonHelper::text_ends_with( $included_url, $wildcard ) ) {
+			if ( false === CommonHelper::text_ends_with( $included_url, $wildcard ) ) {
 				continue;
 			}
 
@@ -44,11 +48,15 @@ class TawkToUpgradeVersion070 extends TawkToUpgradeBase {
 		}
 
 		foreach ( $excluded_url_list as $excluded_url ) {
+			if ( empty( $excluded_url ) ) {
+				continue;
+			}
+
 			$new_excluded_url_list[] = $excluded_url;
 
 			$wildcard = PathHelper::get_wildcard();
 
-			if ( CommonHelper::text_ends_with( $excluded_url, $wildcard ) === false ) {
+			if ( false === CommonHelper::text_ends_with( $excluded_url, $wildcard ) ) {
 				continue;
 			}
 
