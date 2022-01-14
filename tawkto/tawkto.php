@@ -366,7 +366,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		/**
 		 * @var $plugin_version Plugin version
 		 */
-		public $plugin_version;
+		private static $plugin_version;
 
 		/**
 		 * __construct
@@ -374,11 +374,29 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * @return void
 		 */
 		public function __construct() {
-			global $plugin_file_data;
 			$tawkto_settings = new TawkTo_Settings();
 			add_shortcode( 'tawkto', array( $this, 'shortcode_print_embed_code' ) );
+		}
 
-			$this->plugin_version = $plugin_file_data['Version'];
+		/**
+		 * Retrieves plugin version
+		 *
+		 * @return string plugin version
+		 */
+		public static function get_plugin_version() {
+			if ( false === isset( self::$plugin_version ) ) {
+				$plugin_file_data = get_file_data(
+					__FILE__,
+					array(
+						'Version' => 'Version',
+					),
+					'plugin'
+				);
+
+				self::$plugin_version = $plugin_file_data['Version'];
+			}
+
+			return self::$plugin_version;
 		}
 
 		/**
@@ -407,7 +425,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			add_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility, '', 'yes' );
-			add_option( self::PLUGIN_VERSION_VARIABLE, $plugin_file_data['Version'], '', 'yes' );
+			add_option( self::PLUGIN_VERSION_VARIABLE, self::get_plugin_version(), '', 'yes' );
 		}
 
 		/**
@@ -600,7 +618,7 @@ if ( class_exists( 'TawkTo' ) ) {
 	$tawkto = new TawkTo();
 
 	$upgrade_manager = new TawkToUpgradeManager(
-		$tawkto->plugin_version,
+		TawkTo::get_plugin_version(),
 		TawkTo::PLUGIN_VERSION_VARIABLE
 	);
 	$upgrade_manager->register_hooks();
