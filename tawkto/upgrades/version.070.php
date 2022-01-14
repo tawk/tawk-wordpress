@@ -20,57 +20,53 @@ class TawkToUpgradeVersion070 extends TawkToUpgradeBase {
 	 * to adjust with the new pattern matching lib.
 	 */
 	public static function upgrade() {
-		$visibility            = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
-		$included_url_list     = array_map( 'trim', preg_split( '/,/', $visibility['included_url_list'] ) );
-		$excluded_url_list     = array_map( 'trim', preg_split( '/,/', $visibility['excluded_url_list'] ) );
-		$new_included_url_list = array();
-		$new_excluded_url_list = array();
+		$visibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
 
-		foreach ( $included_url_list as $included_url ) {
-			if ( empty( $included_url ) ) {
-				continue;
-			}
-
-			$new_included_url_list[] = $included_url;
-
-			$wildcard = PathHelper::get_wildcard();
-
-			if ( false === CommonHelper::text_ends_with( $included_url, $wildcard ) ) {
-				continue;
-			}
-
-			$new_included_url = rtrim( $included_url, '/' . $wildcard );
-			if ( in_array( $new_included_url, $included_url_list, true ) ) {
-				continue;
-			}
-
-			$new_included_url_list[] = $new_included_url;
-		}
-
-		foreach ( $excluded_url_list as $excluded_url ) {
-			if ( empty( $excluded_url ) ) {
-				continue;
-			}
-
-			$new_excluded_url_list[] = $excluded_url;
-
-			$wildcard = PathHelper::get_wildcard();
-
-			if ( false === CommonHelper::text_ends_with( $excluded_url, $wildcard ) ) {
-				continue;
-			}
-
-			$new_excluded_url = rtrim( $excluded_url, '/' . $wildcard );
-			if ( in_array( $new_excluded_url, $excluded_url_list, true ) ) {
-				continue;
-			}
-
-			$new_excluded_url_list[] = $new_excluded_url;
-		}
-
-		$visibility['included_url_list'] = join( ', ', $new_included_url_list );
-		$visibility['excluded_url_list'] = join( ', ', $new_excluded_url_list );
+		$visibility['included_url_list'] = self::process_patterns( $visibility['included_url_list'] );
+		$visibility['excluded_url_list'] = self::process_patterns( $visibility['excluded_url_list'] );
 
 		update_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility );
+	}
+
+	/**
+	 * Processes the patterns with ending wildcards and adds
+	 * a copy of it without the wildcard to the list.
+	 *
+	 * @param string $pattern_list Comma separated pattern list.
+	 *
+	 * @return string Updated pattern list.
+	 */
+	protected static function process_patterns( $pattern_list ) {
+		$splitted_pattern_list = array_map( 'trim', preg_split( '/,/', $pattern_list ) );
+		$wildcard              = PathHelper::get_wildcard();
+
+		$new_pattern_list = array();
+		$added_patterns   = array();
+
+		foreach ( $splitted_pattern_list as $url ) {
+			if ( empty( $url ) ) {
+				continue;
+			}
+
+			$new_pattern_list[] = $url;
+
+			if ( false === CommonHelper::text_ends_with( $url, $wildcard ) ) {
+				continue;
+			}
+
+			$new_pattern = rtrim( $url, '/' . $wildcard );
+			if ( in_array( $new_pattern, $splitted_pattern_list, true ) ) {
+				continue;
+			}
+
+			if ( true === isset( $added_patterns[ $new_pattern ] ) ) {
+				continue;
+			}
+
+			$new_pattern_list[]             = $new_pattern;
+			$added_patterns[ $new_pattern ] = true;
+		}
+
+		return join( ', ', $new_pattern_list );
 	}
 }

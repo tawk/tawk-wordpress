@@ -39,7 +39,7 @@ class TawkToUpgradeManager {
 	 */
 	public function __construct( $version, $version_var_name ) {
 		$this->upgrades = array(
-			TawkToUpgradeVersion070::get_version(),
+			TawkToUpgradeVersion070::get_version() => TawkToUpgradeVersion070::class,
 		);
 
 		$this->version_var_name = $version_var_name;
@@ -60,13 +60,32 @@ class TawkToUpgradeManager {
 		// All plugins prior to the current version needs the upgrade.
 		if ( version_compare( $this->prev_ver, $this->curr_ver ) < 0 ) {
 			// are there upgrade steps depending on how out-of-date?
-			foreach ( $this->upgrades as $next_ver ) {
-				$this->do_upgrade( $next_ver );
+			foreach ( $this->upgrades as $upgrade_ver => $upgrade ) {
+				// only run upgrades if upgrade version is lower than
+				// and equal to the current version.
+				if ( version_compare( $upgrade_ver, $this->curr_ver ) <= 0 ) {
+					$this->do_upgrade( $upgrade_ver );
+				}
+
+				update_option( $this->version_var_name, $upgrade_ver );
 			}
 		}
 
-		// update stored plugin version for next time.
-		update_option( $this->version_var_name, $this->curr_ver );
+	}
+
+	/**
+	 * Gets upgrade class by provided version
+	 *
+	 * @param string $version Upgrade version.
+	 *
+	 * @return string|null Returns `upgrade class name` if version exists in the list. Otherwise, returns `null`.
+	 */
+	protected function get_upgrade_class( $version ) {
+		if ( false === array_key_exists( $version, $this->upgrades ) ) {
+			return null;
+		}
+
+		return $this->upgrades[ $version ];
 	}
 
 	/**
@@ -76,11 +95,13 @@ class TawkToUpgradeManager {
 	 * @return void
 	 */
 	protected function do_upgrade( $version ) {
-		switch ( $version ) {
-			case TawkToUpgradeVersion070::get_version():
-				TawkToUpgradeVersion070::upgrade();
-				break;
+		$upgrade_class = $this->get_upgrade_class( $version );
+
+		if ( true === is_null( $upgrade_class ) ) {
+			return;
 		}
+
+		$upgrade_class::upgrade();
 	}
 
 	/**
