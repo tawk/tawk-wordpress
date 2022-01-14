@@ -55,15 +55,17 @@ tawk.to offers 24x7-365 live support, visit https://www.tawk.to and initiate a c
 
 == Installation ==
 
-Adding tawk.to live chat widget to your Wordpress site is really easy, follow these steps :
+Adding tawk.to live chat widget to your WordPress site is easy.
 
-* Clone this repository into your plugins directory or download the zip file and unzip on your plugins directory
-* or Install the Free plugin from the WordPress directory and activate it.
-* Go to `Settings`, then to the `Tawk.to` sub menu, and login to your tawk.to account to select a widget.
-* Customize the chat widget from within the [tawk.to dashboard](https://dashboard.tawk.to) to your preference.
+Follow these steps:
+
+* Clone this repository into your plugins directory, download the zip file and unzip in your plugins directory, or install the free plugin from the WordPress directory and activate it.
+* Go to `Settings` and select `Tawk.to` in the submenu. Then, log in to your tawk.to account to select a widget.
+* Choose your visibility options and click the Save Changes button to update the settings.
+* Customize the widget to suit your business from the tawk.to Dashboard.
 * Start chatting with your visitors! :)
 
-Note: You will need a free tawk.to account : [Create one for free here!](https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
+Note: You will need a free tawk.to account: [Create one for free here!](https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
 
 == Changelog ==
 
