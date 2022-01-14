@@ -10,49 +10,62 @@ Stable tag: 0.6.0
 Website: [http://tawk.to](http://tawk.to)
 == Description ==
 
-Over 3,800,000+ business users use the tawk.to FREE live chat app that lets you monitor and chat with visitors on your Wordpress site. No catch. No spam. No Ads. It's truly free and always will be.
+Free messaging app to monitor and chat with site visitors
+= Gain insight =
 
-tawk.to is the #1 most widely used chat applicationin the world.
+Gain valuable insights when you monitor and chat with website visitors in real time.
 
-* Gain valuable insight when you monitor your website visitors in real time.
-* Stay connected anywhere, be in touch with your customers from your computer, or your mobile.
-* Live Chat is convenient for your customers, helping them through pain points and as a result helping you generate better customer support and higher conversions.
+= Increase conversions =
+
+Greet new and returning visitors, help them through pain points, and message before they leave your page.
+
+= Stay connected =
+
+Stay connected anywhere and respond to your customers from your computer or mobile device.
 
 [youtube https://www.youtube.com/watch?v=G7o8x5gj2ww]
 
-tawk.to is designed to increase the effectiveness in managing the online customer engagement experience, enabling multiple websites and agents in a single dashboard interface to chat with the visitors on your website.
+= About tawk.to Live Chat =
 
-Compatible with all modern browsers, tawk.to is free live chat software created out of the growing need for businesses to respond in real time, with real people.
+The tawk.to Live Chat app makes it easy to monitor and chat with visitors on all your WordPress websites. Be there when they need you with unlimited messaging, ticketing and your own Knowledge Base — all 100% FREE.
 
-Tawk.to offers free iOS, Android, Windows and Mac OSX apps to stay connected, or you can log in via any modern browser.
+Compatible with all modern browsers, tawk.to was created in response to the growing need for businesses to respond in real time, with real people.
+
+Never lose another lead or sale again — tawk.to offers iOS, Android, Windows and Mac OSX apps to keep you connected wherever you go.
 
 = Why use tawk.to? =
 
-tawk.to is a free live chat app which integrates seamlessly with Wordpress! More than 250000 companies use tawk.to to provide real time support and service to their customers. Never lose another lead or sale again, with tawk.to you can monitor and chat with your website visitors when they need it most.
+tawk.to’s live chat app integrates seamlessly with WordPress. More than 5 million companies use tawk.to to provide real time support and service to their customers.
+
+* *Save time and simplify* — monitor and chat with visitors on multiple websites from a single dashboard interface
+* *Personalize greetings and share promos* with Trigger messages based on your visitor’s location, past visits, page views, and more
+* *Easily share answers to FAQs* and provide self-help to customers with your own Knowledge Base — included in your free account
+* *Create and assign tickets* in a built-in support desk and ticketing system, making it easy to follow up and create outstanding customer experiences every time
+* See our [full list of features](https://www.tawk.to/features/) to learn more
 
 = How much does this cost? =
 
-This tawk.to app is completely free.
+tawk.to is completely free — there are no limits to the number of agents, chat volumes or sites you can add widgets to.
 
-To learn why tawk.to is free visit [https://www.tawk.to/why-free/](https://www.tawk.to/why-free/)
+Don't have a tawk.to account? [Create one for free here!](https://www.tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
 
 = Support =
 
 tawk.to offers 24x7-365 live support, visit https://www.tawk.to and initiate a chat or send us an email at support@tawk.to.
 
-Don't have a tawk.to account ? [Create one for free here!](https://www.tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
-
 == Installation ==
 
-Adding tawk.to live chat widget to your Wordpress site is really easy, follow these steps :
+Adding tawk.to live chat widget to your WordPress site is easy.
 
-* Clone this repository into your plugins directory or download the zip file and unzip on your plugins directory
-* or Install the Free plugin from the WordPress directory and activate it.
-* Go to `Settings`, then to the `Tawk.to` sub menu, and login to your tawk.to account to select a widget.
-* Customize the chat widget from within the [tawk.to dashboard](https://dashboard.tawk.to) to your preference.
+Follow these steps:
+
+* Clone this repository into your plugins directory, download the zip file and unzip in your plugins directory, or install the free plugin from the WordPress directory and activate it.
+* Go to `Settings` and select `Tawk.to` in the submenu. Then, log in to your tawk.to account to select a widget.
+* Choose your visibility options and click the Save Changes button to update the settings.
+* Customize the widget to suit your business from the tawk.to Dashboard.
 * Start chatting with your visitors! :)
 
-Note: You will need a free tawk.to account : [Create one for free here!](https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
+Note: You will need a free tawk.to account: [Create one for free here!](https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
 
 == Changelog ==
 
@@ -202,15 +215,15 @@ This tawk.to app is completely free.
 
 = Do you provide support? =
 
-Yes, we provide 24x7-365 real time support via both live chat and email. We never close.
+Yes, we provide 24x7-365 real-time support via both live chat and email. We never close.
 
 = Can I choose which pages to put the widget on? =
 
-Yes, you can use the visibility options in the Plugin settings to select specific pages, or you can show the tawk.to widget  on any page independent of the visibility options by simply using the [tawkto] shortcode in the post or page.
+Yes, you can use the visibility options in the Plugin settings to select specific pages, or you can show the tawk.to widget on any page independent of the visibility options by simply using the [tawkto] shortcode in the post or page.
 
-= Can I customize the widget design =
+= Can I customize the widget design? =
 
-Yes, you can customize colors, content, border radius, position etc. You can even select one of 27 different languages, add Attention Grabbing bubbles etc.
+Yes, you can customize colors, content, border radius, position and more. Select any of 45+ different languages. You can even customize your widget with an Attention Grabber —  an image designed to catch your visitor’s attention so they know you’re ready to chat.
 
 = Can I schedule when the widget will be shown? =
 
@@ -218,9 +231,8 @@ Yes, there is a complete widget scheduler.
 
 = Do you have any documentation or support articles? =
 
-Yes, we have a very detailed Knowledge Base, which includes videos & tutorials on all the features of tawk.to [https://www.tawk.to/knowledgebase/](https://www.tawk.to/knowledgebase/)
+Yes, we have a detailed [Help Center](https://help.tawk.to/) and [Academy](https://www.tawk.to/academy/introduction/), which include videos and tutorials on all the features of tawk.to.
 
 = Can multiple users chat at one time? =
 
-Yes, you can add an unlimited number of Agents to your account so that your entire team can chat with your website visitors. Tawk.to also has a Departments feature, to group your agents. Eg: Sales, Support etc.
-
+Yes, you can add an unlimited number of Agents to your account so that your entire team can chat with your website visitors. tawk.to also enables you to create Departments for grouping your agents. E.g., Sales, Support, etc.
