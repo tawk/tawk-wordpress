@@ -6,10 +6,15 @@
  * Plugin Name: Tawk.to Live Chat
  * Plugin URI: https://www.tawk.to
  * Description: Embeds Tawk.to live chat widget to your site
- * Version: 0.6.0
+ * Version: 0.7.0
  * Author: Tawkto
  * Text Domain: tawk-to-live-chat
  **/
+
+require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+require_once dirname( __FILE__ ) . '/upgrade.manager.php';
+
+use Tawk\Modules\UrlPatternMatcher;
 
 if ( ! class_exists( 'TawkTo_Settings' ) ) {
 	/**
@@ -343,10 +348,26 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 }
 
 if ( ! class_exists( 'TawkTo' ) ) {
+
+	$plugin_file_data = get_file_data(
+		__FILE__,
+		array(
+			'Version' => 'Version',
+		),
+		'plugin'
+	);
+
 	/**
 	 * Main tawk.to module
 	 */
 	class TawkTo {
+		const PLUGIN_VERSION_VARIABLE = 'tawkto-version';
+
+		/**
+		 * @var $plugin_version Plugin version
+		 */
+		private static $plugin_version;
+
 		/**
 		 * __construct
 		 *
@@ -358,9 +379,32 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		}
 
 		/**
+		 * Retrieves plugin version
+		 *
+		 * @return string plugin version
+		 */
+		public static function get_plugin_version() {
+			if ( false === isset( self::$plugin_version ) ) {
+				$plugin_file_data = get_file_data(
+					__FILE__,
+					array(
+						'Version' => 'Version',
+					),
+					'plugin'
+				);
+
+				self::$plugin_version = $plugin_file_data['Version'];
+			}
+
+			return self::$plugin_version;
+		}
+
+		/**
 		 * Initializes plugin data on activation.
 		 */
 		public static function activate() {
+			global $plugin_file_data;
+
 			$visibility = array(
 				'always_display'             => 1,
 				'show_onfrontpage'           => 0,
@@ -381,6 +425,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			add_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility, '', 'yes' );
+			add_option( self::PLUGIN_VERSION_VARIABLE, self::get_plugin_version(), '', 'yes' );
 		}
 
 		/**
@@ -390,6 +435,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			delete_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
 			delete_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
 			delete_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
+			delete_option( self::PLUGIN_VERSION_VARIABLE );
 		}
 
 		/**
@@ -466,25 +512,6 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		}
 
 		/**
-		 * Matches current URL with the provided pattern.
-		 *
-		 * @param  string $url - Current URL.
-		 * @param  string $url_pattern - Pattern to be matched with.
-		 * @return boolean
-		 */
-		private function match_url( $url, $url_pattern ) {
-			// do partial match if wildcard character matched at the end pattern.
-			if ( '*' === substr( $url_pattern, -1 ) ) {
-				$url_pattern = substr( $url_pattern, 0, -1 );
-
-				return ( 0 === strpos( $url, $url_pattern ) );
-			}
-
-			// do extact match if wildcard character not matched at the end pattern.
-			return ( 0 === strcmp( $url, $url_pattern ) );
-		}
-
-		/**
 		 * Prints the embed code when it is allowed to be displayed.
 		 *
 		 * @return void
@@ -535,14 +562,10 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				$current_url = $this->get_current_url();
 
 				$included_url_list = $vsibility['included_url_list'];
-				$included_url_list = preg_split( '/,/', $included_url_list );
+				$included_url_list = array_map( 'trim', preg_split( '/,/', $included_url_list ) );
 
-				foreach ( $included_url_list as $include_url ) {
-					$include_url = strtolower( urldecode( trim( $include_url ) ) );
-
-					if ( ! empty( $include_url ) && $this->match_url( $current_url, $include_url ) ) {
-						$display = true;
-					}
+				if ( UrlPatternMatcher::match( $current_url, $included_url_list ) ) {
+					$display = true;
 				}
 			}
 
@@ -550,15 +573,11 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				$current_url = $this->get_current_url();
 
 				$excluded_url_list = $vsibility['excluded_url_list'];
-				$excluded_url_list = preg_split( '/,/', $excluded_url_list );
+				$excluded_url_list = array_map( 'trim', preg_split( '/,/', $excluded_url_list ) );
 
-				foreach ( $excluded_url_list as $exclude_url ) {
-					$exclude_url = strtolower( urldecode( trim( $exclude_url ) ) );
-
-					if ( ! empty( $exclude_url ) && $this->match_url( $current_url, $exclude_url ) ) {
-						$display = false;
-					}
-				}
+				if ( UrlPatternMatcher::match( $current_url, $excluded_url_list ) ) {
+					$display = false;
+				};
 			}
 
 			if ( $display ) {
@@ -598,7 +617,14 @@ if ( class_exists( 'TawkTo' ) ) {
 
 	$tawkto = new TawkTo();
 
+	$upgrade_manager = new TawkToUpgradeManager(
+		TawkTo::get_plugin_version(),
+		TawkTo::PLUGIN_VERSION_VARIABLE
+	);
+	$upgrade_manager->register_hooks();
+
 	if ( isset( $tawkto ) ) {
+		// these are called every page load.
 		$tawkto->migrate_embed_code();
 
 		/**

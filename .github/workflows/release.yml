@@ -1,0 +1,46 @@
+name: create-release-artifact
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  create-release-artifact:
+    name: Creating release artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: cached dependencies
+        uses: actions/cache@v2
+        id: cached-dependencies
+        with:
+          path: ./tawkto/vendor
+          # the key will change if composer.lock changes
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('**/composer.lock') }}
+
+      - name: install dependencies
+        uses: php-actions/composer@v6
+        with:
+          command: run build:prod
+
+      - name: version
+        id: version
+        run: echo "::set-output name=version::$(jq -r '.version' ./composer.json)"
+
+      - name: rename folder to tawkto-live-chat
+        run: mv tawkto tawkto-live-chat
+
+      - name: build artifact
+        run: zip -9 -rq tawkto-live-chat-${{ steps.version.outputs.version }}.zip tawkto-live-chat
+
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./tawkto-live-chat-${{ steps.version.outputs.version }}.zip
+          asset_name: tawkto-live-chat-${{ steps.version.outputs.version }}.zip
+          asset_content_type: application/zip
