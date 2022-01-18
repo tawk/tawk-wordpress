@@ -1,2 +1,2 @@
+# ignore .github files
 /.github export-ignore
-/docker export-ignore

@@ -11,71 +11,40 @@
 | TAWK_USERNAME | tawk.to account username |
 | TAWK_PASSWORD | tawk.to account password |
 
-## Requirements for Running Locally
 
+## Running Tests Locally
 ### Dependencies
 
 Run `composer run build` to build both dev and prod dependencies.
 
-### Selenium Server
+### Starting the Docker Containers
 
-#### Docker containers
+Run `docker-compose -f ./.github/docker/docker-compose.yml up -d` to start the services.
 
-You can pull the images from [Selenium Docker Hub](https://hub.docker.com/u/selenium).
+Then run `docker logs -f wordpress-cli` to check if the WordPress setup is done.
 
-#### Local Selenium Server
+#### Environment Variables
 
-You can download the selenium jar file from their [Downloads page](https://www.selenium.dev/downloads/).
+Environment variables used in the `docker-compose.yml` file can be found in `.env` file.
 
-Do note you'll also need to install the webdrivers locally. Here are some examples on how to install the webdrivers on Ubuntu.
+| Environment Variable | Description | Default Value |
+|---|---|---|
+| WORDPRESS_DB_HOST | MySQL Service DB Host | db:3306 |
+| WORDPRESS_DB_NAME | MySQL Service DB Name | wordpress |
+| WORDPRESS_DB_USER | MySQL Service DB User | wordpress |
+| WORDPRESS_DB_PASSWORD | MySQL Service DB Password | wordpress |
+| WORDPRESS_DB_ROOT_PASSWORD | MySQL Service DB Root Password | somewordpress |
+| WEB_HOST | WordPress Web Host | wordpress |
+| WORDPRESS_DEBUG | WordPress Debug Mode | 1 |
+| WORDPRESS_ADMIN_USER | WordPress Admin User | admin |
+| WORDPRESS_ADMIN_PASSWORD | WordPress Admin Password | admin |
+| WORDPRESS_ADMIN_EMAIL | WordPress Admin Email | admin@example.com |
+| SELENIUM_BROWSER | Selenium Server Browser Type | chrome |
+| SELENIUM_PORT | Selenium Server Port | 4444 |
 
-##### Installing Chromedriver
-```bash
-# install chrome
-mkdir /tmp/chrome/ && \
-cd /tmp/chrome/ && \
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-sudo apt install ./google-chrome-stable_current_amd64.deb
+### Running the Tests
 
-# install chromedriver
-sudo apt-get install unzip;
-a=$(uname -m);
-rm -r /tmp/chromedriver/;
-mkdir /tmp/chromedriver/;
-wget -O /tmp/chromedriver/LATEST_RELEASE http://chromedriver.storage.googleapis.com/LATEST_RELEASE;
-if [ $a == i686 ]; then b=32; elif [ $a == x86_64 ]; then b=64; fi;
-latest=$(cat /tmp/chromedriver/LATEST_RELEASE);
-wget -O /tmp/chromedriver/chromedriver.zip 'http://chromedriver.storage.googleapis.com/'$latest'/chromedriver_linux'$b'.zip';
-sudo unzip /tmp/chromedriver/chromedriver.zip chromedriver -d /usr/local/bin/;
-```
-
-##### Installing Geckodriver
-```bash
-sudo update -y;
-sudo apt install firefox-geckodriver -y;
-```
-
-##### Installing Edgedriver
-```bash
-# install edge
-sudo apt update -y;
-sudo apt-get install unzip;
-wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -;
-sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main";
-sudo apt install microsoft-edge-stable;
-
-# install edgedriver
-MS_EDGE_VERSION=$(microsoft-edge --version);
-MS_EDGE_DRIVER_VERSION=$(echo $MS_EDGE_VERSION | rev | cut -d ' ' -f '1' | rev);
-mkdir /tmp/edgedriver;
-wget -O /tmp/edgedriver/edgedriver.zip https://msedgedriver.azureedge.net/$MS_EDGE_DRIVER_VERSION/edgedriver_linux64.zip;
-sudo unzip /tmp/edgedriver/edgedriver.zip -d /tmp/edgedriver/;
-sudo cp /tmp/edgedriver/msedgedriver /usr/local/bin/;
-```
-
-## Running Tests on local Selenium
-
-### Environment Variables
+#### Environment Variables
 
 These are the environment variables needed to run the selenium tests locally.
 
@@ -87,18 +56,17 @@ These are the environment variables needed to run the selenium tests locally.
 | TAWK_PASSWORD | tawk.to account password | Yes |
 | WEB_HOST | Wordpress web hostname | Yes |
 | WEB_PORT | Wordpress web port | No |
-| SELENIUM_BROWSER | Browser type (chrome, firefox, safari) | Yes |
+| SELENIUM_BROWSER | Browser type (chrome, firefox, edge) | Yes |
 | SELENIUM_HOST | Selenium host | Yes |
 | SELENIUM_PORT | Selenium port | No |
 
-### Command Sample
+#### Command Sample
 ```
 TAWK_PROPERTY_ID=<TAWK_PROPERTY_ID> \
 TAWK_WIDGET_ID=<TAWK_WIDGET_ID> \
 TAWK_USERNAME=<TAWK_USERNAME> \
 TAWK_PASSWORD=<TAWK_PASSWORD> \
-WEB_HOST=http://localhost \
-WEB_PORT=8000 \
+WEB_HOST=wordpress \
 SELENIUM_BROWSER=chrome \
 SELENIUM_HOST=localhost \
 SELENIUM_PORT=4444 \
