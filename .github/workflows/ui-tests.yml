@@ -57,6 +57,9 @@ jobs:
 
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          # checkouts the commit that triggered the Notify ui test workflow
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Start docker services and setup WordPress
         run: |
