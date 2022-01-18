@@ -26,8 +26,8 @@ services:
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
       WORDPRESS_CONFIG_EXTRA: |
-        define('WP_HOME', 'http://${WORDPRESS_HOST}');
-        define('WP_SITEURL', 'http://${WORDPRESS_HOST}');
+        define('WP_HOME', 'http://${WEB_HOST}');
+        define('WP_SITEURL', 'http://${WEB_HOST}');
         define('FORCE_SSL_ADMIN', false);
     volumes:
       - wp_data:/var/www/html
@@ -51,14 +51,14 @@ services:
       WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
       WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
       WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
-      WORDPRESS_HOST: ${WORDPRESS_HOST}
+      WEB_HOST: ${WEB_HOST}
     volumes:
       - wp_data:/var/www/html
       - ./build-wordpress.sh:/tmp/scripts/build-wordpress.sh
 
   selenium:
     container_name: selenium
-    image: selenium/standalone-${BROWSER}:latest
+    image: selenium/standalone-${SELENIUM_BROWSER}:latest
     shm_size: 2g
     ports:
       - ${SELENIUM_PORT}:4444

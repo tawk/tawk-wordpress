@@ -4,7 +4,7 @@
 sleep 10;
 
 # Run wp cli setup commands
-wp core install --path="/var/www/html" --url=http://${WORDPRESS_HOST} --title="Local Wordpress By Docker" --admin_user=${WORDPRESS_ADMIN_USER} --admin_password=${WORDPRESS_ADMIN_PASSWORD} --admin_email=${WORDPRESS_ADMIN_EMAIL};
+wp core install --path="/var/www/html" --url=http://${WEB_HOST} --title="Local Wordpress By Docker" --admin_user=${WORDPRESS_ADMIN_USER} --admin_password=${WORDPRESS_ADMIN_PASSWORD} --admin_email=${WORDPRESS_ADMIN_EMAIL};
 wp rewrite structure /%postname%/;
 wp term create category Category-A --description="Category A";
 wp term create category Category-B --description="Category B";

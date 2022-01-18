@@ -41,9 +41,9 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      WORDPRESS_HOST: wordpress
-      BROWSER: ${{ matrix.browser }}
-      SELENIUM_HOSTNAME: localhost
+      WEB_HOST: wordpress
+      SELENIUM_BROWSER: ${{ matrix.browser }}
+      SELENIUM_HOST: localhost
       SELENIUM_PORT: 4444
 
     steps:
@@ -79,8 +79,4 @@ jobs:
           TAWK_WIDGET_ID: ${{ secrets.TAWK_WIDGET_ID }}
           TAWK_USERNAME: ${{ secrets.TAWK_USERNAME }}
           TAWK_PASSWORD: ${{ secrets.TAWK_PASSWORD }}
-          WEB_HOST: ${{ env.WORDPRESS_HOSTNAME }}
-          SELENIUM_BROWSER: ${{ matrix.browser }}
-          SELENIUM_HOST: ${{ env.SELENIUM_HOSTNAME }}
-          SELENIUM_PORT: ${{ env.SELENIUM_PORT }}
         run: composer run test
