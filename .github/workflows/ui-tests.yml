@@ -41,8 +41,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      WORDPRESS_HOSTNAME: wordpress
-      WORDPRESS_PORT: 80
+      WORDPRESS_HOST: wordpress
       BROWSER: ${{ matrix.browser }}
       SELENIUM_HOSTNAME: localhost
       SELENIUM_PORT: 4444
@@ -81,7 +80,6 @@ jobs:
           TAWK_USERNAME: ${{ secrets.TAWK_USERNAME }}
           TAWK_PASSWORD: ${{ secrets.TAWK_PASSWORD }}
           WEB_HOST: ${{ env.WORDPRESS_HOSTNAME }}
-          WEB_PORT: ${{ env.WORDPRESS_PORT }}
           SELENIUM_BROWSER: ${{ matrix.browser }}
           SELENIUM_HOST: ${{ env.SELENIUM_HOSTNAME }}
           SELENIUM_PORT: ${{ env.SELENIUM_PORT }}

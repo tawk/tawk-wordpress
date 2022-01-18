@@ -3,6 +3,8 @@ version: '3.8'
 services:
   db:
     container_name: db
+    ports:
+      - 3306:3306
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_ROOT_PASSWORD}
@@ -24,13 +26,9 @@ services:
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
       WORDPRESS_CONFIG_EXTRA: |
-        define('WP_HOME', 'http://${WORDPRESS_HOSTNAME}:${WORDPRESS_PORT}');
-        define('WP_SITEURL', 'http://${WORDPRESS_HOSTNAME}:${WORDPRESS_PORT}');
+        define('WP_HOME', 'http://${WORDPRESS_HOST}');
+        define('WP_SITEURL', 'http://${WORDPRESS_HOST}');
         define('FORCE_SSL_ADMIN', false);
-        define('ADMIN_COOKIE_PATH', '/');
-        define('COOKIE_DOMAIN', '');
-        define('COOKIEPATH', '');
-        define('SITECOOKIEPATH', '');
     volumes:
       - wp_data:/var/www/html
 
@@ -53,8 +51,7 @@ services:
       WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
       WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
       WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
-      WORDPRESS_HOSTNAME: ${WORDPRESS_HOSTNAME}
-      WORDPRESS_PORT: ${WORDPRESS_PORT}
+      WORDPRESS_HOST: ${WORDPRESS_HOST}
     volumes:
       - wp_data:/var/www/html
       - ./build-wordpress.sh:/tmp/scripts/build-wordpress.sh
