@@ -16,7 +16,7 @@ class Common {
 		$host     = $url_config->host;
 		$port     = $url_config->port;
 
-		if ( true === empty( $port ) ) {
+		if ( true === empty( $port ) || '80' === $port || '443' === $port ) {
 			return $protocol . '://' . $host . '/';
 		}
 
