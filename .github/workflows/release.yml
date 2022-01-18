@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          # checkouts the commit that triggered the Notify ui test workflow
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: cached dependencies
         uses: actions/cache@v2
