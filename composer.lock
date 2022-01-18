@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7d588a77ad40597aa5f25b3a6d9223c",
+    "content-hash": "4a0962f807e7cfc3336e62b727d97fc7",
     "packages": [
         {
             "name": "tawk/url-utils",
@@ -43,54 +43,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "browserstack/browserstack-local",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/browserstack/browserstack-local-php.git",
-                "reference": "491c6e31960ce8111d2cb70cb84d03e73f270dbb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/browserstack/browserstack-local-php/zipball/491c6e31960ce8111d2cb70cb84d03e73f270dbb",
-                "reference": "491c6e31960ce8111d2cb70cb84d03e73f270dbb",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.19"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.6.*"
-            },
-            "suggest": {
-                "phpdocumentor/phpdocumentor": "2.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "BrowserStack\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHP bindings for BrowserStack Local",
-            "homepage": "https://github.com/browserstack/browserstack-local-php",
-            "keywords": [
-                "BrowserStack",
-                "browserstacklocal",
-                "local",
-                "php",
-                "selenium"
-            ],
-            "support": {
-                "issues": "https://github.com/browserstack/browserstack-local-php/issues",
-                "source": "https://github.com/browserstack/browserstack-local-php"
-            },
-            "time": "2016-09-19T13:39:06+00:00"
-        },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
             "version": "v0.7.1",
@@ -1339,84 +1291,6 @@
                 }
             ],
             "time": "2021-12-25T07:07:57+00:00"
-        },
-        {
-            "name": "phpunit/phpunit-selenium",
-            "version": "9.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/giorgiosironi/phpunit-selenium.git",
-                "reference": "41711edd4dfcc5a0db2f8a22da6d2ddc908da741"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/giorgiosironi/phpunit-selenium/zipball/41711edd4dfcc5a0db2f8a22da6d2ddc908da741",
-                "reference": "41711edd4dfcc5a0db2f8a22da6d2ddc908da741",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=7.3",
-                "phpunit/phpunit": ">=9.0,<10.0"
-            },
-            "require-dev": {
-                "phing/phing": "2.*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "PHPUnit/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                ""
-            ],
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Giorgio Sironi",
-                    "email": "info@giorgiosironi.com",
-                    "role": "developer"
-                },
-                {
-                    "name": "Ivan Kurnosov",
-                    "email": "zerkms@zerkms.com",
-                    "role": "developer"
-                },
-                {
-                    "name": "Paul Briton",
-                    "role": "developer"
-                },
-                {
-                    "name": "Patrik Štrba",
-                    "role": "developer"
-                },
-                {
-                    "name": "Petr Kotek",
-                    "role": "developer"
-                },
-                {
-                    "name": "Sebastian Bergmann",
-                    "email": "sb@sebastian-bergmann.de",
-                    "role": "original developer"
-                }
-            ],
-            "description": "Selenium Server integration for PHPUnit",
-            "homepage": "https://github.com/giorgiosironi/phpunit-selenium",
-            "keywords": [
-                "phpunit",
-                "selenium",
-                "testing",
-                "xunit"
-            ],
-            "support": {
-                "issues": "https://github.com/giorgiosironi/phpunit-selenium/issues",
-                "source": "https://github.com/giorgiosironi/phpunit-selenium/tree/9.0.0"
-            },
-            "time": "2020-12-08T19:49:55+00:00"
         },
         {
             "name": "sebastian/cli-parser",
