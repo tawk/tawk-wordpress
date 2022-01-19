@@ -47,7 +47,7 @@ Stop the containers:
 
 Destroy the container and start from scratch:
 - ```docker-compose down```
-- ```docker volume rm docker_db_data docker_web_data```
+- ```docker volume rm docker_db_data docker_wp_data```
 
 ## Plugin setup
 You can follow the instruction in the [Wordpress KB Article](https://help.tawk.to/article/wordpress)
