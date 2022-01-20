@@ -63,7 +63,7 @@ jobs:
 
       - name: Start docker services and setup WordPress
         run: |
-          docker-compose -f ./.github/docker/docker-compose.yml up -d;
+          docker-compose -f ./tests/docker/docker-compose.yml up -d;
           docker logs -f wordpress-cli;
 
       - name: cached dependencies

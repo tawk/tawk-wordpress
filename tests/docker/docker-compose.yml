@@ -37,10 +37,11 @@ services:
       - db
       - wordpress
     container_name: wordpress-cli
-    image: wordpress:cli
+    build:
+      context: ./build
+      dockerfile: Dockerfile-wpcli
     user: '33:33'
-    command: >
-      /bin/sh -c /tmp/scripts/build-wordpress.sh
+    command: /bin/sh -c /tmp/scripts/build-wordpress.sh;
     environment:
       HOME: /tmp
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
@@ -54,7 +55,6 @@ services:
       WEB_HOST: ${WEB_HOST}
     volumes:
       - wp_data:/var/www/html
-      - ./build-wordpress.sh:/tmp/scripts/build-wordpress.sh
 
   selenium:
     container_name: selenium
