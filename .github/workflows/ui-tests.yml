@@ -64,7 +64,7 @@ jobs:
       - name: Start docker services and setup WordPress
         run: |
           docker-compose -f ./tests/docker/docker-compose.yml up -d;
-          docker logs -f wordpress-cli;
+          docker attach wordpress-cli;
 
       - name: cached dependencies
         uses: actions/cache@v2
