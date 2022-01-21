@@ -1,0 +1,3 @@
+FROM wordpress:cli
+
+ADD files/build-wordpress.sh /tmp/scripts/build-wordpress.sh
