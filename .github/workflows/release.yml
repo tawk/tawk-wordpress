@@ -29,11 +29,8 @@ jobs:
         id: version
         run: echo "::set-output name=version::$(jq -r '.version' ./composer.json)"
 
-      - name: rename folder to tawkto-live-chat
-        run: mv tawkto tawkto-live-chat
-
       - name: build artifact
-        run: zip -9 -rq tawkto-live-chat-${{ steps.version.outputs.version }}.zip tawkto-live-chat
+        run: composer run package && mv tawkto-live-chat.zip tawkto-live-chat-${{ steps.version.outputs.version }}.zip
 
       - name: upload artifact
         uses: actions/upload-release-asset@v1
