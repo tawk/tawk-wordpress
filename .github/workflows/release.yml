@@ -30,7 +30,7 @@ jobs:
         run: echo "::set-output name=version::$(jq -r '.version' ./composer.json)"
 
       - name: build artifact
-        run: composer run package && mv tawkto-live-chat.zip tawkto-live-chat-${{ steps.version.outputs.version }}.zip
+        run: composer run package && mv ./tmp/tawkto-live-chat.zip tawkto-live-chat-${{ steps.version.outputs.version }}.zip
 
       - name: upload artifact
         uses: actions/upload-release-asset@v1

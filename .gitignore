@@ -7,6 +7,5 @@ node_modules
 .eslintcache
 .stylelintcache
 **/*.env.local
-./tmp
+tmp
 dev
-tawkto-live-chat.zip

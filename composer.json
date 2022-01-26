@@ -33,7 +33,8 @@
         "build:prod": "COMPOSER_VENDOR_DIR=tawkto/vendor composer install --no-dev",
         "lint": "phpcs -p -s -v --runtime-set ignore_warnings_on_exit true .",
         "lint:fix": "phpcbf -p -s -v .; err=$?; if [ $err -eq 1 ]; then exit 0; else exit $err; fi;",
-        "package": "mkdir -p ./tmp/tawkto-live-chat && cp -r ./tawkto/* ./tmp/tawkto-live-chat && (cd ./tmp && zip -9 -rq ../tawkto-live-chat.zip ./tawkto-live-chat) && rm -r ./tmp"
+        "package": "composer run clean && mkdir -p ./tmp/tawkto-live-chat && cp -r ./tawkto/* ./tmp/tawkto-live-chat && (cd ./tmp && zip -9 -rq ./tawkto-live-chat.zip ./tawkto-live-chat)",
+        "clean": "rm -rf ./tmp"
     },
     "config": {
         "process-timeout": 0
