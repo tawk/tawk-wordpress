@@ -81,8 +81,8 @@ jobs:
 
       - name: run tests
         env:
-          TAWK_PROPERTY_ID: ${{ secrets.TAWK_PROPERTY_ID }}
-          TAWK_WIDGET_ID: ${{ secrets.TAWK_WIDGET_ID }}
+          TAWK_PROPERTY_ID: 61efb9abb9e4e21181bbc347
+          TAWK_WIDGET_ID: 1fq86qic0
           TAWK_USERNAME: ${{ secrets.TAWK_USERNAME }}
           TAWK_PASSWORD: ${{ secrets.TAWK_PASSWORD }}
         run: composer run test

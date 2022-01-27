@@ -39,9 +39,6 @@ fi
 # Finish WordPress installation
 wp core install --path="/var/www/html" --url=http://${WEB_HOST} --title="Local Wordpress By Docker" --admin_user=${WORDPRESS_ADMIN_USER} --admin_password=${WORDPRESS_ADMIN_PASSWORD} --admin_email=${WORDPRESS_ADMIN_EMAIL} && \
 
-# Print current WordPress version
-wp core version;
-
 # If you see “Error: Another update is currently in progress.”,
 # you may need to run wp option delete core_updater.lock after
 # verifying another update isn’t actually running.
@@ -52,6 +49,9 @@ wp option delete core_updater.lock;
 # Update to latest WordPress version
 # This does a version check before proceeding to update.
 wp core update;
+
+# Print current WordPress version
+wp core version;
 
 # Run wp cli setup commands
 wp rewrite structure /%postname%/ && \
