@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: db
+    ports:
+      - 3306:3306
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
+      MYSQL_USER: ${WORDPRESS_DB_USER}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    depends_on:
+      - db
+    container_name: wordpress
+    image: wordpress:latest
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://${WEB_HOST}');
+        define('WP_SITEURL', 'http://${WEB_HOST}');
+        define('FORCE_SSL_ADMIN', false);
+    volumes:
+      - wp_data:/var/www/html
+
+  wordpress-cli:
+    depends_on:
+      - db
+      - wordpress
+    container_name: wordpress-cli
+    build:
+      context: ./build
+      dockerfile: Dockerfile-wpcli
+    user: '33:33'
+    command: /bin/sh -c /tmp/scripts/build-wordpress.sh;
+    environment:
+      HOME: /tmp
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
+      WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
+      WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+      WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
+      WEB_HOST: ${WEB_HOST}
+    volumes:
+      - wp_data:/var/www/html
+
+  selenium:
+    container_name: selenium
+    image: selenium/standalone-${SELENIUM_BROWSER}:latest
+    shm_size: 2g
+    ports:
+      - ${SELENIUM_PORT}:4444
+volumes:
+  db_data: {}
+  wp_data:

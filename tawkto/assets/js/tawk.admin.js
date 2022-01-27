@@ -1,75 +1,84 @@
-jQuery(function() {
-    document.getElementById("defaultOpen").click();
+'use strict';
 
-    if (jQuery("#always_display").prop("checked")) {
-        jQuery('.twk_selected_display').hide();
-        jQuery('#show_onfrontpage').prop('disabled', true);
-        jQuery('#show_oncategory').prop('disabled', true);
-        jQuery('#show_ontagpage').prop('disabled', true);
-        jQuery('#show_onarticlepages').prop('disabled', true);
-        jQuery('#include_url').prop('disabled', true);
-    } else {
-        jQuery('.twk_selected_display').show();
-    }
+jQuery(
+	function() {
+		document.getElementById( 'account-settings-tab' ).click();
 
-    jQuery("#always_display").change(function() {
-        if (this.checked) {
-            jQuery('.twk_selected_display').fadeOut();
-            jQuery('#show_onfrontpage').prop('disabled', true);
-            jQuery('#show_oncategory').prop('disabled', true);
-            jQuery('#show_ontagpage').prop('disabled', true);
-            jQuery('#show_onarticlepages').prop('disabled', true);
-            jQuery('#include_url').prop('disabled', true);
-        } else {
-            jQuery('.twk_selected_display').fadeIn();
-            jQuery('#show_onfrontpage').prop('disabled', false);
-            jQuery('#show_oncategory').prop('disabled', false);
-            jQuery('#show_ontagpage').prop('disabled', false);
-            jQuery('#show_onarticlepages').prop('disabled', false);
-            jQuery('#include_url').prop('disabled', false);
-        }
-    });
+		if ( jQuery( '#always-display' ).prop( 'checked' ) ) {
+			jQuery( '.tawk-selected-display' ).hide();
+			jQuery( '#show-onfrontpage' ).prop( 'disabled', true );
+			jQuery( '#show-oncategory' ).prop( 'disabled', true );
+			jQuery( '#show-ontagpage' ).prop( 'disabled', true );
+			jQuery( '#show-onarticlepages' ).prop( 'disabled', true );
+			jQuery( '#include-url' ).prop( 'disabled', true );
+		} else {
+			jQuery( '.tawk-selected-display' ).show();
+		}
 
-    jQuery("#exclude_url").change(function() {
-        if (this.checked) {
-            jQuery("#exlucded_urls_container").fadeIn();
-        } else {
-            jQuery("#exlucded_urls_container").fadeOut();
-        }
-    });
+		jQuery( '#always-display' ).change(
+			function() {
+				if ( this.checked ) {
+					jQuery( '.tawk-selected-display' ).fadeOut();
+					jQuery( '#show-onfrontpage' ).prop( 'disabled', true );
+					jQuery( '#show-oncategory' ).prop( 'disabled', true );
+					jQuery( '#show-ontagpage' ).prop( 'disabled', true );
+					jQuery( '#show-onarticlepages' ).prop( 'disabled', true );
+					jQuery( '#include-url' ).prop( 'disabled', true );
+				} else {
+					jQuery( '.tawk-selected-display' ).fadeIn();
+					jQuery( '#show-onfrontpage' ).prop( 'disabled', false );
+					jQuery( '#show-oncategory' ).prop( 'disabled', false );
+					jQuery( '#show-ontagpage' ).prop( 'disabled', false );
+					jQuery( '#show-onarticlepages' ).prop( 'disabled', false );
+					jQuery( '#include-url' ).prop( 'disabled', false );
+				}
+			}
+		);
 
-    if (jQuery("#include_url").prop("checked")) {
-        jQuery("#included_urls_container").show();
-    }
+		jQuery( '#exclude-url' ).change(
+			function() {
+				if ( this.checked ) {
+					jQuery( '#exlucded-urls-container' ).fadeIn();
+				} else {
+					jQuery( '#exlucded-urls-container' ).fadeOut();
+				}
+			}
+		);
 
-    jQuery("#include_url").change(function() {
-        if (this.checked) {
-            jQuery("#included_urls_container").fadeIn();
-        } else {
-            jQuery("#included_urls_container").fadeOut();
-        }
-    });
+		if ( jQuery( '#include-url' ).prop( 'checked' ) ) {
+			jQuery( '#included-urls-container' ).show();
+		}
 
-    if (jQuery("#exclude_url").prop("checked")) {
-        jQuery("#exlucded_urls_container").fadeIn();
-    }
-});
+		jQuery( '#include-url' ).change(
+			function() {
+				if ( this.checked ) {
+					jQuery( '#included-urls-container' ).fadeIn();
+				} else {
+					jQuery( '#included-urls-container' ).fadeOut();
+				}
+			}
+		);
 
+		if ( jQuery( '#exclude-url' ).prop( 'checked' ) ) {
+			jQuery( '#exlucded-urls-container' ).fadeIn();
+		}
+	}
+);
 
-function opentab(evt, tabName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
+function opentab( evt, tabName ) {
+	var i, tabcontent, tablinks;
 
-    tabcontent = document.getElementsByClassName("tawktabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
+	tabcontent = document.getElementsByClassName( 'tawk-tab-content' );
+	for ( i = 0; i < tabcontent.length; i++ ) {
+		tabcontent[i].style.display = 'none';
+	}
 
-    tablinks = document.getElementsByClassName("tawktablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
+	tablinks = document.getElementsByClassName( 'tawk-tab-links' );
+	for ( i = 0; i < tablinks.length; i++ ) {
+		tablinks[i].className = tablinks[i].className.replace( ' active', '' );
+	}
 
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+	document.getElementById( tabName ).style.display = 'block';
+
+	evt.currentTarget.className += ' active';
 }
