@@ -77,7 +77,7 @@ jobs:
           key: ${{ runner.os }}-composer-dependencies-${{ hashFiles('**/composer.lock') }}
 
       - name: prepare test artifact
-        run: zip -9 -rq tawkto-live-chat.zip tawkto
+        run: composer run package
 
       - name: run tests
         env:

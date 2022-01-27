@@ -105,7 +105,7 @@ class Web {
 		}
 
 		$file_upload_id = '#pluginzip';
-		$file_path      = getcwd() . '/tawkto-live-chat.zip';
+		$file_path      = getcwd() . '/tmp/tawkto-live-chat.zip';
 
 		$this->driver->goto_page( $this->admin_url . 'plugin-install.php?tab=upload' );
 		$this->driver->wait_until_element_is_located( $file_upload_id );

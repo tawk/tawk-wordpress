@@ -1,29 +1,18 @@
 # Tests
 
-## Running Tests on Github Actions
+## Test setup and configuration
 
-### Secrets to store
-
-| Secret | Description |
-|---|---|
-| TAWK_PROPERTY_ID | Property Id |
-| TAWK_WIDGET_ID | Widget Id |
-| TAWK_USERNAME | tawk.to account username |
-| TAWK_PASSWORD | tawk.to account password |
-
-
-## Running Tests Locally
-### Dependencies
+### Building package to test
 
 Run `composer run build` to build both dev and prod dependencies.
 
-### Starting the Docker Containers
+Run `composer run package` to build the tawk.to plugin zip file that will be tested.
 
-Run `docker-compose -f ./.github/docker/docker-compose.yml up -d` to start the services.
+### Setting up docker environment
 
-Then run `docker logs -f wordpress-cli` to check if the WordPress setup is done.
+Docker-compose is used for test dependency setup and is required to run these tests
 
-#### Environment Variables
+#### Configuring docker environment
 
 Environment variables used in the `docker-compose.yml` file can be found in `.env` file.
 
@@ -42,11 +31,29 @@ Environment variables used in the `docker-compose.yml` file can be found in `.en
 | SELENIUM_BROWSER | Selenium Server Browser Type | chrome |
 | SELENIUM_PORT | Selenium Server Port | 4444 |
 
-### Running the Tests
+#### Wordpress and WooCommerce setup
 
-#### Environment Variables
+Docker environment is setup up to automatically populate test data
+This is done by `wordpress-cli` service in compose file
 
-These are the environment variables needed to run the selenium tests locally.
+For more details on setup, see <insert script file here> setup script
+
+#### Running the test environment
+
+To run docker environment for testing this repository, start docker compose file found in `/tests/docker/docker-compose.yml`
+
+Example (assuming from root of repository)
+
+```sh
+docker-compose -f ./tests/docker/docker-compose.yml up -d
+```
+
+Environment is ready when `wordpress-cli` successfully exists.
+To monitor its status, you can tail it's logs using `docker logs -f wordpress-cli`
+
+### Configuring local test environment
+
+These are the environment variables needed to run the selenium tests locally using composer script
 
 | Environment Variable | Description | Required |
 |---|---|---|
@@ -72,3 +79,36 @@ SELENIUM_HOST=localhost \
 SELENIUM_PORT=4444 \
 composer run test
 ```
+
+#### Storing local environments in a file for easy reference
+
+To simplify testing, you can place your environment configuration in a `.env.local` file.
+
+Example contents:
+```
+export TAWK_PROPERTY_ID='<TAWK_PROPERTY_ID>'
+export TAWK_WIDGET_ID='<TAWK_WIDGET_ID>'
+export TAWK_USERNAME='<TAWK_USERNAME>'
+export TAWK_PASSWORD='<TAWK_PASSWORD>'
+export WEB_HOST='wordpress'
+export SELENIUM_BROWSER='chrome'
+export SELENIUM_HOST='localhost'
+export SELENIUM_PORT='4444'
+```
+
+And simply run
+
+`source .env.local && composer run test`
+
+## Running Tests on Github Actions
+
+This repository is set up to use Github Actions to perform automated testing.
+
+To use actions in this repository, the following secrets need to be configured:
+
+| Secret | Description |
+|---|---|
+| TAWK_PROPERTY_ID | Property Id |
+| TAWK_WIDGET_ID | Widget Id |
+| TAWK_USERNAME | tawk.to account username |
+| TAWK_PASSWORD | tawk.to account password |

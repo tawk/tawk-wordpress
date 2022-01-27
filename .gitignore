@@ -6,3 +6,6 @@ node_modules
 .phpcs.cache
 .eslintcache
 .stylelintcache
+**/*.env.local
+tmp
+dev
