@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="vendor/autoload.php"
+		 colors="true"
+		 verbose="true"
+		 stopOnFailure="true"
+		 testdox="true">
+	<testsuites>
+		<testsuite name="Coverage">
+			<directory suffix="Test.php">tests/Coverages</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

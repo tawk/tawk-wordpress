@@ -3,9 +3,9 @@
 	<description>Custom coding standards.</description>
 	<config name="testVersion" value="5.6-"/>
 	<exclude-pattern>\.github/*</exclude-pattern>
-	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>tawkto/vendor/*</exclude-pattern>
-	<exclude-pattern>node_modues/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>assets/*</exclude-pattern>
 
 	<arg value="ps"/>
@@ -25,5 +25,19 @@
 	<rule ref="WooCommerce-Core">
 		<exclude name="WooCommerce.Commenting"/>
 	</rule>
-	<rule ref="PHPCompatibility"/>
+	<rule ref="PHPCompatibility">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FileComment">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.ClassComment">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.VariableComment">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FunctionComment">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
 </ruleset>

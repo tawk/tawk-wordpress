@@ -1,2 +1,6 @@
+# ignore .github files
 /.github export-ignore
-/docker export-ignore
+
+# export-ignore test files
+/phpunit.xml export-ignore
+/tests export-ignore

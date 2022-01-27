@@ -1,7 +1,11 @@
 tawkto.zip
+vendor
+.phpunit*
 tawkto/vendor
 node_modules
 .phpcs.cache
 .eslintcache
 .stylelintcache
-vendor
+**/*.env.local
+tmp
+dev

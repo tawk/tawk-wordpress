@@ -1,0 +1,88 @@
+name: ui-tests
+
+on:
+  workflow_run:
+    workflows: ["Notify ui test"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bansan85/action-workflow_run-status@main
+
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          # checkouts the commit that triggered the Notify ui test workflow
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: cached dependencies
+        uses: actions/cache@v2
+        id: cached-dependencies
+        with:
+          path: |
+            ./vendor
+            ./tawkto/vendor
+          # the key will change if composer.lock changes
+          key: ${{ runner.os }}-composer-dependencies-${{ hashFiles('**/composer.lock') }}
+
+      - name: install dependencies
+        if: steps.cached-dependencies.outputs.cache-hit != 'true'
+        uses: php-actions/composer@v6
+        with:
+          php_extensions: zip
+          command: run build
+
+  tests:
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: ['chrome', 'firefox', 'edge']
+
+    runs-on: ubuntu-latest
+    env:
+      WEB_HOST: wordpress
+      SELENIUM_BROWSER: ${{ matrix.browser }}
+      SELENIUM_HOST: localhost
+      SELENIUM_PORT: 4444
+
+    steps:
+      - name: Report to PR
+        env:
+          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+        uses: bansan85/action-workflow_run-status@main
+
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          # checkouts the commit that triggered the Notify ui test workflow
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Start docker services and setup WordPress
+        run: |
+          docker-compose -f ./tests/docker/docker-compose.yml up -d;
+          docker attach wordpress-cli;
+
+      - name: cached dependencies
+        uses: actions/cache@v2
+        id: cached-dependencies
+        with:
+          path: |
+            ./vendor
+            ./tawkto/vendor
+          # the key will change if composer.lock changes
+          key: ${{ runner.os }}-composer-dependencies-${{ hashFiles('**/composer.lock') }}
+
+      - name: prepare test artifact
+        run: composer run package
+
+      - name: run tests
+        env:
+          TAWK_PROPERTY_ID: 61efb9abb9e4e21181bbc347
+          TAWK_WIDGET_ID: 1fq86qic0
+          TAWK_USERNAME: ${{ secrets.TAWK_USERNAME }}
+          TAWK_PASSWORD: ${{ secrets.TAWK_PASSWORD }}
+        run: composer run test

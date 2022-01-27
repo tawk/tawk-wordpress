@@ -47,20 +47,23 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 	<div id="tawk-tabs">
 		<button class="tawk-tab-links"
 				onclick="opentab( event, 'account' )"
-				id="defaultOpen">
+				id="account-settings-tab">
 			Account Settings
 		</button>
 		<button class="tawk-tab-links"
-				onclick="opentab( event, 'visibility' )">
+				onclick="opentab( event, 'visibility' )"
+				id="visibility-options-tab">
 			Visibility Options
 		</button>
 		<button class="tawk-tab-links"
-				onclick="opentab( event, 'privacy' )">
+				onclick="opentab( event, 'privacy' )"
+				id="privacy-options-tab">
 			Privacy Options
 		</button>
 		<?php if ( $has_woocommerce ) { ?>
 			<button class="tawk-tab-links"
-					onclick="opentab( event, 'woocommerce' )">
+					onclick="opentab( event, 'woocommerce' )"
+					id="woocommerce-options-tab">
 				Woocomerce Options
 			</button>
 		<?php } ?>
@@ -114,7 +117,7 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 			?>
 			<h2><?php esc_html_e( 'Property and widget is already set.', 'tawk-to-live-chat' ); ?></h2>
 			<?php esc_html_e( 'if you wish to reselect property or widget', 'tawk-to-live-chat' ); ?>
-			<a href=<?php echo esc_html( $tawk_admin_url ); ?>>click here</a>
+			<a id="reselect" href=<?php echo esc_html( $tawk_admin_url ); ?>>click here</a>
 		<?php } ?>
 	</div>
 
