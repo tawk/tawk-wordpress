@@ -211,6 +211,17 @@ Note: You will need a free tawk.to account: [Create one for free here!](https://
 = 0.1.1 =
 * No more manual embed code copying, choose desired widget and it will be inserted in your site
 
+== Upgrade Notice ==
+
+= 0.7.0 =
+We have released an update for the URL include/exclude feature of our plugin. You can now enter either full URLs or paths with wildcards using any of the following placements:
+
+* start of the path (ex. */to/somewhere)
+* middle of the path (ex. /path/*/somewhere)
+* end of the path (ex. /path/to/somewhere)
+* start AND middle of the path (ex. */lead/*/somewhere)
+* middle AND end of the path (ex. /path/*/to/*)
+
 ## Frequently Asked Questions
 
 = How much does this cost? =
