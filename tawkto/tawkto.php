@@ -162,7 +162,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			if ( true === $settings_updated ) {
 				?>
 				<div class="notice notice-warning is-dismissible">
-					<p><?php esc_html_e( 'You might need to clear cache if your using a cache plugin to see your updates', 'tawk-to-live-chat' ); ?></p>
+					<p><?php esc_html_e( 'You might need to clear cache if you are using a cache plugin to see your updates', 'tawk-to-live-chat' ); ?></p>
 				</div>
 				<?php
 			}
