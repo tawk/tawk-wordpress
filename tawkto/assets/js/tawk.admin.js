@@ -62,6 +62,16 @@ jQuery(
 		if ( jQuery( '#exclude-url' ).prop( 'checked' ) ) {
 			jQuery( '#exlucded-urls-container' ).fadeIn();
 		}
+
+		jQuery( '.tooltip' ).on( 'mouseenter', function() {
+			var tooltipTextHeight = jQuery( this ).find( '.tooltiptext' ).height();
+			if ( jQuery( '#url-exclusion' ).height() > tooltipTextHeight ) {
+				jQuery( this ).removeClass( 'reverse' );
+				return;
+			}
+
+			jQuery( this ).addClass( 'reverse' );
+		});
 	}
 );
 

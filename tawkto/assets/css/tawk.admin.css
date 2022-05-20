@@ -264,6 +264,11 @@ a.tawk-link:hover {
 	top: 5px;
 }
 
+.tooltip.reverse .tooltiptext {
+	top: unset;
+	bottom: 5px;
+}
+
 .tooltip .tooltiptext::before {
 	content: "";
 	display: block;
@@ -276,6 +281,13 @@ a.tawk-link:hover {
 	border-bottom: 5px solid #545454;
 	top: -5px;
 	left: 5px;
+}
+
+.tooltip.reverse .tooltiptext::before {
+	top: unset;
+	border-bottom: unset;
+	bottom: -5px;
+	border-top: 5px solid #545454;
 }
 
 .tooltip:hover .tooltiptext {
