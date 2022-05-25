@@ -6,7 +6,7 @@
  * Plugin Name: Tawk.to Live Chat
  * Plugin URI: https://www.tawk.to
  * Description: Embeds Tawk.to live chat widget to your site
- * Version: 0.7.1
+ * Version: 0.7.2
  * Author: Tawkto
  * Text Domain: tawk-to-live-chat
  **/
@@ -162,7 +162,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			if ( true === $settings_updated ) {
 				?>
 				<div class="notice notice-warning is-dismissible">
-					<p><?php esc_html_e( 'You might need to clear cache if your using a cache plugin to see your updates', 'tawk-to-live-chat' ); ?></p>
+					<p><?php esc_html_e( 'You might need to clear cache if you are using a cache plugin to see your updates', 'tawk-to-live-chat' ); ?></p>
 				</div>
 				<?php
 			}
