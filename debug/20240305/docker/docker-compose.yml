@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - db_data:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: somewordpress
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: wordpress
+       MYSQL_PASSWORD: wordpress
+
+   wordpress:
+     depends_on:
+       - db
+     image: wordpress:latest
+     volumes:
+       - wp_data:/var/www/html
+       #- ${PWD}/wp-cli_setup_01.sh:/var/www/html/tmp/wp-cli_setup_01.sh
+       - ${PWD}:/var/www/html/tmp
+     ports:
+       - "8001:80"
+     restart: unless-stopped
+     environment:
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_USER: wordpress
+       WORDPRESS_DB_PASSWORD: wordpress
+       WORDPRESS_DB_NAME: wordpress
+volumes:
+    db_data: {}
+    wp_data: 
+
