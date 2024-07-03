@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  mariadb:
+    image: docker.io/bitnami/mariadb:latest
+    volumes:
+      - 'mariadb_data:/bitnami/mariadb'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_wordpress
+      - MARIADB_DATABASE=bitnami_wordpress
+  wordpress:
+    image: docker.io/bitnami/wordpress:latest
+    ports:
+      - '8080:8080'
+    volumes:
+      - wordpress_data:/bitnami/wordpress
+      - ../tawkto:/tawkto:ro
+    depends_on:
+      - mariadb
+    environment:
+      WORDPRESS_USERNAME: admin
+      WORDPRESS_PASSWORD: admin
+      WORDPRESS_EMAIL: admin@example.com
+      WORDPRESS_PLUGINS: query-monitor
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      ALLOW_EMPTY_PASSWORD: yes
+      WORDPRESS_DATABASE_HOST: mariadb
+      WORDPRESS_DATABASE_PORT_NUMBER: 3306
+      WORDPRESS_DATABASE_USER: bn_wordpress
+      WORDPRESS_DATABASE_NAME: bitnami_wordpress
+  wordpress-tawkto-plugin:
+    image: docker.io/bitnami/wordpress:latest
+    command: /app/symlink-tawkto-plugin.sh
+    volumes:
+      - wordpress_data:/bitnami/wordpress
+      - ./symlink-tawkto-plugin.sh:/app/symlink-tawkto-plugin.sh:ro
+      - ../tawkto:/tawkto:ro
+volumes:
+  mariadb_data:
+    driver: local
+  wordpress_data:
+    driver: local
