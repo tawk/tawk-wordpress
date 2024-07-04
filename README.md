@@ -100,6 +100,15 @@ And simply run
 
 `source .env.local && composer run test`
 
+## Debugging the test environment/Developing
+
+Ensure you have this line in your `/etc/hosts`
+```
+127.0.0.1 <WEB_HOST>
+```
+
+Then go to `http://<WEB_HOST>/wp-admin` and login with `WORDPRESS_ADMIN_USER` & `WORDPRESS_ADMIN_PASSWORD`
+
 ## Running Tests on Github Actions
 
 This repository is set up to use Github Actions to perform automated testing.
