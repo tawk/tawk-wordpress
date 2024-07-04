@@ -29,7 +29,6 @@ class WidgetSelectionTest extends TestCase {
 
 		self::$web->login();
 
-		self::$web->install_plugin();
 		self::$web->activate_plugin();
 	}
 

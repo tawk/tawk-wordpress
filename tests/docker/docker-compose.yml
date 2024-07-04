@@ -19,6 +19,8 @@ services:
       - db
     container_name: wordpress
     image: wordpress:latest
+    ports:
+      - 80:80
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
@@ -26,11 +28,10 @@ services:
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
       WORDPRESS_CONFIG_EXTRA: |
-        define('WP_HOME', 'http://${WEB_HOST}');
-        define('WP_SITEURL', 'http://${WEB_HOST}');
         define('FORCE_SSL_ADMIN', false);
     volumes:
       - wp_data:/var/www/html
+      - ../../tawkto:/var/www/html/wp-content/plugins/tawkto
 
   wordpress-cli:
     depends_on:
@@ -62,6 +63,7 @@ services:
     shm_size: 2g
     ports:
       - ${SELENIUM_PORT}:4444
+      - 7900:7900
 volumes:
   db_data: {}
   wp_data:
