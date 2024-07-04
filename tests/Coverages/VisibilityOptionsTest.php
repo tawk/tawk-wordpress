@@ -74,7 +74,6 @@ class VisibilityOptionsTest extends TestCase {
 	 */
 	public function should_not_display_widget_on_excluded_page_while_always_display_is_enabled() {
 		$excluded_url = self::$web->get_base_url() . 'category/category-a/';
-		echo "$excluded_url";
 		self::$web->toggle_switch( '#exclude-url', true );
 		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_url );
 
