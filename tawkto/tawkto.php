@@ -28,6 +28,11 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		const TAWK_ACTION_REMOVE_WIDGET = 'tawkto-remove-widget';
 
 		/**
+		 * @var $plugin_ver Plugin version
+		 */
+		private $plugin_ver = '';
+
+		/**
 		 * __construct
 		 *
 		 * @return void
