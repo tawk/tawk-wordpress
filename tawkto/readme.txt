@@ -4,7 +4,7 @@ Tags: tawk,tawk.to,tawkto,chat,free chat,livechat,chat widget,plugin,chat for we
 Requires at least: 2.7
 Requires PHP: 5.6
 Tested up to: 6.5
-Stable tag: 0.8.3
+Stable tag: 0.8.4
 
 (OFFICIAL tawk.to plugin) Instantly chat with  visitors on your website with the free tawk.to chat widget.
 Website: [http://tawk.to](http://tawk.to)
@@ -68,6 +68,9 @@ Follow these steps:
 Note: You will need a free tawk.to account: [Create one for free here!](https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
 
 == Changelog ==
+
+= 0.8.4 =
+* Fixed PHP dynamic properties deprecation
 
 = 0.8.3 =
 * Supported version bump to 6.5
