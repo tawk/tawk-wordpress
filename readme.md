@@ -1,1 +1,0 @@
-tawkto/readme.txt

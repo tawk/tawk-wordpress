@@ -28,7 +28,6 @@ class VisibilityOptionsTest extends TestCase {
 
 		self::$web->login();
 
-		self::$web->install_plugin();
 		self::$web->activate_plugin();
 		self::$web->set_widget( $config->tawk->property_id, $config->tawk->widget_id );
 	}
