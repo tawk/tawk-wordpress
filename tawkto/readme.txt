@@ -1,10 +1,12 @@
 === Tawk.To Live Chat ===
 Contributors: tawkto
-Tags: tawk,tawk.to,tawkto,chat,free chat,livechat,chat widget,plugin,chat for web,chat online,chat software,free live chat,IM Chat,,live chat,live support,live web chat,online chat,online support,snapengage,wordpress chat,wordpress live chat
+Tags: tawk.to,livechat,free live chat,ai chat,chat widget 
 Requires at least: 2.7
 Requires PHP: 5.6
 Tested up to: 6.5
 Stable tag: 0.8.4
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 (OFFICIAL tawk.to plugin) Instantly chat with  visitors on your website with the free tawk.to chat widget.
 Website: [http://tawk.to](http://tawk.to)

@@ -9,6 +9,7 @@
  * Version: 0.8.4
  * Author: Tawkto
  * Text Domain: tawk-to-live-chat
+ * License: GPLv3
  **/
 
 require_once dirname( __FILE__ ) . '/vendor/autoload.php';
