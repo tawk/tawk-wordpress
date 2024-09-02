@@ -1,10 +1,10 @@
 === Tawk.To Live Chat ===
 Contributors: tawkto
-Tags: tawk.to,livechat,free live chat,ai chat,chat widget 
+Tags: tawk.to,tawk,free live chat,ai chat,chat widget
 Requires at least: 2.7
 Requires PHP: 5.6
 Tested up to: 6.6
-Stable tag: 0.8.5
+Stable tag: 0.8.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -70,6 +70,9 @@ Follow these steps:
 Note: You will need a free tawk.to account: [Create one for free here!](https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
 
 == Changelog ==
+
+= 0.8.6 =
+* Update header information
 
 = 0.8.5 =
 * Update header information
