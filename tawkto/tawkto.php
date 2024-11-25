@@ -71,7 +71,8 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/plugin.php';
 				}
 
-				$plugin_data = get_plugin_data( __FILE__ );
+				// TODO: Move to proper lifecycle hook.
+				$plugin_data = get_plugin_data( __FILE__, false, false );
 
 				$this->plugin_ver = $plugin_data['Version'];
 			}
