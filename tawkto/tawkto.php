@@ -59,20 +59,27 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				update_option( 'tawkto-visibility-options', $visibility );
 			}
 
+			add_action( 'wp_loaded', array( &$this, 'init' ) );
 			add_action( 'admin_init', array( &$this, 'admin_init' ) );
 			add_action( 'admin_menu', array( &$this, 'add_menu' ) );
 			add_action( 'wp_ajax_tawkto_setwidget', array( &$this, 'action_setwidget' ) );
 			add_action( 'wp_ajax_tawkto_removewidget', array( &$this, 'action_removewidget' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'tawk_settings_assets' ) );
 			add_action( 'admin_notices', array( $this, 'tawk_admin_notice' ) );
+		}
 
+		/**
+		 * Initializes the plugin data
+		 *
+		 * @return void
+		 */
+		public function init() {
 			if ( is_admin() ) {
 				if ( false === function_exists( 'get_plugin_data' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/plugin.php';
 				}
 
-				// TODO: Move to proper lifecycle hook.
-				$plugin_data = get_plugin_data( __FILE__, false, false );
+				$plugin_data = get_plugin_data( __FILE__ );
 
 				$this->plugin_ver = $plugin_data['Version'];
 			}
