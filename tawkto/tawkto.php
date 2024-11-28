@@ -106,7 +106,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @return void
 		 */
 		public function admin_init() {
-			register_setting( 'tawk_options', 'tawkto-visibility-options', array( &$this, 'validate_options' ) );
+			register_setting( 'tawk_options', self::TAWK_VISIBILITY_OPTIONS, array( &$this, 'validate_options' ) );
 		}
 
 		/**
@@ -472,9 +472,9 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * Creates the embed code
 		 */
 		public function embed_code() {
-			$page_id    = get_option( 'tawkto-embed-widget-page-id' );
-			$widget_id  = get_option( 'tawkto-embed-widget-widget-id' );
-			$visibility = get_option( 'tawkto-visibility-options' );
+			$page_id    = get_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
+			$widget_id  = get_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
+			$visibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
 
 			// default value.
 			$enable_visitor_recognition = true;
@@ -523,7 +523,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * @return void
 		 */
 		public function print_embed_code() {
-			$vsibility = get_option( 'tawkto-visibility-options' );
+			$vsibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
 			$display   = false;
 
 			if ( 1 === $vsibility['always_display'] ) {
