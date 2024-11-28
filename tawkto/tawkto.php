@@ -39,24 +39,10 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @return void
 		 */
 		public function __construct() {
-			if ( ! get_option( 'tawkto-visibility-options', false ) ) {
-				$visibility = array(
-					'always_display'             => 1,
-					'show_onfrontpage'           => 0,
-					'show_oncategory'            => 0,
-					'show_ontagpage'             => 0,
-					'show_onarticlepages'        => 0,
-					'exclude_url'                => 0,
-					'excluded_url_list'          => '',
-					'include_url'                => 0,
-					'included_url_list'          => '',
-					'display_on_shop'            => 0,
-					'display_on_productcategory' => 0,
-					'display_on_productpage'     => 0,
-					'display_on_producttag'      => 0,
-					'enable_visitor_recognition' => 1,
-				);
-				update_option( 'tawkto-visibility-options', $visibility );
+			if ( ! get_option( self::TAWK_VISIBILITY_OPTIONS, false ) ) {
+				$visibility = self::get_default_visibility_options();
+
+				update_option( self::TAWK_VISIBILITY_OPTIONS, $visibility );
 			}
 
 			add_action( 'wp_loaded', array( &$this, 'init' ) );
@@ -308,6 +294,15 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$remove_widget_nonce = wp_create_nonce( self::TAWK_ACTION_REMOVE_WIDGET );
 			$plugin_ver          = $this->plugin_ver;
 
+			$default_visibility = self::get_default_visibility_options();
+			$visibility         = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
+
+			foreach ( $default_visibility as $key => $value ) {
+				if ( ! isset( $visibility[ $key ] ) ) {
+					$visibility[ $key ] = $value;
+				}
+			}
+
 			include sprintf( '%s/templates/settings.php', dirname( __FILE__ ) );
 		}
 
@@ -358,6 +353,18 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				$fields[ $field_name ] = 0;
 			}
 		}
+
+		/**
+		 * Retrieves default visibility options
+		 *
+		 * @return array
+		 */
+		public static function get_default_visibility_options() {
+			$config = include plugin_dir_path( __FILE__ ) . 'includes/default_config.php';
+
+			return $config['visibility'];
+		}
+
 	}
 }
 
@@ -419,22 +426,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		public static function activate() {
 			global $plugin_file_data;
 
-			$visibility = array(
-				'always_display'             => 1,
-				'show_onfrontpage'           => 0,
-				'show_oncategory'            => 0,
-				'show_ontagpage'             => 0,
-				'show_onarticlepages'        => 0,
-				'exclude_url'                => 0,
-				'excluded_url_list'          => '',
-				'include_url'                => 0,
-				'included_url_list'          => '',
-				'display_on_shop'            => 0,
-				'display_on_productcategory' => 0,
-				'display_on_productpage'     => 0,
-				'display_on_producttag'      => 0,
-				'enable_visitor_recognition' => 1,
-			);
+			$visibility = TawkTo_Settings::get_default_visibility_options();
 
 			add_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE, '', '', 'yes' );
