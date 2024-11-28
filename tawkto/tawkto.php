@@ -380,12 +380,26 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @return string
 		 */
 		private static function get_encrypted_data( $data ) {
-			$iv = openssl_random_pseudo_bytes( self::CIPHER_IV_LENGTH );
+			try {
+				$iv = random_bytes( self::CIPHER_IV_LENGTH );
+			} catch ( Exception $e ) {
+				return '';
+			}
 
 			$encrypted_data = openssl_encrypt( $data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
 
+			if ( false === $encrypted_data ) {
+				return '';
+			}
+
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-			return base64_encode( $iv . $encrypted_data );
+			$encrypted_data = base64_encode( $iv . $encrypted_data );
+
+			if ( false === $encrypted_data ) {
+				return '';
+			}
+
+			return $encrypted_data;
 		}
 
 		/**
@@ -398,10 +412,20 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 			$decoded_data = base64_decode( $data );
 
+			if ( false === $decoded_data ) {
+				return '';
+			}
+
 			$iv             = substr( $decoded_data, 0, self::CIPHER_IV_LENGTH );
 			$encrypted_data = substr( $decoded_data, self::CIPHER_IV_LENGTH );
 
-			return openssl_decrypt( $encrypted_data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
+			$decrypted_data = openssl_decrypt( $encrypted_data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
+
+			if ( false === $decrypted_data ) {
+				return '';
+			}
+
+			return $decrypted_data;
 		}
 
 		/**
@@ -518,7 +542,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				);
 
 				$js_api_key = TawkTo_Settings::get_js_api_key();
-				if ( ! empty( $js_api_key ) ) {
+				if ( ! empty( $user_info['email'] ) && ! empty( $js_api_key ) ) {
 					$user_info['hash'] = hash_hmac( 'sha256', $user_info['email'], $js_api_key );
 				}
 

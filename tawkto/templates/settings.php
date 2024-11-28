@@ -431,7 +431,9 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 							<input type="password"
 								id="js-api-key"
 								name="tawkto-visibility-options[js_api_key]"
-								value="<?php echo esc_attr( $visibility['js_api_key'] ); ?>" />
+								value="<?php echo esc_attr( $visibility['js_api_key'] ); ?>"
+								pattern="^[a-zA-Z0-9]+$"
+								autocomplete="off" />
 						</td>
 					</tr>
 				</table>
