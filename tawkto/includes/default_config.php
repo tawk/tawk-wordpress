@@ -16,5 +16,6 @@ return array(
 		'display_on_productpage'     => 0,
 		'display_on_producttag'      => 0,
 		'enable_visitor_recognition' => 1,
+		'js_api_key'                 => '',
 	),
 );
