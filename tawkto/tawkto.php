@@ -27,6 +27,8 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		const TAWK_VISIBILITY_OPTIONS   = 'tawkto-visibility-options';
 		const TAWK_ACTION_SET_WIDGET    = 'tawkto-set-widget';
 		const TAWK_ACTION_REMOVE_WIDGET = 'tawkto-remove-widget';
+		const CIPHER                    = 'AES-256-CBC';
+		const CIPHER_IV_LENGTH          = 16;
 
 		/**
 		 * @var $plugin_ver Plugin version
@@ -249,6 +251,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$visibility_text_fields = array(
 				'excluded_url_list',
 				'included_url_list',
+				'js_api_key',
 			);
 
 			self::validate_visibility_toggle_fields( $input, $visibility_toggle_fields );
@@ -329,6 +332,11 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			foreach ( $field_names as $field_name ) {
 				if ( isset( $fields[ $field_name ] ) ) {
 					$fields[ $field_name ] = sanitize_text_field( $fields[ $field_name ] );
+
+					if ( 'js_api_key' === $field_name && ! empty( $fields['js_api_key'] ) ) {
+						$fields['js_api_key'] = self::get_encrypted_data( $fields['js_api_key'] );
+					}
+
 					continue;
 				}
 
@@ -365,6 +373,51 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			return $config['visibility'];
 		}
 
+		/**
+		 * Encrypt data
+		 *
+		 * @param string $data - Data to be encrypted.
+		 * @return string
+		 */
+		private static function get_encrypted_data( $data ) {
+			$iv = openssl_random_pseudo_bytes( self::CIPHER_IV_LENGTH );
+
+			$encrypted_data = openssl_encrypt( $data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
+
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+			return base64_encode( $iv . $encrypted_data );
+		}
+
+		/**
+		 * Decrypt data
+		 *
+		 * @param string $data - Data to be decrypted.
+		 * @return string
+		 */
+		private static function get_decrypted_data( $data ) {
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+			$decoded_data = base64_decode( $data );
+
+			$iv             = substr( $decoded_data, 0, self::CIPHER_IV_LENGTH );
+			$encrypted_data = substr( $decoded_data, self::CIPHER_IV_LENGTH );
+
+			return openssl_decrypt( $encrypted_data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
+		}
+
+		/**
+		 * Retrieves JS API Key
+		 *
+		 * @return string
+		 */
+		public static function get_js_api_key() {
+			$visibility = get_option( self::TAWK_VISIBILITY_OPTIONS );
+
+			if ( isset( $visibility['js_api_key'] ) ) {
+				return self::get_decrypted_data( $visibility['js_api_key'] );
+			}
+
+			return '';
+		}
 	}
 }
 
@@ -463,6 +516,12 @@ if ( ! class_exists( 'TawkTo' ) ) {
 					'name'  => $current_user->display_name,
 					'email' => $current_user->user_email,
 				);
+
+				$js_api_key = TawkTo_Settings::get_js_api_key();
+				if ( ! empty( $js_api_key ) ) {
+					$user_info['hash'] = hash_hmac( 'sha256', $user_info['email'], $js_api_key );
+				}
+
 				return wp_json_encode( $user_info );
 			}
 			return null;
