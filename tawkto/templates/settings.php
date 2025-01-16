@@ -415,11 +415,7 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 
 			<div class="tawk-selected-visitor">
 				<p class='tawk-notice'>
-					<?php esc_html_e( 'Note: If ', 'tawk-to-live-chat' ); ?>
-					<b><?php esc_html_e( 'Secure Mode', 'tawk-to-live-chat' ); ?></b>
-					<?php esc_html_e( ' is enabled on your property, please enter your ', 'tawk-to-live-chat' ); ?>
-					<b><?php esc_html_e( 'Javascript API Key', 'tawk-to-live-chat' ); ?></b>
-					<?php esc_html_e( ' for visitor recognition to work correctly.', 'tawk-to-live-chat' ); ?>
+					<?php esc_html_e( 'Note: If Secure Mode is enabled on your property, please enter your Javascript API Key to ensure visitor recognition works correctly.', 'tawk-to-live-chat' ); ?>
 				</p>
 
 				<table class="form-table">
