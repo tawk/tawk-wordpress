@@ -31,7 +31,6 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		const CIPHER_IV_LENGTH          = 16;
 		const NO_CHANGE                 = 'nochange';
 		const TAWK_API_KEY              = 'tawkto-js-api-key';
-		const TAWK_API_KEY_ENCRYPTED    = 'tawkto-js-api-key-encrypted';
 
 		/**
 		 * @var $plugin_ver Plugin version
@@ -261,7 +260,10 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			self::validate_text_fields( $input, $visibility_text_fields );
 			self::validate_js_api_key( $input );
 
-			return $input;
+			$visibility = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
+			$visibility = array_merge( $visibility, $input );
+
+			return $visibility;
 		}
 
 		/**
@@ -311,8 +313,6 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			}
 
 			if ( ! empty( $visibility['js_api_key'] ) ) {
-				set_transient( self::TAWK_API_KEY_ENCRYPTED, $visibility['js_api_key'] );
-
 				$visibility['js_api_key'] = self::NO_CHANGE;
 			}
 
@@ -339,13 +339,12 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 */
 		private static function validate_js_api_key( &$fields ) {
 			if ( self::NO_CHANGE === $fields['js_api_key'] ) {
-				$fields['js_api_key'] = get_transient( self::TAWK_API_KEY_ENCRYPTED );
+				unset( $fields['js_api_key'] );
 				return;
 			}
 
 			$fields['js_api_key'] = 40 === strlen( $fields['js_api_key'] ) ? self::get_encrypted_data( $fields['js_api_key'] ) : '';
 
-			delete_transient( self::TAWK_API_KEY_ENCRYPTED );
 			delete_transient( self::TAWK_API_KEY );
 		}
 
@@ -556,7 +555,6 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			delete_option( self::PLUGIN_VERSION_VARIABLE );
 
 			delete_transient( TawkTo_Settings::TAWK_API_KEY );
-			delete_transient( TawkTo_Settings::TAWK_API_KEY_ENCRYPTED );
 		}
 
 		/**
