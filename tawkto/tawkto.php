@@ -403,6 +403,10 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @return string
 		 */
 		private static function get_encrypted_data( $data ) {
+			if ( ! defined( 'SECURE_AUTH_KEY' ) ) {
+				return '';
+			}
+
 			try {
 				$iv = random_bytes( self::CIPHER_IV_LENGTH );
 			} catch ( Exception $e ) {
