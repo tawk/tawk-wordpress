@@ -35,6 +35,7 @@ class PrivacyOptionsTest extends TestCase {
 
 	public function setup(): void {
 		self::$web->login();
+		self::$web->goto_privacy_options();
 	}
 
 	public static function tearDownAfterClass(): void {
@@ -60,6 +61,7 @@ class PrivacyOptionsTest extends TestCase {
 		$this->assertNotEmpty( $visitor_data );
 		$this->assertEquals( self::$admin_name, $visitor_data['name'] );
 		$this->assertEquals( self::$admin_email, $visitor_data['email'] );
+		$this->assertArrayNotHasKey( 'hash', $visitor_data );
 	}
 
 	/**
@@ -75,5 +77,28 @@ class PrivacyOptionsTest extends TestCase {
 		$visitor_data = self::$driver->get_driver()->executeScript( 'return Tawk_API.visitor' );
 
 		$this->assertEmpty( $visitor_data );
+	}
+
+	/**
+	 * @test
+	 * @group privacy_options
+	 */
+	public function should_have_hash_on_visitor_object_if_logged_in_and_api_key_provided(): void {
+		self::$web->toggle_switch( '#enable-visitor-recognition', true );
+		self::$driver->find_element_and_input( '#js-api-key', str_repeat( 'a', 40 ) );
+
+		self::$driver->move_mouse_to( '#submit-header' )->click();
+		self::$driver->wait_for_seconds( 1 );
+
+		self::$driver->goto_page( self::$web->get_base_url() );
+
+		self::$driver->wait_until_element_is_located( self::$script_selector );
+
+		$visitor_data = self::$driver->get_driver()->executeScript( 'return Tawk_API.visitor' );
+
+		$this->assertNotEmpty( $visitor_data );
+		$this->assertEquals( self::$admin_name, $visitor_data['name'] );
+		$this->assertEquals( self::$admin_email, $visitor_data['email'] );
+		$this->assertArrayHasKey( 'hash', $visitor_data );
 	}
 }
