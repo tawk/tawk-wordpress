@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname( __FILE__ ) . '/upgrades/version.070.php';
+require_once dirname( __FILE__ ) . '/upgrades/version.090.php';
 
 /**
  * Upgrade manager for tawk.to plugin
@@ -40,6 +41,7 @@ class TawkToUpgradeManager {
 	public function __construct( $version, $version_var_name ) {
 		$this->upgrades = array(
 			TawkToUpgradeVersion070::get_version() => TawkToUpgradeVersion070::class,
+			TawkToUpgradeVersion090::get_version() => TawkToUpgradeVersion090::class,
 		);
 
 		$this->version_var_name = $version_var_name;
