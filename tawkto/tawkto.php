@@ -256,11 +256,12 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				'js_api_key',
 			);
 
+			$visibility = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
+
 			self::validate_visibility_toggle_fields( $input, $visibility_toggle_fields );
 			self::validate_text_fields( $input, $visibility_text_fields );
-			self::validate_js_api_key( $input );
+			self::validate_js_api_key( $input, $visibility['js_api_key'] );
 
-			$visibility = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
 			$visibility = array_merge( $visibility, $input );
 
 			return $visibility;
@@ -334,18 +335,34 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		/**
 		 * Validate JS API Key field
 		 *
-		 * @param  array $fields - List of fields.
+		 * @param array  $fields - List of fields.
+		 * @param string $default - Default value.
 		 * @return void
+		 * @throws Exception - Error validating JS API Key.
 		 */
-		private static function validate_js_api_key( &$fields ) {
+		private static function validate_js_api_key( &$fields, $default ) {
 			if ( self::NO_CHANGE === $fields['js_api_key'] ) {
 				unset( $fields['js_api_key'] );
 				return;
 			}
 
-			$fields['js_api_key'] = 40 === strlen( $fields['js_api_key'] ) ? self::get_encrypted_data( $fields['js_api_key'] ) : '';
-
 			delete_transient( self::TAWK_API_KEY );
+
+			if ( '' === $fields['js_api_key'] ) {
+				return;
+			}
+
+			try {
+				if ( 40 !== strlen( $fields['js_api_key'] ) ) {
+					throw new Exception( 'Invalid key. Please provide value with 40 characters' );
+				}
+
+				$fields['js_api_key'] = self::get_encrypted_data( $fields['js_api_key'] );
+			} catch ( Exception $e ) {
+				self::show_tawk_options_error( 'Javascript API Key: ' . $e->getMessage() );
+
+				$fields['js_api_key'] = $default;
+			}
 		}
 
 		/**
@@ -400,29 +417,30 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 *
 		 * @param string $data - Data to be encrypted.
 		 * @return string
+		 * @throws Exception - Error encrypting data.
 		 */
 		private static function get_encrypted_data( $data ) {
 			if ( ! defined( 'SECURE_AUTH_KEY' ) ) {
-				return '';
+				throw new Exception( 'SECURE_AUTH_KEY is not defined' );
 			}
 
 			try {
 				$iv = random_bytes( self::CIPHER_IV_LENGTH );
 			} catch ( Exception $e ) {
-				return '';
+				throw new Exception( 'Error generating IV' );
 			}
 
 			$encrypted_data = openssl_encrypt( $data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
 
 			if ( false === $encrypted_data ) {
-				return '';
+				throw new Exception( 'Error encrypting data' );
 			}
 
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 			$encrypted_data = base64_encode( $iv . $encrypted_data );
 
 			if ( false === $encrypted_data ) {
-				return '';
+				throw new Exception( 'Error encoding data' );
 			}
 
 			return $encrypted_data;
@@ -475,6 +493,21 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			set_transient( self::TAWK_API_KEY, $key, 60 * 60 );
 
 			return $key;
+		}
+
+		/**
+		 * Adds settings error
+		 *
+		 * @param string $message - Error message.
+		 * @return void
+		 */
+		private static function show_tawk_options_error( $message ) {
+			add_settings_error(
+				'tawk_options',
+				'tawk_error',
+				$message,
+				'error'
+			);
 		}
 	}
 }
