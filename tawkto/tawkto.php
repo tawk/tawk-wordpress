@@ -25,6 +25,8 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		const TAWK_WIDGET_ID_VARIABLE   = 'tawkto-embed-widget-widget-id';
 		const TAWK_PAGE_ID_VARIABLE     = 'tawkto-embed-widget-page-id';
 		const TAWK_VISIBILITY_OPTIONS   = 'tawkto-visibility-options';
+		const TAWK_PRIVACY_OPTIONS      = 'tawkto-privacy-options';
+		const TAWK_SECURITY_OPTIONS     = 'tawkto-security-options';
 		const TAWK_ACTION_SET_WIDGET    = 'tawkto-set-widget';
 		const TAWK_ACTION_REMOVE_WIDGET = 'tawkto-remove-widget';
 		const CIPHER                    = 'AES-256-CBC';
@@ -43,11 +45,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @return void
 		 */
 		public function __construct() {
-			if ( ! get_option( self::TAWK_VISIBILITY_OPTIONS, false ) ) {
-				$visibility = self::get_default_visibility_options();
-
-				update_option( self::TAWK_VISIBILITY_OPTIONS, $visibility );
-			}
+			self::init_options();
 
 			add_action( 'wp_loaded', array( &$this, 'init' ) );
 			add_action( 'admin_init', array( &$this, 'admin_init' ) );
@@ -72,6 +70,27 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				$plugin_data = get_plugin_data( __FILE__ );
 
 				$this->plugin_ver = $plugin_data['Version'];
+			}
+		}
+
+		/**
+		 * Initialize default option values
+		 *
+		 * @return void
+		 */
+		public static function init_options() {
+			$options = self::get_default_options();
+
+			if ( ! get_option( self::TAWK_VISIBILITY_OPTIONS, false ) ) {
+				update_option( self::TAWK_VISIBILITY_OPTIONS, $options['visibility'] );
+			}
+
+			if ( ! get_option( self::TAWK_PRIVACY_OPTIONS, false ) ) {
+				update_option( self::TAWK_PRIVACY_OPTIONS, $options['privacy'] );
+			}
+
+			if ( ! get_option( self::TAWK_SECURITY_OPTIONS, false ) ) {
+				update_option( self::TAWK_SECURITY_OPTIONS, $options['security'] );
 			}
 		}
 
@@ -110,7 +129,9 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @return void
 		 */
 		public function admin_init() {
-			register_setting( 'tawk_options', self::TAWK_VISIBILITY_OPTIONS, array( &$this, 'validate_options' ) );
+			register_setting( 'tawk_options', self::TAWK_VISIBILITY_OPTIONS, array( &$this, 'validate_visibility_options' ) );
+			register_setting( 'tawk_options', self::TAWK_PRIVACY_OPTIONS, array( &$this, 'validate_privacy_options' ) );
+			register_setting( 'tawk_options', self::TAWK_SECURITY_OPTIONS, array( &$this, 'validate_security_options' ) );
 		}
 
 		/**
@@ -232,10 +253,10 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * Validates the selected visibility options
 		 *
 		 * @param  array $input - Visibility option fields.
-		 * @return boolean
+		 * @return mixed
 		 */
-		public function validate_options( $input ) {
-			$visibility_toggle_fields = array(
+		public function validate_visibility_options( $input ) {
+			$toggle_fields = array(
 				'always_display',
 				'show_onfrontpage',
 				'show_oncategory',
@@ -247,24 +268,62 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				'display_on_productcategory',
 				'display_on_productpage',
 				'display_on_producttag',
-				'enable_visitor_recognition',
 			);
 
-			$visibility_text_fields = array(
+			$text_fields = array(
 				'excluded_url_list',
 				'included_url_list',
-				'js_api_key',
 			);
 
 			$visibility = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
 
-			self::validate_visibility_toggle_fields( $input, $visibility_toggle_fields );
-			self::validate_text_fields( $input, $visibility_text_fields );
-			self::validate_js_api_key( $input, $visibility['js_api_key'] );
+			self::validate_toggle_fields( $input, $toggle_fields );
+			self::validate_text_fields( $input, $text_fields );
 
 			$visibility = array_merge( $visibility, $input );
 
 			return $visibility;
+		}
+
+		/**
+		 * Validates the selected privacy options
+		 *
+		 * @param mixed $input - Privacy option fields.
+		 * @return mixed
+		 */
+		public function validate_privacy_options( $input ) {
+			$toggle_fields = array(
+				'enable_visitor_recognition',
+			);
+
+			$privacy = get_option( self::TAWK_PRIVACY_OPTIONS, array() );
+
+			self::validate_toggle_fields( $input, $toggle_fields );
+
+			$privacy = array_merge( $privacy, $input );
+
+			return $privacy;
+		}
+
+		/**
+		 * Validates the selected security options
+		 *
+		 * @param mixed $input - Security option fields.
+		 * @return mixed
+		 */
+		public function validate_security_options( $input ) {
+			$text_fields = array(
+				'js_api_key',
+			);
+
+			$security = get_option( self::TAWK_SECURITY_OPTIONS, array() );
+
+			self::validate_text_fields( $input, $text_fields );
+			self::validate_js_api_key( $input, $security['js_api_key'] );
+
+			$security = array_merge( $security, $input );
+
+			return $security;
 		}
 
 		/**
@@ -304,17 +363,31 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$remove_widget_nonce = wp_create_nonce( self::TAWK_ACTION_REMOVE_WIDGET );
 			$plugin_ver          = $this->plugin_ver;
 
-			$default_visibility = self::get_default_visibility_options();
-			$visibility         = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
+			$default_options = self::get_default_options();
+			$visibility      = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
+			$privacy         = get_option( self::TAWK_PRIVACY_OPTIONS, array() );
+			$security        = get_option( self::TAWK_SECURITY_OPTIONS, array() );
 
-			foreach ( $default_visibility as $key => $value ) {
+			foreach ( $default_options['visibility'] as $key => $value ) {
 				if ( ! isset( $visibility[ $key ] ) ) {
 					$visibility[ $key ] = $value;
 				}
 			}
 
-			if ( ! empty( $visibility['js_api_key'] ) ) {
-				$visibility['js_api_key'] = self::NO_CHANGE;
+			foreach ( $default_options['privacy'] as $key => $value ) {
+				if ( ! isset( $privacy[ $key ] ) ) {
+					$privacy[ $key ] = $value;
+				}
+			}
+
+			foreach ( $default_options['security'] as $key => $value ) {
+				if ( ! isset( $security[ $key ] ) ) {
+					$security[ $key ] = $value;
+				}
+			}
+
+			if ( ! empty( $security['js_api_key'] ) ) {
+				$security['js_api_key'] = self::NO_CHANGE;
 			}
 
 			include sprintf( '%s/templates/settings.php', dirname( __FILE__ ) );
@@ -390,7 +463,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @param  array $field_names - List of field names to be validated.
 		 * @return void
 		 */
-		private static function validate_visibility_toggle_fields( &$fields, $field_names ) {
+		private static function validate_toggle_fields( &$fields, $field_names ) {
 			foreach ( $field_names as $field_name ) {
 				if ( isset( $fields[ $field_name ] ) && '1' === $fields[ $field_name ] ) {
 					$fields[ $field_name ] = 1;
@@ -406,10 +479,10 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 *
 		 * @return array
 		 */
-		public static function get_default_visibility_options() {
+		public static function get_default_options() {
 			$config = include plugin_dir_path( __FILE__ ) . 'includes/default_config.php';
 
-			return $config['visibility'];
+			return $config;
 		}
 
 		/**
@@ -482,13 +555,13 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				return get_transient( self::TAWK_API_KEY );
 			}
 
-			$visibility = get_option( self::TAWK_VISIBILITY_OPTIONS );
+			$security = get_option( self::TAWK_SECURITY_OPTIONS );
 
-			if ( ! isset( $visibility['js_api_key'] ) ) {
+			if ( ! isset( $security['js_api_key'] ) ) {
 				return '';
 			}
 
-			$key = self::get_decrypted_data( $visibility['js_api_key'] );
+			$key = self::get_decrypted_data( $security['js_api_key'] );
 
 			set_transient( self::TAWK_API_KEY, $key, 60 * 60 );
 
@@ -570,11 +643,10 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		public static function activate() {
 			global $plugin_file_data;
 
-			$visibility = TawkTo_Settings::get_default_visibility_options();
+			TawkTo_Settings::init_options();
 
 			add_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE, '', '', 'yes' );
-			add_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility, '', 'yes' );
 			add_option( self::PLUGIN_VERSION_VARIABLE, self::get_plugin_version(), '', 'yes' );
 		}
 
@@ -585,6 +657,8 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			delete_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
 			delete_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
 			delete_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
+			delete_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
+			delete_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
 			delete_option( self::PLUGIN_VERSION_VARIABLE );
 
 			delete_transient( TawkTo_Settings::TAWK_API_KEY );
@@ -624,15 +698,15 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * Creates the embed code
 		 */
 		public function embed_code() {
-			$page_id    = get_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
-			$widget_id  = get_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
-			$visibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
+			$page_id   = get_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
+			$widget_id = get_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
+			$privacy   = get_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
 
 			// default value.
 			$enable_visitor_recognition = true;
 
-			if ( isset( $visibility ) && isset( $visibility['enable_visitor_recognition'] ) ) {
-				$enable_visitor_recognition = 1 === $visibility['enable_visitor_recognition'];
+			if ( isset( $privacy ) && isset( $privacy['enable_visitor_recognition'] ) ) {
+				$enable_visitor_recognition = 1 === $privacy['enable_visitor_recognition'];
 			}
 
 			if ( $enable_visitor_recognition ) {
