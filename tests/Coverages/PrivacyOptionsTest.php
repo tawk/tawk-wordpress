@@ -88,7 +88,7 @@ class PrivacyOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#js-api-key', str_repeat( 'a', 40 ) );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		self::$driver->goto_page( self::$web->get_base_url() );
 

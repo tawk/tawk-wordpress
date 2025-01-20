@@ -70,8 +70,6 @@ class Web {
 		$this->driver->find_element_and_input( '#user_pass', $this->admin->password );
 		$this->driver->find_element_and_click( '#wp-submit' );
 
-		$this->driver->wait_for_seconds( 1 );
-
 		$this->driver->wait_until_page_fully_loads();
 
 		// prevent reauth=1 loop.
@@ -241,7 +239,7 @@ class Web {
 		$this->driver->find_element_and_click( '#addWidgetToPage' );
 
 		// ensures widget is added.
-		$this->driver->wait_for_seconds( 1 );
+		$this->driver->wait_until_element_is_located( '#successMessage' );
 
 		$this->widget_set = true;
 
@@ -260,7 +258,7 @@ class Web {
 		$this->driver->find_element_and_click( '#removeCurrentWidget' );
 
 		// ensures widget is added.
-		$this->driver->wait_for_seconds( 1 );
+		$this->driver->wait_until_element_is_located( '#successMessage' );
 
 		$this->widget_set = false;
 
@@ -289,7 +287,7 @@ class Web {
 
 		if ( $save_flag ) {
 			$this->driver->move_mouse_to( '#submit-header' )->click();
-			$this->driver->wait_for_seconds( 1 );
+			$this->driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 		}
 	}
 
@@ -302,7 +300,7 @@ class Web {
 
 		if ( $save_flag ) {
 			$this->driver->move_mouse_to( '#submit-header' )->click();
-			$this->driver->wait_for_seconds( 1 );
+			$this->driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 		}
 	}
 
