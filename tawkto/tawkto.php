@@ -749,51 +749,51 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * @return void
 		 */
 		public function print_embed_code() {
-			$vsibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
-			$display   = false;
+			$visibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
+			$display    = false;
 
-			if ( 1 === $vsibility['always_display'] ) {
+			if ( 1 === $visibility['always_display'] ) {
 				$display = true;
 			}
 
-			if ( ( 1 === $vsibility['show_onfrontpage'] ) && ( is_home() || is_front_page() ) ) {
+			if ( ( 1 === $visibility['show_onfrontpage'] ) && ( is_home() || is_front_page() ) ) {
 				$display = true;
 			}
 
-			if ( ( 1 === $vsibility['show_oncategory'] ) && is_category() ) {
+			if ( ( 1 === $visibility['show_oncategory'] ) && is_category() ) {
 				$display = true;
 			}
 
-			if ( ( 1 === $vsibility['show_ontagpage'] ) && is_tag() ) {
+			if ( ( 1 === $visibility['show_ontagpage'] ) && is_tag() ) {
 				$display = true;
 			}
 
-			if ( ( 1 === $vsibility['show_onarticlepages'] ) && is_single() ) {
+			if ( ( 1 === $visibility['show_onarticlepages'] ) && is_single() ) {
 				$display = true;
 			}
 
 			if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
-				if ( ( 1 === $vsibility['display_on_shop'] ) && is_shop() ) {
+				if ( ( 1 === $visibility['display_on_shop'] ) && is_shop() ) {
 					$display = true;
 				}
 
-				if ( ( 1 === $vsibility['display_on_productcategory'] ) && is_product_category() ) {
+				if ( ( 1 === $visibility['display_on_productcategory'] ) && is_product_category() ) {
 					$display = true;
 				}
 
-				if ( ( 1 === $vsibility['display_on_productpage'] ) && is_product() ) {
+				if ( ( 1 === $visibility['display_on_productpage'] ) && is_product() ) {
 					$display = true;
 				}
 
-				if ( ( 1 === $vsibility['display_on_producttag'] ) && is_product_tag() ) {
+				if ( ( 1 === $visibility['display_on_producttag'] ) && is_product_tag() ) {
 					$display = true;
 				}
 			}
 
-			if ( isset( $vsibility['include_url'] ) && 1 === $vsibility['include_url'] ) {
+			if ( isset( $visibility['include_url'] ) && 1 === $visibility['include_url'] ) {
 				$current_url = $this->get_current_url();
 
-				$included_url_list = $vsibility['included_url_list'];
+				$included_url_list = $visibility['included_url_list'];
 				$included_url_list = array_map( 'trim', preg_split( '/,/', $included_url_list ) );
 
 				if ( UrlPatternMatcher::match( $current_url, $included_url_list ) ) {
@@ -801,10 +801,10 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				}
 			}
 
-			if ( isset( $vsibility['exclude_url'] ) && ( 1 === $vsibility['exclude_url'] ) ) {
+			if ( isset( $visibility['exclude_url'] ) && ( 1 === $visibility['exclude_url'] ) ) {
 				$current_url = $this->get_current_url();
 
-				$excluded_url_list = $vsibility['excluded_url_list'];
+				$excluded_url_list = $visibility['excluded_url_list'];
 				$excluded_url_list = array_map( 'trim', preg_split( '/,/', $excluded_url_list ) );
 
 				if ( UrlPatternMatcher::match( $current_url, $excluded_url_list ) ) {
