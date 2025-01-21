@@ -72,4 +72,5 @@ wp option set woocommerce_store_postalcode 'A1B2C3' && \
 wp option set woocommerce_currency 'CAD' && \
 wp option set woocommerce_product_type 'physical' && \
 wp option set woocommerce_allow_tracking 'no' && \
+wp option set woocommerce_coming_soon 'no' && \
 wp wc --user=admin tool run install_pages;
