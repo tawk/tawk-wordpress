@@ -319,7 +319,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$security = get_option( self::TAWK_SECURITY_OPTIONS, array() );
 
 			self::validate_text_fields( $input, $text_fields );
-			self::validate_js_api_key( $input, $security['js_api_key'] );
+			self::validate_js_api_key( $input );
 
 			$security = array_merge( $security, $input );
 
@@ -408,12 +408,11 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		/**
 		 * Validate JS API Key field
 		 *
-		 * @param array  $fields - List of fields.
-		 * @param string $default - Default value.
+		 * @param array $fields - List of fields.
 		 * @return void
 		 * @throws Exception - Error validating JS API Key.
 		 */
-		private static function validate_js_api_key( &$fields, $default ) {
+		private static function validate_js_api_key( &$fields ) {
 			if ( self::NO_CHANGE === $fields['js_api_key'] ) {
 				unset( $fields['js_api_key'] );
 				return;
@@ -434,7 +433,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			} catch ( Exception $e ) {
 				self::show_tawk_options_error( 'Javascript API Key: ' . $e->getMessage() );
 
-				$fields['js_api_key'] = $default;
+				unset( $fields['js_api_key'] );
 			}
 		}
 
