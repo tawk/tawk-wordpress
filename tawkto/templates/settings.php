@@ -404,14 +404,37 @@ $tawky_big_img_url = plugins_url( 'assets/tawky_big.png', dirname( __FILE__ ) );
 							<input type="checkbox"
 									class="slider round"
 									id="enable-visitor-recognition"
-									name="tawkto-visibility-options[enable_visitor_recognition]"
+									name="tawkto-privacy-options[enable_visitor_recognition]"
 									value="1"
-									<?php echo checked( 1, $visibility['enable_visitor_recognition'], false ); ?> />
+									<?php echo checked( 1, $privacy['enable_visitor_recognition'], false ); ?> />
 							<div class="slider round"></div>
 						</label>
 					</td>
 				</tr>
 			</table>
+
+			<div class="tawk-selected-visitor">
+				<p class='tawk-notice'>
+					<?php esc_html_e( 'Note: If Secure Mode is enabled on your property, please enter your Javascript API Key to ensure visitor recognition works correctly.', 'tawk-to-live-chat' ); ?>
+				</p>
+
+				<table class="form-table">
+					<tr valign="top">
+						<th class="tawk-setting" scope="row">
+							<?php esc_html_e( 'Javascript API Key', 'tawk-to-live-chat' ); ?>
+						</th>
+						<td>
+							<input type="password"
+								id="js-api-key"
+								name="tawkto-security-options[js_api_key]"
+								value="<?php echo esc_attr( $security['js_api_key'] ); ?>"
+								pattern="^[a-zA-Z0-9]+$"
+								onfocus="this.select();"
+								autocomplete="off" />
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</form>
 </div>

@@ -72,6 +72,26 @@ jQuery(
 
 			jQuery( this ).addClass( 'reverse' );
 		});
+
+		if ( jQuery( '#enable-visitor-recognition' ).prop( 'checked' ) ) {
+			jQuery( '.tawk-selected-visitor' ).show();
+			jQuery( '#js-api-key' ).prop( 'disabled', false );
+		} else {
+			jQuery( '.tawk-selected-visitor' ).hide();
+			jQuery( '#js-api-key' ).prop( 'disabled', true );
+		}
+
+		jQuery( '#enable-visitor-recognition' ).change(
+			function() {
+				if ( this.checked ) {
+					jQuery( '.tawk-selected-visitor' ).fadeIn();
+					jQuery( '#js-api-key' ).prop( 'disabled', false );
+				} else {
+					jQuery( '.tawk-selected-visitor' ).fadeOut();
+					jQuery( '#js-api-key' ).prop( 'disabled', true );
+				}
+			}
+		);
 	}
 );
 

@@ -78,7 +78,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_url );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_not_on_page( $excluded_url );
 	}
@@ -106,7 +106,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_urls );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		// assertion for '<host>/category/*'.
 		$this->check_widget_not_on_page( self::$web->get_base_url() . 'category/category-a/' );
@@ -161,7 +161,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_url );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'tag/tag-a/' );
 	}
@@ -173,7 +173,7 @@ class VisibilityOptionsTest extends TestCase {
 	public function should_not_display_when_always_display_is_disabled() {
 		self::$web->toggle_switch( '#always-display', false );
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_not_on_page( self::$web->get_base_url() );
 	}
@@ -189,7 +189,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#included-url-list', $included_url );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_on_page( $included_url );
 	}
@@ -218,7 +218,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#included-url-list', $included_urls );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		// assertion for '<host>/category/*'.
 		$this->check_widget_on_page( self::$web->get_base_url() . 'category/category-a/' );
@@ -274,7 +274,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#included-url-list', $included_url );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_not_on_page( self::$web->get_base_url() . 'tag/tag-a/' );
 	}
@@ -288,7 +288,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#show-onfrontpage', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_on_page( self::$web->get_base_url() );
 	}
@@ -304,7 +304,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#excluded-url-list', self::$web->get_base_url() );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_not_on_page( self::$web->get_base_url() );
 	}
@@ -318,7 +318,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#show-oncategory', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'category/category-a/' );
 		$this->check_widget_on_page( self::$web->get_base_url() . 'category/category-b/' );
@@ -339,7 +339,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_urls );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_not_on_page( $category_a_url );
 		$this->check_widget_not_on_page( $category_b_url );
@@ -354,7 +354,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#show-ontagpage', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'tag/tag-a/' );
 		$this->check_widget_on_page( self::$web->get_base_url() . 'tag/tag-b/' );
@@ -375,7 +375,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_urls );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_not_on_page( $tag_a_url );
 		$this->check_widget_not_on_page( $tag_b_url );
@@ -390,7 +390,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$web->toggle_switch( '#show-onarticlepages', true );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_on_page( self::$web->get_base_url() . 'hello-world/' );
 	}
@@ -408,7 +408,7 @@ class VisibilityOptionsTest extends TestCase {
 		self::$driver->find_element_and_input( '#excluded-url-list', $excluded_url );
 
 		self::$driver->move_mouse_to( '#submit-header' )->click();
-		self::$driver->wait_for_seconds( 1 );
+		self::$driver->wait_until_element_is_located( '#setting-error-settings_updated' );
 
 		$this->check_widget_not_on_page( $excluded_url );
 	}

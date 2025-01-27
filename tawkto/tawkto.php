@@ -25,8 +25,14 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		const TAWK_WIDGET_ID_VARIABLE   = 'tawkto-embed-widget-widget-id';
 		const TAWK_PAGE_ID_VARIABLE     = 'tawkto-embed-widget-page-id';
 		const TAWK_VISIBILITY_OPTIONS   = 'tawkto-visibility-options';
+		const TAWK_PRIVACY_OPTIONS      = 'tawkto-privacy-options';
+		const TAWK_SECURITY_OPTIONS     = 'tawkto-security-options';
 		const TAWK_ACTION_SET_WIDGET    = 'tawkto-set-widget';
 		const TAWK_ACTION_REMOVE_WIDGET = 'tawkto-remove-widget';
+		const CIPHER                    = 'AES-256-CBC';
+		const CIPHER_IV_LENGTH          = 16;
+		const NO_CHANGE                 = 'nochange';
+		const TAWK_API_KEY              = 'tawkto-js-api-key';
 
 		/**
 		 * @var $plugin_ver Plugin version
@@ -39,11 +45,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @return void
 		 */
 		public function __construct() {
-			if ( ! get_option( self::TAWK_VISIBILITY_OPTIONS, false ) ) {
-				$visibility = self::get_default_visibility_options();
-
-				update_option( self::TAWK_VISIBILITY_OPTIONS, $visibility );
-			}
+			self::init_options();
 
 			add_action( 'wp_loaded', array( &$this, 'init' ) );
 			add_action( 'admin_init', array( &$this, 'admin_init' ) );
@@ -68,6 +70,27 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				$plugin_data = get_plugin_data( __FILE__ );
 
 				$this->plugin_ver = $plugin_data['Version'];
+			}
+		}
+
+		/**
+		 * Initialize default option values
+		 *
+		 * @return void
+		 */
+		public static function init_options() {
+			$options = self::get_default_options();
+
+			if ( ! get_option( self::TAWK_VISIBILITY_OPTIONS, false ) ) {
+				update_option( self::TAWK_VISIBILITY_OPTIONS, $options['visibility'] );
+			}
+
+			if ( ! get_option( self::TAWK_PRIVACY_OPTIONS, false ) ) {
+				update_option( self::TAWK_PRIVACY_OPTIONS, $options['privacy'] );
+			}
+
+			if ( ! get_option( self::TAWK_SECURITY_OPTIONS, false ) ) {
+				update_option( self::TAWK_SECURITY_OPTIONS, $options['security'] );
 			}
 		}
 
@@ -106,7 +129,9 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @return void
 		 */
 		public function admin_init() {
-			register_setting( 'tawk_options', self::TAWK_VISIBILITY_OPTIONS, array( &$this, 'validate_options' ) );
+			register_setting( 'tawk_options', self::TAWK_VISIBILITY_OPTIONS, array( &$this, 'validate_visibility_options' ) );
+			register_setting( 'tawk_options', self::TAWK_PRIVACY_OPTIONS, array( &$this, 'validate_privacy_options' ) );
+			register_setting( 'tawk_options', self::TAWK_SECURITY_OPTIONS, array( &$this, 'validate_security_options' ) );
 		}
 
 		/**
@@ -228,10 +253,10 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * Validates the selected visibility options
 		 *
 		 * @param  array $input - Visibility option fields.
-		 * @return boolean
+		 * @return mixed
 		 */
-		public function validate_options( $input ) {
-			$visibility_toggle_fields = array(
+		public function validate_visibility_options( $input ) {
+			$toggle_fields = array(
 				'always_display',
 				'show_onfrontpage',
 				'show_oncategory',
@@ -243,18 +268,62 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				'display_on_productcategory',
 				'display_on_productpage',
 				'display_on_producttag',
-				'enable_visitor_recognition',
 			);
 
-			$visibility_text_fields = array(
+			$text_fields = array(
 				'excluded_url_list',
 				'included_url_list',
 			);
 
-			self::validate_visibility_toggle_fields( $input, $visibility_toggle_fields );
-			self::validate_text_fields( $input, $visibility_text_fields );
+			$visibility = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
 
-			return $input;
+			self::validate_toggle_fields( $input, $toggle_fields );
+			self::validate_text_fields( $input, $text_fields );
+
+			$visibility = array_merge( $visibility, $input );
+
+			return $visibility;
+		}
+
+		/**
+		 * Validates the selected privacy options
+		 *
+		 * @param mixed $input - Privacy option fields.
+		 * @return mixed
+		 */
+		public function validate_privacy_options( $input ) {
+			$toggle_fields = array(
+				'enable_visitor_recognition',
+			);
+
+			$privacy = get_option( self::TAWK_PRIVACY_OPTIONS, array() );
+
+			self::validate_toggle_fields( $input, $toggle_fields );
+
+			$privacy = array_merge( $privacy, $input );
+
+			return $privacy;
+		}
+
+		/**
+		 * Validates the selected security options
+		 *
+		 * @param mixed $input - Security option fields.
+		 * @return mixed
+		 */
+		public function validate_security_options( $input ) {
+			$text_fields = array(
+				'js_api_key',
+			);
+
+			$security = get_option( self::TAWK_SECURITY_OPTIONS, array() );
+
+			self::validate_text_fields( $input, $text_fields );
+			self::validate_js_api_key( $input );
+
+			$security = array_merge( $security, $input );
+
+			return $security;
 		}
 
 		/**
@@ -294,13 +363,31 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$remove_widget_nonce = wp_create_nonce( self::TAWK_ACTION_REMOVE_WIDGET );
 			$plugin_ver          = $this->plugin_ver;
 
-			$default_visibility = self::get_default_visibility_options();
-			$visibility         = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
+			$default_options = self::get_default_options();
+			$visibility      = get_option( self::TAWK_VISIBILITY_OPTIONS, array() );
+			$privacy         = get_option( self::TAWK_PRIVACY_OPTIONS, array() );
+			$security        = get_option( self::TAWK_SECURITY_OPTIONS, array() );
 
-			foreach ( $default_visibility as $key => $value ) {
+			foreach ( $default_options['visibility'] as $key => $value ) {
 				if ( ! isset( $visibility[ $key ] ) ) {
 					$visibility[ $key ] = $value;
 				}
+			}
+
+			foreach ( $default_options['privacy'] as $key => $value ) {
+				if ( ! isset( $privacy[ $key ] ) ) {
+					$privacy[ $key ] = $value;
+				}
+			}
+
+			foreach ( $default_options['security'] as $key => $value ) {
+				if ( ! isset( $security[ $key ] ) ) {
+					$security[ $key ] = $value;
+				}
+			}
+
+			if ( ! empty( $security['js_api_key'] ) ) {
+				$security['js_api_key'] = self::NO_CHANGE;
 			}
 
 			include sprintf( '%s/templates/settings.php', dirname( __FILE__ ) );
@@ -316,6 +403,38 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 */
 		public static function ids_are_correct( $page_id, $widget_id ) {
 			return 1 === preg_match( '/^[0-9A-Fa-f]{24}$/', $page_id ) && 1 === preg_match( '/^[a-z0-9]{1,50}$/i', $widget_id );
+		}
+
+		/**
+		 * Validate JS API Key field
+		 *
+		 * @param array $fields - List of fields.
+		 * @return void
+		 * @throws Exception - Error validating JS API Key.
+		 */
+		private static function validate_js_api_key( &$fields ) {
+			if ( self::NO_CHANGE === $fields['js_api_key'] ) {
+				unset( $fields['js_api_key'] );
+				return;
+			}
+
+			delete_transient( self::TAWK_API_KEY );
+
+			if ( '' === $fields['js_api_key'] ) {
+				return;
+			}
+
+			try {
+				if ( 40 !== strlen( $fields['js_api_key'] ) ) {
+					throw new Exception( 'Invalid key. Please provide value with 40 characters' );
+				}
+
+				$fields['js_api_key'] = self::get_encrypted_data( $fields['js_api_key'] );
+			} catch ( Exception $e ) {
+				self::show_tawk_options_error( 'Javascript API Key: ' . $e->getMessage() );
+
+				unset( $fields['js_api_key'] );
+			}
 		}
 
 		/**
@@ -343,7 +462,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @param  array $field_names - List of field names to be validated.
 		 * @return void
 		 */
-		private static function validate_visibility_toggle_fields( &$fields, $field_names ) {
+		private static function validate_toggle_fields( &$fields, $field_names ) {
 			foreach ( $field_names as $field_name ) {
 				if ( isset( $fields[ $field_name ] ) && '1' === $fields[ $field_name ] ) {
 					$fields[ $field_name ] = 1;
@@ -359,12 +478,109 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 *
 		 * @return array
 		 */
-		public static function get_default_visibility_options() {
+		public static function get_default_options() {
 			$config = include plugin_dir_path( __FILE__ ) . 'includes/default_config.php';
 
-			return $config['visibility'];
+			return $config;
 		}
 
+		/**
+		 * Encrypt data
+		 *
+		 * @param string $data - Data to be encrypted.
+		 * @return string
+		 * @throws Exception - Error encrypting data.
+		 */
+		private static function get_encrypted_data( $data ) {
+			if ( ! defined( 'SECURE_AUTH_KEY' ) ) {
+				throw new Exception( 'SECURE_AUTH_KEY is not defined' );
+			}
+
+			try {
+				$iv = random_bytes( self::CIPHER_IV_LENGTH );
+			} catch ( Exception $e ) {
+				throw new Exception( 'Error generating IV' );
+			}
+
+			$encrypted_data = openssl_encrypt( $data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
+
+			if ( false === $encrypted_data ) {
+				throw new Exception( 'Error encrypting data' );
+			}
+
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+			$encrypted_data = base64_encode( $iv . $encrypted_data );
+
+			if ( false === $encrypted_data ) {
+				throw new Exception( 'Error encoding data' );
+			}
+
+			return $encrypted_data;
+		}
+
+		/**
+		 * Decrypt data
+		 *
+		 * @param string $data - Data to be decrypted.
+		 * @return string
+		 */
+		private static function get_decrypted_data( $data ) {
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+			$decoded_data = base64_decode( $data );
+
+			if ( false === $decoded_data ) {
+				return '';
+			}
+
+			$iv             = substr( $decoded_data, 0, self::CIPHER_IV_LENGTH );
+			$encrypted_data = substr( $decoded_data, self::CIPHER_IV_LENGTH );
+
+			$decrypted_data = openssl_decrypt( $encrypted_data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
+
+			if ( false === $decrypted_data ) {
+				return '';
+			}
+
+			return $decrypted_data;
+		}
+
+		/**
+		 * Retrieves JS API Key
+		 *
+		 * @return string
+		 */
+		public static function get_js_api_key() {
+			if ( ! empty( get_transient( self::TAWK_API_KEY ) ) ) {
+				return get_transient( self::TAWK_API_KEY );
+			}
+
+			$security = get_option( self::TAWK_SECURITY_OPTIONS );
+
+			if ( ! isset( $security['js_api_key'] ) ) {
+				return '';
+			}
+
+			$key = self::get_decrypted_data( $security['js_api_key'] );
+
+			set_transient( self::TAWK_API_KEY, $key, 60 * 60 );
+
+			return $key;
+		}
+
+		/**
+		 * Adds settings error
+		 *
+		 * @param string $message - Error message.
+		 * @return void
+		 */
+		private static function show_tawk_options_error( $message ) {
+			add_settings_error(
+				'tawk_options',
+				'tawk_error',
+				$message,
+				'error'
+			);
+		}
 	}
 }
 
@@ -426,11 +642,10 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		public static function activate() {
 			global $plugin_file_data;
 
-			$visibility = TawkTo_Settings::get_default_visibility_options();
+			TawkTo_Settings::init_options();
 
 			add_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE, '', '', 'yes' );
 			add_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE, '', '', 'yes' );
-			add_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility, '', 'yes' );
 			add_option( self::PLUGIN_VERSION_VARIABLE, self::get_plugin_version(), '', 'yes' );
 		}
 
@@ -441,7 +656,11 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			delete_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
 			delete_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
 			delete_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
+			delete_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
+			delete_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
 			delete_option( self::PLUGIN_VERSION_VARIABLE );
+
+			delete_transient( TawkTo_Settings::TAWK_API_KEY );
 		}
 
 		/**
@@ -463,6 +682,12 @@ if ( ! class_exists( 'TawkTo' ) ) {
 					'name'  => $current_user->display_name,
 					'email' => $current_user->user_email,
 				);
+
+				$js_api_key = TawkTo_Settings::get_js_api_key();
+				if ( ! empty( $user_info['email'] ) && ! empty( $js_api_key ) ) {
+					$user_info['hash'] = hash_hmac( 'sha256', $user_info['email'], $js_api_key );
+				}
+
 				return wp_json_encode( $user_info );
 			}
 			return null;
@@ -472,15 +697,15 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * Creates the embed code
 		 */
 		public function embed_code() {
-			$page_id    = get_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
-			$widget_id  = get_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
-			$visibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
+			$page_id   = get_option( TawkTo_Settings::TAWK_PAGE_ID_VARIABLE );
+			$widget_id = get_option( TawkTo_Settings::TAWK_WIDGET_ID_VARIABLE );
+			$privacy   = get_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
 
 			// default value.
 			$enable_visitor_recognition = true;
 
-			if ( isset( $visibility ) && isset( $visibility['enable_visitor_recognition'] ) ) {
-				$enable_visitor_recognition = 1 === $visibility['enable_visitor_recognition'];
+			if ( isset( $privacy ) && isset( $privacy['enable_visitor_recognition'] ) ) {
+				$enable_visitor_recognition = 1 === $privacy['enable_visitor_recognition'];
 			}
 
 			if ( $enable_visitor_recognition ) {
@@ -523,51 +748,51 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * @return void
 		 */
 		public function print_embed_code() {
-			$vsibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
-			$display   = false;
+			$visibility = get_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
+			$display    = false;
 
-			if ( 1 === $vsibility['always_display'] ) {
+			if ( 1 === $visibility['always_display'] ) {
 				$display = true;
 			}
 
-			if ( ( 1 === $vsibility['show_onfrontpage'] ) && ( is_home() || is_front_page() ) ) {
+			if ( ( 1 === $visibility['show_onfrontpage'] ) && ( is_home() || is_front_page() ) ) {
 				$display = true;
 			}
 
-			if ( ( 1 === $vsibility['show_oncategory'] ) && is_category() ) {
+			if ( ( 1 === $visibility['show_oncategory'] ) && is_category() ) {
 				$display = true;
 			}
 
-			if ( ( 1 === $vsibility['show_ontagpage'] ) && is_tag() ) {
+			if ( ( 1 === $visibility['show_ontagpage'] ) && is_tag() ) {
 				$display = true;
 			}
 
-			if ( ( 1 === $vsibility['show_onarticlepages'] ) && is_single() ) {
+			if ( ( 1 === $visibility['show_onarticlepages'] ) && is_single() ) {
 				$display = true;
 			}
 
 			if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
-				if ( ( 1 === $vsibility['display_on_shop'] ) && is_shop() ) {
+				if ( ( 1 === $visibility['display_on_shop'] ) && is_shop() ) {
 					$display = true;
 				}
 
-				if ( ( 1 === $vsibility['display_on_productcategory'] ) && is_product_category() ) {
+				if ( ( 1 === $visibility['display_on_productcategory'] ) && is_product_category() ) {
 					$display = true;
 				}
 
-				if ( ( 1 === $vsibility['display_on_productpage'] ) && is_product() ) {
+				if ( ( 1 === $visibility['display_on_productpage'] ) && is_product() ) {
 					$display = true;
 				}
 
-				if ( ( 1 === $vsibility['display_on_producttag'] ) && is_product_tag() ) {
+				if ( ( 1 === $visibility['display_on_producttag'] ) && is_product_tag() ) {
 					$display = true;
 				}
 			}
 
-			if ( isset( $vsibility['include_url'] ) && 1 === $vsibility['include_url'] ) {
+			if ( isset( $visibility['include_url'] ) && 1 === $visibility['include_url'] ) {
 				$current_url = $this->get_current_url();
 
-				$included_url_list = $vsibility['included_url_list'];
+				$included_url_list = $visibility['included_url_list'];
 				$included_url_list = array_map( 'trim', preg_split( '/,/', $included_url_list ) );
 
 				if ( UrlPatternMatcher::match( $current_url, $included_url_list ) ) {
@@ -575,10 +800,10 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				}
 			}
 
-			if ( isset( $vsibility['exclude_url'] ) && ( 1 === $vsibility['exclude_url'] ) ) {
+			if ( isset( $visibility['exclude_url'] ) && ( 1 === $visibility['exclude_url'] ) ) {
 				$current_url = $this->get_current_url();
 
-				$excluded_url_list = $vsibility['excluded_url_list'];
+				$excluded_url_list = $visibility['excluded_url_list'];
 				$excluded_url_list = array_map( 'trim', preg_split( '/,/', $excluded_url_list ) );
 
 				if ( UrlPatternMatcher::match( $current_url, $excluded_url_list ) ) {
