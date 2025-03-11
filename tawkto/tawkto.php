@@ -27,6 +27,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		const TAWK_VISIBILITY_OPTIONS   = 'tawkto-visibility-options';
 		const TAWK_PRIVACY_OPTIONS      = 'tawkto-privacy-options';
 		const TAWK_SECURITY_OPTIONS     = 'tawkto-security-options';
+		const TAWK_CONFIG_VERSION       = 'tawkto-config-version';
 		const TAWK_ACTION_SET_WIDGET    = 'tawkto-set-widget';
 		const TAWK_ACTION_REMOVE_WIDGET = 'tawkto-remove-widget';
 		const CIPHER                    = 'AES-256-CBC';
@@ -92,6 +93,10 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			if ( ! get_option( self::TAWK_SECURITY_OPTIONS, false ) ) {
 				update_option( self::TAWK_SECURITY_OPTIONS, $options['security'] );
 			}
+
+			if ( ! get_option( self::TAWK_CONFIG_VERSION, false ) ) {
+				update_option( self::TAWK_CONFIG_VERSION, $options['config_version'] );
+			}
 		}
 
 		/**
@@ -132,6 +137,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			register_setting( 'tawk_options', self::TAWK_VISIBILITY_OPTIONS, array( &$this, 'validate_visibility_options' ) );
 			register_setting( 'tawk_options', self::TAWK_PRIVACY_OPTIONS, array( &$this, 'validate_privacy_options' ) );
 			register_setting( 'tawk_options', self::TAWK_SECURITY_OPTIONS, array( &$this, 'validate_security_options' ) );
+			register_setting( 'tawk_options', self::TAWK_CONFIG_VERSION, array( &$this, 'update_config_version' ) );
 		}
 
 		/**
@@ -324,6 +330,15 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$security = array_merge( $security, $input );
 
 			return $security;
+		}
+
+		/**
+		 * Updates the config version
+		 *
+		 * @return int
+		 */
+		public function update_config_version() {
+			return get_option( self::TAWK_CONFIG_VERSION, 0 ) + 1;
 		}
 
 		/**

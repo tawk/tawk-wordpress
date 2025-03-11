@@ -1,7 +1,7 @@
 <?php
 
 return array(
-	'visibility' => array(
+	'visibility'     => array(
 		'always_display'             => 1,
 		'show_onfrontpage'           => 0,
 		'show_oncategory'            => 0,
@@ -16,10 +16,11 @@ return array(
 		'display_on_productpage'     => 0,
 		'display_on_producttag'      => 0,
 	),
-	'privacy'    => array(
+	'privacy'        => array(
 		'enable_visitor_recognition' => 1,
 	),
-	'security'   => array(
+	'security'       => array(
 		'js_api_key' => '',
 	),
+	'config_version' => 0,
 );
