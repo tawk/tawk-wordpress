@@ -33,7 +33,6 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		const CIPHER                    = 'AES-256-CBC';
 		const CIPHER_IV_LENGTH          = 16;
 		const NO_CHANGE                 = 'nochange';
-		const TAWK_API_KEY              = 'tawkto-js-api-key';
 
 		/**
 		 * @var $plugin_ver Plugin version
@@ -433,8 +432,6 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				return;
 			}
 
-			delete_transient( self::TAWK_API_KEY );
-
 			if ( '' === $fields['js_api_key'] ) {
 				return;
 			}
@@ -539,7 +536,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @param string $data - Data to be decrypted.
 		 * @return string
 		 */
-		private static function get_decrypted_data( $data ) {
+		public static function get_decrypted_data( $data ) {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 			$decoded_data = base64_decode( $data );
 
@@ -557,29 +554,6 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			}
 
 			return $decrypted_data;
-		}
-
-		/**
-		 * Retrieves JS API Key
-		 *
-		 * @return string
-		 */
-		public static function get_js_api_key() {
-			if ( ! empty( get_transient( self::TAWK_API_KEY ) ) ) {
-				return get_transient( self::TAWK_API_KEY );
-			}
-
-			$security = get_option( self::TAWK_SECURITY_OPTIONS );
-
-			if ( ! isset( $security['js_api_key'] ) ) {
-				return '';
-			}
-
-			$key = self::get_decrypted_data( $security['js_api_key'] );
-
-			set_transient( self::TAWK_API_KEY, $key, 60 * 60 );
-
-			return $key;
 		}
 
 		/**
@@ -614,6 +588,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 	 */
 	class TawkTo {
 		const PLUGIN_VERSION_VARIABLE = 'tawkto-version';
+		const TAWK_VISITOR_SESSION    = 'tawkto-visitor-session';
 
 		/**
 		 * @var $plugin_version Plugin version
@@ -628,6 +603,19 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		public function __construct() {
 			$tawkto_settings = new TawkTo_Settings();
 			add_shortcode( 'tawkto', array( $this, 'shortcode_print_embed_code' ) );
+
+			add_action( 'init', array( $this, 'start_session' ) );
+		}
+
+		/**
+		 * Starts user session
+		 *
+		 * @return void
+		 */
+		public function start_session() {
+			if ( session_status() === PHP_SESSION_NONE ) {
+				session_start();
+			}
 		}
 
 		/**
@@ -674,8 +662,6 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			delete_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
 			delete_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
 			delete_option( self::PLUGIN_VERSION_VARIABLE );
-
-			delete_transient( TawkTo_Settings::TAWK_API_KEY );
 		}
 
 		/**
@@ -698,14 +684,51 @@ if ( ! class_exists( 'TawkTo' ) ) {
 					'email' => $current_user->user_email,
 				);
 
-				$js_api_key = TawkTo_Settings::get_js_api_key();
-				if ( ! empty( $user_info['email'] ) && ! empty( $js_api_key ) ) {
-					$user_info['hash'] = hash_hmac( 'sha256', $user_info['email'], $js_api_key );
+				$hash = self::get_visitor_hash( $user_info['email'] );
+				if ( ! empty( $user_info['email'] ) && ! empty( $hash ) ) {
+					$user_info['hash'] = $hash;
 				}
 
 				return wp_json_encode( $user_info );
 			}
 			return null;
+		}
+
+		/**
+		 * Retrieves visitor hash
+		 *
+		 * @param string $email - Visitor email address.
+		 * @return string
+		 */
+		public static function get_visitor_hash( $email ) {
+			$config_version = get_option( TawkTo_Settings::TAWK_CONFIG_VERSION, 0 );
+
+			if ( isset( $_SESSION[ self::TAWK_VISITOR_SESSION ] ) ) {
+				$current_session = $_SESSION[ self::TAWK_VISITOR_SESSION ];
+
+				if ( $current_session['email'] === $email &&
+					$current_session['config_version'] === $config_version ) {
+					return $current_session['hash'];
+				}
+			}
+
+			$security = get_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
+
+			if ( empty( $security['js_api_key'] ) ) {
+				return '';
+			}
+
+			$key = TawkTo_Settings::get_decrypted_data( $security['js_api_key'] );
+
+			$hash = hash_hmac( 'sha256', $email, $key );
+
+			$_SESSION[ self::TAWK_VISITOR_SESSION ] = array(
+				'hash'           => $hash,
+				'email'          => $email,
+				'config_version' => $config_version,
+			);
+
+			return $hash;
 		}
 
 		/**
