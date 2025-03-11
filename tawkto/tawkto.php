@@ -436,14 +436,14 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				return;
 			}
 
-			try {
-				if ( 40 !== strlen( $fields['js_api_key'] ) ) {
-					throw new Exception( 'Invalid key. Please provide value with 40 characters' );
-				}
+			if ( 40 !== strlen( $fields['js_api_key'] ) ) {
+				throw new Exception( 'Invalid API key.' );
+			}
 
+			try {
 				$fields['js_api_key'] = self::get_encrypted_data( $fields['js_api_key'] );
 			} catch ( Exception $e ) {
-				self::show_tawk_options_error( 'Javascript API Key: ' . $e->getMessage() );
+				self::show_tawk_options_error( 'Error saving Javascript API Key.' );
 
 				unset( $fields['js_api_key'] );
 			}
