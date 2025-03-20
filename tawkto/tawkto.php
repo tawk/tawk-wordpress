@@ -432,14 +432,16 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				return;
 			}
 
+			$fields['js_api_key'] = trim( $fields['js_api_key'] );
+
 			if ( 40 !== strlen( $fields['js_api_key'] ) ) {
-				throw new Exception( 'Invalid API key.' );
+				self::show_tawk_options_error( 'Invalid API key' );
 			}
 
 			try {
 				$fields['js_api_key'] = self::get_encrypted_data( $fields['js_api_key'] );
 			} catch ( Exception $e ) {
-				self::show_tawk_options_error( 'Error saving Javascript API Key.' );
+				self::show_tawk_options_error( 'Error saving Javascript API Key' );
 
 				unset( $fields['js_api_key'] );
 			}
@@ -537,7 +539,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$decoded_data = base64_decode( $data );
 
 			if ( false === $decoded_data ) {
-				return '';
+				return null;
 			}
 
 			$iv             = substr( $decoded_data, 0, self::CIPHER_IV_LENGTH );
@@ -546,7 +548,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$decrypted_data = openssl_decrypt( $encrypted_data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
 
 			if ( false === $decrypted_data ) {
-				return '';
+				return null;
 			}
 
 			return $decrypted_data;
@@ -669,7 +671,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				);
 
 				$hash = self::get_visitor_hash( $user_info['email'] );
-				if ( ! empty( $user_info['email'] ) && ! empty( $hash ) ) {
+				if ( null !== $hash ) {
 					$user_info['hash'] = $hash;
 				}
 
@@ -704,10 +706,14 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			$security = get_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
 
 			if ( empty( $security['js_api_key'] ) ) {
-				return '';
+				return null;
 			}
 
 			$key = TawkTo_Settings::get_decrypted_data( $security['js_api_key'] );
+
+			if ( null === $key ) {
+				return null;
+			}
 
 			$hash = hash_hmac( 'sha256', $email, $key );
 
