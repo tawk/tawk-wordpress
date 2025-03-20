@@ -92,10 +92,6 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			if ( ! get_option( self::TAWK_SECURITY_OPTIONS, false ) ) {
 				update_option( self::TAWK_SECURITY_OPTIONS, $options['security'] );
 			}
-
-			if ( ! get_option( self::TAWK_CONFIG_VERSION, false ) ) {
-				update_option( self::TAWK_CONFIG_VERSION, $options['config_version'] );
-			}
 		}
 
 		/**
@@ -648,6 +644,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			delete_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
 			delete_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
 			delete_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
+			delete_option( TawkTo_Settings::TAWK_CONFIG_VERSION );
 			delete_option( self::PLUGIN_VERSION_VARIABLE );
 		}
 
