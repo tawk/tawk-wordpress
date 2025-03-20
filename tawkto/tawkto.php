@@ -603,19 +603,6 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		public function __construct() {
 			$tawkto_settings = new TawkTo_Settings();
 			add_shortcode( 'tawkto', array( $this, 'shortcode_print_embed_code' ) );
-
-			add_action( 'init', array( $this, 'start_session' ) );
-		}
-
-		/**
-		 * Starts user session
-		 *
-		 * @return void
-		 */
-		public function start_session() {
-			if ( session_status() === PHP_SESSION_NONE ) {
-				session_start();
-			}
 		}
 
 		/**
@@ -701,12 +688,17 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * @return string
 		 */
 		public static function get_visitor_hash( $email ) {
+			if ( session_status() === PHP_SESSION_NONE ) {
+				session_start();
+			}
+
 			$config_version = get_option( TawkTo_Settings::TAWK_CONFIG_VERSION, 0 );
 
 			if ( isset( $_SESSION[ self::TAWK_VISITOR_SESSION ] ) ) {
 				$current_session = $_SESSION[ self::TAWK_VISITOR_SESSION ];
 
-				if ( $current_session['email'] === $email &&
+				if ( isset( $current_session['hash'] ) &&
+					$current_session['email'] === $email &&
 					$current_session['config_version'] === $config_version ) {
 					return $current_session['hash'];
 				}
