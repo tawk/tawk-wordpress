@@ -601,6 +601,36 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		public function __construct() {
 			$tawkto_settings = new TawkTo_Settings();
 			add_shortcode( 'tawkto', array( $this, 'shortcode_print_embed_code' ) );
+
+			add_action( 'init', array( $this, 'start_session' ) );
+		}
+
+
+		/**
+		 * Starts user session
+		 *
+		 * @return void
+		 */
+		public function start_session() {
+			$privacy = get_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
+
+			if ( empty( $privacy['enable_visitor_recognition'] ) ) {
+				return;
+			}
+
+			$security = get_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
+
+			if ( empty( $security['js_api_key'] ) ) {
+				return;
+			}
+
+			if ( ! is_user_logged_in() ) {
+				return;
+			}
+
+			if ( session_status() === PHP_SESSION_NONE ) {
+				session_start();
+			}
 		}
 
 		/**
@@ -687,8 +717,10 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		 * @return string
 		 */
 		public static function get_visitor_hash( $email ) {
-			if ( session_status() === PHP_SESSION_NONE ) {
-				session_start();
+			$security = get_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
+
+			if ( empty( $security['js_api_key'] ) ) {
+				return null;
 			}
 
 			$config_version = get_option( TawkTo_Settings::TAWK_CONFIG_VERSION, 0 );
@@ -701,12 +733,6 @@ if ( ! class_exists( 'TawkTo' ) ) {
 					$current_session['config_version'] === $config_version ) {
 					return $current_session['hash'];
 				}
-			}
-
-			$security = get_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
-
-			if ( empty( $security['js_api_key'] ) ) {
-				return null;
 			}
 
 			$key = TawkTo_Settings::get_decrypted_data( $security['js_api_key'] );
