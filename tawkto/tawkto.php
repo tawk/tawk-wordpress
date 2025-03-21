@@ -624,12 +624,17 @@ if ( ! class_exists( 'TawkTo' ) ) {
 				return;
 			}
 
-			if ( ! is_user_logged_in() ) {
-				return;
-			}
-
 			if ( session_status() === PHP_SESSION_NONE ) {
 				session_start();
+
+				// If user is not logged in, remove the visitor session and close the session.
+				// Session cannot be updated if it is not started.
+				if ( ! is_user_logged_in() ) {
+					if ( isset( $_SESSION[ self::TAWK_VISITOR_SESSION ] ) ) {
+						unset( $_SESSION[ self::TAWK_VISITOR_SESSION ] );
+					}
+					session_write_close();
+				}
 			}
 		}
 
