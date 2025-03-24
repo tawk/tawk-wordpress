@@ -6,7 +6,7 @@
  * Plugin Name: Tawk.to Live Chat
  * Plugin URI: https://www.tawk.to
  * Description: Embeds Tawk.to live chat widget to your site
- * Version: 0.9.0
+ * Version: 0.9.1
  * Author: Tawkto
  * Text Domain: tawk-to-live-chat
  * License: GPLv3
@@ -27,12 +27,12 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		const TAWK_VISIBILITY_OPTIONS   = 'tawkto-visibility-options';
 		const TAWK_PRIVACY_OPTIONS      = 'tawkto-privacy-options';
 		const TAWK_SECURITY_OPTIONS     = 'tawkto-security-options';
+		const TAWK_CONFIG_VERSION       = 'tawkto-config-version';
 		const TAWK_ACTION_SET_WIDGET    = 'tawkto-set-widget';
 		const TAWK_ACTION_REMOVE_WIDGET = 'tawkto-remove-widget';
 		const CIPHER                    = 'AES-256-CBC';
 		const CIPHER_IV_LENGTH          = 16;
 		const NO_CHANGE                 = 'nochange';
-		const TAWK_API_KEY              = 'tawkto-js-api-key';
 
 		/**
 		 * @var $plugin_ver Plugin version
@@ -132,6 +132,7 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			register_setting( 'tawk_options', self::TAWK_VISIBILITY_OPTIONS, array( &$this, 'validate_visibility_options' ) );
 			register_setting( 'tawk_options', self::TAWK_PRIVACY_OPTIONS, array( &$this, 'validate_privacy_options' ) );
 			register_setting( 'tawk_options', self::TAWK_SECURITY_OPTIONS, array( &$this, 'validate_security_options' ) );
+			register_setting( 'tawk_options', self::TAWK_CONFIG_VERSION, array( &$this, 'update_config_version' ) );
 		}
 
 		/**
@@ -327,6 +328,15 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		}
 
 		/**
+		 * Updates the config version
+		 *
+		 * @return int
+		 */
+		public function update_config_version() {
+			return get_option( self::TAWK_CONFIG_VERSION, 0 ) + 1;
+		}
+
+		/**
 		 * Adds the tawk.to plugin settings in the admin menu.
 		 */
 		public function add_menu() {
@@ -418,20 +428,20 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 				return;
 			}
 
-			delete_transient( self::TAWK_API_KEY );
-
 			if ( '' === $fields['js_api_key'] ) {
 				return;
 			}
 
-			try {
-				if ( 40 !== strlen( $fields['js_api_key'] ) ) {
-					throw new Exception( 'Invalid key. Please provide value with 40 characters' );
-				}
+			$fields['js_api_key'] = trim( $fields['js_api_key'] );
 
+			if ( 40 !== strlen( $fields['js_api_key'] ) ) {
+				self::show_tawk_options_error( 'Invalid API key' );
+			}
+
+			try {
 				$fields['js_api_key'] = self::get_encrypted_data( $fields['js_api_key'] );
 			} catch ( Exception $e ) {
-				self::show_tawk_options_error( 'Javascript API Key: ' . $e->getMessage() );
+				self::show_tawk_options_error( 'Error saving Javascript API Key' );
 
 				unset( $fields['js_api_key'] );
 			}
@@ -524,12 +534,12 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 		 * @param string $data - Data to be decrypted.
 		 * @return string
 		 */
-		private static function get_decrypted_data( $data ) {
+		public static function get_decrypted_data( $data ) {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 			$decoded_data = base64_decode( $data );
 
 			if ( false === $decoded_data ) {
-				return '';
+				return null;
 			}
 
 			$iv             = substr( $decoded_data, 0, self::CIPHER_IV_LENGTH );
@@ -538,33 +548,10 @@ if ( ! class_exists( 'TawkTo_Settings' ) ) {
 			$decrypted_data = openssl_decrypt( $encrypted_data, self::CIPHER, SECURE_AUTH_KEY, 0, $iv );
 
 			if ( false === $decrypted_data ) {
-				return '';
+				return null;
 			}
 
 			return $decrypted_data;
-		}
-
-		/**
-		 * Retrieves JS API Key
-		 *
-		 * @return string
-		 */
-		public static function get_js_api_key() {
-			if ( ! empty( get_transient( self::TAWK_API_KEY ) ) ) {
-				return get_transient( self::TAWK_API_KEY );
-			}
-
-			$security = get_option( self::TAWK_SECURITY_OPTIONS );
-
-			if ( ! isset( $security['js_api_key'] ) ) {
-				return '';
-			}
-
-			$key = self::get_decrypted_data( $security['js_api_key'] );
-
-			set_transient( self::TAWK_API_KEY, $key, 60 * 60 );
-
-			return $key;
 		}
 
 		/**
@@ -599,6 +586,7 @@ if ( ! class_exists( 'TawkTo' ) ) {
 	 */
 	class TawkTo {
 		const PLUGIN_VERSION_VARIABLE = 'tawkto-version';
+		const TAWK_VISITOR_SESSION    = 'tawkto-visitor-session';
 
 		/**
 		 * @var $plugin_version Plugin version
@@ -613,6 +601,41 @@ if ( ! class_exists( 'TawkTo' ) ) {
 		public function __construct() {
 			$tawkto_settings = new TawkTo_Settings();
 			add_shortcode( 'tawkto', array( $this, 'shortcode_print_embed_code' ) );
+
+			add_action( 'init', array( $this, 'start_session' ) );
+		}
+
+
+		/**
+		 * Starts user session
+		 *
+		 * @return void
+		 */
+		public function start_session() {
+			$privacy = get_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
+
+			if ( empty( $privacy['enable_visitor_recognition'] ) ) {
+				return;
+			}
+
+			$security = get_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
+
+			if ( empty( $security['js_api_key'] ) ) {
+				return;
+			}
+
+			if ( session_status() === PHP_SESSION_NONE ) {
+				session_start();
+
+				// If user is not logged in, remove the visitor session and close the session.
+				// Session cannot be updated if it is not started.
+				if ( ! is_user_logged_in() ) {
+					if ( isset( $_SESSION[ self::TAWK_VISITOR_SESSION ] ) ) {
+						unset( $_SESSION[ self::TAWK_VISITOR_SESSION ] );
+					}
+					session_write_close();
+				}
+			}
 		}
 
 		/**
@@ -658,9 +681,8 @@ if ( ! class_exists( 'TawkTo' ) ) {
 			delete_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS );
 			delete_option( TawkTo_Settings::TAWK_PRIVACY_OPTIONS );
 			delete_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
+			delete_option( TawkTo_Settings::TAWK_CONFIG_VERSION );
 			delete_option( self::PLUGIN_VERSION_VARIABLE );
-
-			delete_transient( TawkTo_Settings::TAWK_API_KEY );
 		}
 
 		/**
@@ -683,14 +705,56 @@ if ( ! class_exists( 'TawkTo' ) ) {
 					'email' => $current_user->user_email,
 				);
 
-				$js_api_key = TawkTo_Settings::get_js_api_key();
-				if ( ! empty( $user_info['email'] ) && ! empty( $js_api_key ) ) {
-					$user_info['hash'] = hash_hmac( 'sha256', $user_info['email'], $js_api_key );
+				$hash = self::get_visitor_hash( $user_info['email'] );
+				if ( null !== $hash ) {
+					$user_info['hash'] = $hash;
 				}
 
 				return wp_json_encode( $user_info );
 			}
 			return null;
+		}
+
+		/**
+		 * Retrieves visitor hash
+		 *
+		 * @param string $email - Visitor email address.
+		 * @return string
+		 */
+		public static function get_visitor_hash( $email ) {
+			$security = get_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS );
+
+			if ( empty( $security['js_api_key'] ) ) {
+				return null;
+			}
+
+			$config_version = get_option( TawkTo_Settings::TAWK_CONFIG_VERSION, 0 );
+
+			if ( isset( $_SESSION[ self::TAWK_VISITOR_SESSION ] ) ) {
+				$current_session = $_SESSION[ self::TAWK_VISITOR_SESSION ];
+
+				if ( isset( $current_session['hash'] ) &&
+					$current_session['email'] === $email &&
+					$current_session['config_version'] === $config_version ) {
+					return $current_session['hash'];
+				}
+			}
+
+			$key = TawkTo_Settings::get_decrypted_data( $security['js_api_key'] );
+
+			if ( null === $key ) {
+				return null;
+			}
+
+			$hash = hash_hmac( 'sha256', $email, $key );
+
+			$_SESSION[ self::TAWK_VISITOR_SESSION ] = array(
+				'hash'           => $hash,
+				'email'          => $email,
+				'config_version' => $config_version,
+			);
+
+			return $hash;
 		}
 
 		/**
