@@ -4,7 +4,7 @@ Tags: tawk.to,tawk,free live chat,ai chat,chat widget
 Requires at least: 2.7
 Requires PHP: 5.6
 Tested up to: 6.7
-Stable tag: 0.9.0
+Stable tag: 0.9.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,7 +71,11 @@ Note: You will need a free tawk.to account: [Create one for free here!](https://
 
 == Changelog ==
 
-= 0.9.0
+= 0.9.1 =
+* Add configuration versioning
+* Improve security for Secure Mode
+
+= 0.9.0 =
 * Add support for Secure Mode
 
 = 0.8.7 =
