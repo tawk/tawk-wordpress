@@ -24,5 +24,7 @@ class TawkToUpgradeVersion090 extends TawkToUpgradeBase {
 			unset( $visibility['enable_visitor_recognition'] );
 			update_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility );
 		}
+
+		update_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS, array( 'js_api_key' => '' ) );
 	}
 }
