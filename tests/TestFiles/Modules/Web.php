@@ -213,7 +213,6 @@ class Web {
 		$this->driver->find_element_and_click( 'button[type="submit"]' );
 
 		// handle consent page.
-		$this->driver->wait_for_seconds( 3 );
 		$allow_id     = '#allow';
 		$allow_button = $this->driver->find_and_check_element( $allow_id );
 
