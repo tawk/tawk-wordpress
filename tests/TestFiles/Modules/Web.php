@@ -184,13 +184,45 @@ class Web {
 
 		// driver currently on tawk-iframe frame
 		// incase the current session hasn't logged in to the plugin yet.
-		$login_form_id = '#loginForm';
-		$login_form    = $this->driver->find_and_check_element( $login_form_id );
-		if ( false === is_null( $login_form ) ) {
-			$this->driver->find_element_and_input( '#email', $this->tawk->username );
-			$this->driver->find_element_and_input( '#password', $this->tawk->password );
-			$this->driver->find_element_and_click( '#login-button' );
+		$login_button_id = '#login-button';
+		$login_button    = $this->driver->find_and_check_element( $login_button_id );
+		if ( true === is_null( $login_button ) ) {
+			return;
 		}
+
+		$this->driver->find_element_and_click( '#login-button' );
+
+		$window_handles = $this->driver->get_driver()->getWindowHandles();
+		$this->driver->get_driver()->switchTo()->window( end( $window_handles ) );
+
+		// driver currently on tawk.to OAuth login popout.
+
+		// handle currently logged in page.
+		$allow_id     = '#allow';
+		$allow_button = $this->driver->find_and_check_element( $allow_id );
+		if ( false === is_null( $allow_button ) ) {
+			$allow_button->click();
+			$this->driver->get_driver()->switchTo()->window( reset( $window_handles ) );
+			$this->driver->wait_for_frame_and_switch( '#tawk-iframe', 10 );
+			return;
+		}
+
+		// handle login page.
+		$this->driver->find_element_and_input( '#email', $this->tawk->username );
+		$this->driver->find_element_and_input( '#password', $this->tawk->password );
+		$this->driver->find_element_and_click( 'button[type="submit"]' );
+
+		// handle consent page.
+		$allow_id     = '#allow';
+		$allow_button = $this->driver->find_and_check_element( $allow_id );
+
+		if ( false === is_null( $allow_button ) ) {
+			$allow_button->click();
+		}
+
+		// go back to tawk-iframe frame.
+		$this->driver->get_driver()->switchTo()->window( reset( $window_handles ) );
+		$this->driver->wait_for_frame_and_switch( '#tawk-iframe', 10 );
 	}
 
 	public function goto_visibility_options() {
