@@ -192,32 +192,37 @@ class Web {
 
 		$this->driver->find_element_and_click( '#login-button' );
 
-		$window_handles = $this->driver->get_driver()->getWindowHandles();
-		$this->driver->get_driver()->switchTo()->window( end( $window_handles ) );
+		$window_handles    = $this->driver->get_driver()->getWindowHandles();
+		$new_window_handle = end( $window_handles );
+
+		$this->driver->get_driver()->switchTo()->window( $new_window_handle );
 
 		// driver currently on tawk.to OAuth login popout.
 
-		// handle currently logged in page.
-		$allow_id     = '#allow';
-		$allow_button = $this->driver->find_and_check_element( $allow_id );
-		if ( false === is_null( $allow_button ) ) {
-			$allow_button->click();
-			$this->driver->get_driver()->switchTo()->window( reset( $window_handles ) );
-			$this->driver->wait_for_frame_and_switch( '#tawk-iframe', 10 );
-			return;
-		}
+		// currently logged in page not shown because driver creates new browser instance.
 
 		// handle login page.
 		$this->driver->find_element_and_input( '#email', $this->tawk->username );
 		$this->driver->find_element_and_input( '#password', $this->tawk->password );
 		$this->driver->find_element_and_click( 'button[type="submit"]' );
 
-		// handle consent page.
-		$allow_id     = '#allow';
-		$allow_button = $this->driver->find_and_check_element( $allow_id );
+		$start = microtime( true );
+		while ( ( microtime( true ) - $start ) < 5 ) {
+			// consent already allowed, window will automatically close.
+			$current_handles = $this->driver->get_driver()->getWindowHandles();
+			if ( ! in_array( $new_window_handle, $current_handles, true ) ) {
+				break;
+			}
 
-		if ( false === is_null( $allow_button ) ) {
-			$allow_button->click();
+			// handle consent page if shown.
+			try {
+				$this->driver->find_element_and_click( '#allow' );
+				break;
+			} catch ( \Exception $e ) { // phpcs:ignore
+				// consent button not found, do nothing.
+			}
+
+			usleep( 10000 );
 		}
 
 		// go back to tawk-iframe frame.
