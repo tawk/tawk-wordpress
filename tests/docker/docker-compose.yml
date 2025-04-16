@@ -59,7 +59,7 @@ services:
 
   selenium:
     container_name: selenium
-    image: selenium/standalone-${SELENIUM_BROWSER}:latest
+    image: selenium/standalone-${SELENIUM_BROWSER}:4.28 # 4.29: intermittent driver session loss when OAuth popout is closed
     shm_size: 2g
     ports:
       - ${SELENIUM_PORT}:4444
