@@ -3,8 +3,8 @@ Contributors: tawkto
 Tags: tawk.to,tawk,free live chat,ai chat,chat widget
 Requires at least: 2.7
 Requires PHP: 5.6
-Tested up to: 6.8
-Stable tag: 0.9.2
+Tested up to: 6.9
+Stable tag: 0.9.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -70,6 +70,9 @@ Follow these steps:
 Note: You will need a free tawk.to account: [Create one for free here!](https://tawk.to/?utm_source=wpdirectory&utm_medium=link&utm_campaign=signup)
 
 == Changelog ==
+
+= 0.9.3 =
+* Supported version bump to 6.9
 
 = 0.9.2 =
 * Supported version bump to 6.8
