@@ -3,7 +3,7 @@ Contributors: tawkto
 Tags: tawk.to,tawk,free live chat,ai chat,chat widget
 Requires at least: 2.7
 Requires PHP: 5.6
-Tested up to: 6.9
+Tested up to: 7.1
 Stable tag: 0.9.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
