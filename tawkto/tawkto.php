@@ -10,6 +10,7 @@
  * Author: Tawkto
  * Text Domain: tawk-to-live-chat
  * License: GPLv3
+ * test
  **/
 
 require_once dirname( __FILE__ ) . '/vendor/autoload.php';
