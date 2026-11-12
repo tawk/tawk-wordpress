@@ -58,21 +58,17 @@ class TawkToUpgradeManager {
 			return;
 		}
 
-		// special case: we've never set the version before.
-		// All plugins prior to the current version needs the upgrade.
-		if ( version_compare( $this->prev_ver, $this->curr_ver ) < 0 ) {
-			// are there upgrade steps depending on how out-of-date?
-			foreach ( $this->upgrades as $upgrade_ver => $upgrade ) {
-				// only run upgrades if upgrade version is lower than
-				// and equal to the current version.
-				if ( version_compare( $upgrade_ver, $this->curr_ver ) <= 0 ) {
-					$this->do_upgrade( $upgrade_ver );
-				}
-
-				update_option( $this->version_var_name, $upgrade_ver );
+		// only run upgrades newer than the previously installed version and
+		// up to the current version. If the version was never recorded,
+		// prev_ver is empty and every upgrade runs.
+		foreach ( $this->upgrades as $upgrade_ver => $upgrade ) {
+			if ( version_compare( $upgrade_ver, $this->prev_ver ) > 0 &&
+				version_compare( $upgrade_ver, $this->curr_ver ) <= 0 ) {
+				$this->do_upgrade( $upgrade_ver );
 			}
 		}
 
+		update_option( $this->version_var_name, $this->curr_ver );
 	}
 
 	/**

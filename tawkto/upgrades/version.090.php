@@ -25,6 +25,8 @@ class TawkToUpgradeVersion090 extends TawkToUpgradeBase {
 			update_option( TawkTo_Settings::TAWK_VISIBILITY_OPTIONS, $visibility );
 		}
 
-		update_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS, array( 'js_api_key' => '' ) );
+		if ( ! get_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS, false ) ) {
+			update_option( TawkTo_Settings::TAWK_SECURITY_OPTIONS, array( 'js_api_key' => '' ) );
+		}
 	}
 }
