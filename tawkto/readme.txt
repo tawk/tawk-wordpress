@@ -4,7 +4,7 @@ Tags: tawk.to,tawk,free live chat,ai chat,chat widget
 Requires at least: 2.7
 Requires PHP: 5.6
 Tested up to: 7.1
-Stable tag: 0.9.4
+Stable tag: 0.9.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,9 +71,11 @@ Note: You will need a free tawk.to account: [Create one for free here!](https://
 
 == Changelog ==
 
+= 0.9.5 =
+* Fix Javascript API key being reset after plugin update
+
 = 0.9.4 =
 * Supported version bump to 7.1
-* Fix Javascript API key being reset after plugin update
 
 = 0.9.3 =
 * Supported version bump to 6.9
