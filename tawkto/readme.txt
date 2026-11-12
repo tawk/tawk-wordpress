@@ -71,6 +71,10 @@ Note: You will need a free tawk.to account: [Create one for free here!](https://
 
 == Changelog ==
 
+= 0.9.4 =
+* Supported version bump to 7.1
+* Fix Javascript API key being reset after plugin update
+
 = 0.9.3 =
 * Supported version bump to 6.9
 
